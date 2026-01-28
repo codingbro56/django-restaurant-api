@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Orders</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/order.css">
+</head>
+<body>
+  <div id="header-container"></div>
+  <div class="orders-container">
+    <h1 class="orders-title">My Orders</h1>
+
+    <div id="orders-list" class="orders-list">
+      <!-- Orders loaded by JS -->
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/orders.js"></script>
+  <script src="/frontend/js/header.js"></script>
+  <script>
+    fetch("/frontend/partials/header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-container").innerHTML = html;
+        loadHeader();
+      });
+  </script>
+</body>
+</html>

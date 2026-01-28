@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu – BharatBites</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/menu.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header-container"></div>
+
+<section class="menu-page">
+  <h1 class="menu-title">Our Menu</h1>
+
+  <div id="menu-grid" class="menu-grid">
+    <!-- JS injects cards -->
+  </div>
+</section>
+
+<script src="../js/config.js"></script>
+<script src="../js/header.js"></script>
+<script src="../js/menu.js"></script>
+
+<script>
+  fetch("../partials/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-container").innerHTML = html;
+      loadHeader();
+    });
+</script>
+
+</body>
+</html>

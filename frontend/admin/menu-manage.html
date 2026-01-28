@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu Management</title>
+  <link rel="stylesheet" href="../css/menu-manage.css">
+</head>
+<body>
+
+<div class="menu-wrapper">
+  <div class="menu-card">
+
+    <h2>Menu Management</h2>
+    <p class="menu-subtitle">Add and manage categories & menu items</p>
+
+    <!-- ================= CATEGORY SECTION ================= -->
+    <div class="menu-section">
+      <h3>Add Category</h3>
+
+      <div class="form-row">
+        <input type="text" id="catName" placeholder="Category name">
+        <button onclick="addCategory()">Add</button>
+      </div>
+
+      <h4>Manage Categories</h4>
+      <div id="categoryList" class="category-list"></div>
+    </div>
+
+    <!-- ================= MENU ITEM SECTION ================= -->
+    <div class="menu-section">
+      <h3>Add Menu Item</h3>
+
+      <div class="form-row">
+        <input id="itemName" placeholder="Item name">
+        <input id="itemPrice" type="number" placeholder="Price">
+        <select id="categorySelect">
+          <option value="">Select Category</option>
+        </select>
+        <button onclick="addMenuItem()">Add Item</button>
+      </div>
+
+      <h4>All Menu Items</h4>
+      <div id="menuList" class="menu-list"></div>
+    </div>
+    <div class="admin-footer">
+      <a href="dashboard.html">
+        <button class="secondary">Back to Dashboard</button>
+  </a>
+</div>
+
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/menu-admin.js"></script>
+
+</body>
+</html>

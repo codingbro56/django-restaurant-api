@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Successful – BharatBites</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/success.css">
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<section class="success-page">
+  <div class="success-card">
+    <h1>Order Placed Successfully 🎉</h1>
+    <p>Your delicious food is being prepared.</p>
+
+    <div class="actions">
+      <a href="../menu/index.html">Order More</a>
+      <a href="../home/index.html">Back to Home</a>
+    </div>
+  </div>
+</section>
+
+<script src="../js/config.js"></script>
+<script src="../js/header.js"></script>
+
+<script>
+  fetch("../partials/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-container").innerHTML = html;
+      loadHeader();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+:root {
+  --primary: #b91c1c;      /* deep red */
+  --accent: #f59e0b;       /* saffron */
+  --bg: #fff7ed;           /* warm background */
+  --text: #1f2933;
+  --muted: #6b7280;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button.secondary {
+  background: var(--accent);
+  color: black;
+}

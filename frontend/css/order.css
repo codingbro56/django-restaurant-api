@@ -1,0 +1,65 @@
+/* ===== ORDER SUCCESS ===== */
+.order-success {
+  max-width: 700px;
+  margin: 120px auto;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.order-success h1 {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.order-success p {
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* ===== MY ORDERS ===== */
+.orders-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.orders-title {
+  text-align: center;
+  font-size: 34px;
+  margin-bottom: 30px;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.order-card h3 {
+  margin-bottom: 6px;
+}
+
+.order-card p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .order-actions {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Detail</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/order-admin.css">
+</head>
+<body>
+
+<div class="order-detail-wrapper">
+  <div class="order-detail-card">
+
+    <h1>Order Detail</h1>
+    <p class="admin-subtitle">Review order information and items</p>
+
+    <!-- ORDER INFO -->
+    <div id="order-info" class="order-info-box"></div>
+
+    <!-- ORDER ITEMS -->
+    <h3 class="section-title">Items</h3>
+    <div id="order-items" class="order-items-list"></div>
+
+    <!-- ACTIONS -->
+    <div id="order-actions" class="order-actions">
+      <button onclick="updateOrderStatus('completed')">Accept</button>
+      <button onclick="updateOrderStatus('cancelled')">Reject</button>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="admin-footer">
+      <a href="orders.html">
+        <button class="secondary">Back to Orders</button>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/orders-admin.js"></script>
+<script>
+  checkAdmin();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+<div class="admin-dashboard-wrapper">
+  <div class="admin-dashboard-card">
+
+    <div class="admin-badge">⚙ Admin Panel</div>
+
+    <h1>Dashboard</h1>
+    <p class="admin-subtitle">Manage restaurant operations</p>
+
+    <!-- DASHBOARD STATS -->
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <span>Users</span>
+        <strong id="usersCount">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Orders</span>
+        <strong id="ordersCount">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Menu Items</span>
+        <strong id="menuCount">0</strong>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="admin-actions">
+      <a href="users.html">
+        <button class="admin-btn users">User Management</button>
+      </a>
+
+      <a href="menu-manage.html">
+        <button class="admin-btn menu">Manage Menu</button>
+      </a>
+
+      <a href="orders.html">
+        <button class="admin-btn orders">View Orders</button>
+      </a>
+
+      <a href="reports.html">
+        <button class="admin-btn reports">Reports</button>
+      </a>
+
+      <button class="admin-btn logout" onclick="adminLogout()">Logout</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/admin-dashboard.js"></script>
+<script>
+  checkAdmin();
+</script>
+
+</body>
+</html>

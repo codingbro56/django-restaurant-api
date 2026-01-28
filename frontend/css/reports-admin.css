@@ -1,0 +1,219 @@
+/* =========================
+   REPORTS – ADMIN UI
+   ========================= */
+
+.reports-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #1f2937, #020617);
+}
+
+.reports-card {
+  width: 1000px;
+  padding: 35px;
+  background: linear-gradient(180deg, #111827, #020617);
+  border-radius: 18px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.65);
+  color: #ffffff;
+}
+
+/* Filters */
+.report-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.report-filters select,
+.report-filters input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: none;
+  background: #020617;
+  color: white;
+  font-size: 14px;
+}
+
+.report-filters button {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: white;
+}
+
+.report-filters button.secondary {
+  background: linear-gradient(90deg, #374151, #4b5563);
+}
+
+/* Summary */
+.report-summary {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.summary-card {
+  flex: 1;
+  padding: 16px;
+  background: #020617;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px #1f2937;
+}
+
+.summary-card span {
+  font-size: 13px;
+  color: #93c5fd;
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 24px;
+  margin-top: 4px;
+}
+
+/* Chart */
+.report-chart {
+  margin: 30px 0;
+  padding: 20px;
+  background: #020617;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px #1f2937;
+}
+
+/* Report list */
+.report-list div {
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: #020617;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px #1f2937;
+  font-size: 14px;
+}
+
+/* Section title */
+.section-title {
+  margin: 20px 0 10px;
+  font-size: 16px;
+  color: #93c5fd;
+}
+
+/* =========================
+   BACK TO DASHBOARD BUTTON
+   ========================= */
+
+.admin-footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.admin-footer a {
+  text-decoration: none;
+}
+
+/* Back button style */
+.admin-footer button.secondary {
+  padding: 12px 26px;
+  border-radius: 14px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  background: linear-gradient(90deg, #1f2937, #374151);
+  color: #e5e7eb;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 12px 30px rgba(0,0,0,0.6);
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect */
+.admin-footer button.secondary:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.08),
+    0 18px 40px rgba(0,0,0,0.8);
+}
+
+
+/* =========================
+   REPORT TYPE SELECT DROPDOWN
+   ========================= */
+
+.report-type-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.report-type-wrapper label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+/* Select box */
+#reportType {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 12px 44px 12px 16px;
+  border-radius: 14px;
+  border: none;
+
+  background:
+    linear-gradient(180deg, #020617, #020617) padding-box,
+    linear-gradient(90deg, #2563eb, #3b82f6) border-box;
+
+  border: 1px solid transparent;
+
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.05),
+    0 10px 30px rgba(0,0,0,0.6);
+
+  background-image:
+    linear-gradient(180deg, #020617, #020617),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='%2393c5fd' viewBox='0 0 20 20'><path d='M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'/></svg>");
+
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px;
+}
+
+/* Hover */
+#reportType:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.08),
+    0 14px 35px rgba(0,0,0,0.75);
+}
+
+/* Focus */
+#reportType:focus {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px #3b82f6,
+    0 0 0 4px rgba(59,130,246,0.25);
+}
+
+/* Options */
+#reportType option {
+  background: #020617;
+  color: #ffffff;
+  font-weight: 500;
+}

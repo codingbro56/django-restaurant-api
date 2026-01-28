@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BharatBites – Authentic Indian Restaurant</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header-container"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Authentic Indian Food</h1>
+    <p>Freshly prepared • Traditional flavors • Delivered hot</p>
+
+    <a href="../menu/index.html" class="cta-btn">View Menu</a>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section class="highlights">
+  <div class="highlight-card">
+    <h3>Fresh Ingredients</h3>
+    <p>Quality vegetables and spices sourced daily</p>
+  </div>
+
+  <div class="highlight-card">
+    <h3>Authentic Taste</h3>
+    <p>Traditional recipes from Indian kitchens</p>
+  </div>
+
+  <div class="highlight-card">
+    <h3>Fast Delivery</h3>
+    <p>Quick and reliable order fulfillment</p>
+  </div>
+</section>
+
+<script src="js/config.js"></script>
+<script src="../js/home.js"></script>
+<script src="js/header.js"></script>
+<script>
+  fetch("partials/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-container").innerHTML = html;
+      loadHeader();
+    });
+</script>
+
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Home</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+  <div id="header-container"></div>
+  <div class="home-container">
+    <h1>Welcome to Our Restaurant</h1>
+
+    <div class="home-actions">
+      <a href="../menu/index.html"><button>View Menu</button></a> -->
+      <!-- <a href="../auth/login.html"><button class="secondary">Login</button></a> -->
+
+        <!-- <a id="login-btn" href="../auth/login.html" >
+            <button class="secondary">Login</button>
+        </a> -->
+
+        <!-- <a id="register-btn" href="../auth/register.html">
+            <button class="secondary">Register</button>
+        </a> -->
+<!-- 
+        <button id="logout-btn" style="display:none;" class="secondary">Logout</button>
+        </div>
+
+        <script src="../js/home.js"></script>
+        <script src="/frontend/js/header.js"></script>
+        <script>
+          fetch("/frontend/partials/header.html")
+            .then(res => res.text())
+            .then(html => {
+              document.getElementById("header-container").innerHTML = html;
+              loadHeader();
+            });
+        </script>
+
+    </div>
+  </div>
+
+</body>
+</html> -->

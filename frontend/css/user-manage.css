@@ -1,0 +1,244 @@
+/* =========================
+   ADMIN CONTAINER
+   ========================= */
+
+.admin-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.admin-subtitle {
+  color: #9ca3af;
+  margin-bottom: 30px;
+}
+
+/* =========================
+   CARDS
+   ========================= */
+
+.admin-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+.admin-card h3 {
+  margin-bottom: 16px;
+}
+
+/* =========================
+   FORM
+   ========================= */
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.form-row input {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: none;
+  background: #020617;
+  color: #fff;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+/* =========================
+   TABLE
+   ========================= */
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead {
+  background: rgba(255,255,255,0.06);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 14px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.admin-table th {
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.admin-table .actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+button.primary {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: linear-gradient(135deg, #374151, #1f2937);
+  color: #fff;
+  padding: 12px 26px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Action buttons (used by JS) */
+.btn-edit {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: none;
+  margin-right: 6px;
+}
+
+.btn-disable {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: none;
+}
+
+/* Center Create User button */
+.admin-card button.primary {
+  display: block;
+  margin: 20px auto 0 auto;
+}
+
+
+/* =========================
+   ADMIN CHECKBOX STYLING
+   ========================= */
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Checkbox itself */
+.checkbox-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #f59e0b; /* amber warning tone */
+}
+
+/* Label text */
+.checkbox-row span {
+  color: #92400e; /* admin = sensitive */
+}
+
+/* Optional helper text (if you want later) */
+.checkbox-row::after {
+  content: " (full access)";
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+.admin-footer {
+  text-align: center;
+  margin-top: 40px;
+}
+/* =========================
+   USER TABLE – CONTRAST FIX
+   ========================= */
+
+/* Header */
+.admin-table th {
+  color: #4b5563; /* darker gray */
+  font-weight: 600;
+}
+
+/* Normal cells */
+.admin-table td {
+  color: #111827; /* near-black for readability */
+}
+
+/* Username emphasis */
+.admin-table td:nth-child(2) {
+  font-weight: 600;
+  color: #020617;
+}
+
+/* Email */
+.admin-table td:nth-child(3) {
+  color: #374151;
+  font-size: 14px;
+}
+
+/* Status colors */
+.admin-table .status-active {
+  color: #15803d; /* dark green */
+  font-weight: 600;
+}
+
+.admin-table .status-disabled {
+  color: #b91c1c; /* dark red */
+  font-weight: 600;
+}
+
+/* Role colors */
+.admin-table .role-admin {
+  color: #92400e; /* amber/brown */
+  font-weight: 600;
+}
+
+.admin-table .role-user {
+  color: #1e40af; /* blue */
+  font-weight: 600;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(0,0,0,0.03);
+}

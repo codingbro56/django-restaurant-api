@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin – User Management</title>
+    <meta charset="UTF-8">
+
+    <!-- Admin styles -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/user-manage.css">
+</head>
+<body>
+
+<div class="admin-container">
+
+  <h1>User Management</h1>
+  <p class="admin-subtitle">Create, manage and control system users</p>
+
+  <!-- =====================
+       CREATE USER
+       ===================== -->
+  <div class="admin-card">
+    <h3>Create User</h3>
+
+    <div class="form-row">
+      <input type="text" id="newUsername" placeholder="Username">
+      <input type="email" id="newEmail" placeholder="Email">
+      <input type="password" id="newPassword" placeholder="Password">
+    </div>
+
+    <label class="checkbox-row">
+      <input type="checkbox" id="newIsStaff">
+      <span>Admin User</span>
+    </label>
+
+    <button class="primary" onclick="createUser()">Create User</button>
+  </div>
+
+  <!-- =====================
+       USER LIST
+       ===================== -->
+  <div class="admin-card">
+    <h3>All Users</h3>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Active</th>
+          <th>Staff</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="userTable">
+        <!-- Rows injected by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- =====================
+       FOOTER
+       ===================== -->
+  <div class="admin-footer">
+    <a href="dashboard.html">
+      <button class="secondary">Back to Dashboard</button>
+    </a>
+  </div>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/user-admin.js"></script>
+<script>
+  checkAdmin();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Reports</title>
+
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/reports-admin.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="reports-wrapper">
+  <div class="reports-card">
+
+    <h1>Reports</h1>
+    <p class="admin-subtitle">View system analytics</p>
+
+    <!-- REPORT SELECTOR -->
+    <label>Select Report Type:</label>
+    <select id="reportType" onchange="switchReport()">
+      <option value="users">User Reports</option>
+      <option value="orders">Order Reports</option>
+      <option value="items">Top Selling Items</option>
+    </select>
+
+    <!-- ======================
+         USER REPORTS (DEFAULT)
+         ====================== -->
+    <div id="usersReport" class="report-section">
+
+      <h2>User Reports (Monthly)</h2>
+
+      <label>Select Month:</label>
+      <input type="month" id="userReportMonth">
+
+      <button onclick="loadUserReport()">Generate</button>
+
+      <div class="report-summary">
+        <div class="summary-card">
+          <span>Users Added</span>
+          <strong id="usersTotal">0</strong>
+        </div>
+
+        <div class="summary-card">
+          <span>Active Users</span>
+          <strong id="usersActive">0</strong>
+        </div>
+
+        <div class="summary-card">
+          <span>Disabled Users</span>
+          <strong id="usersDisabled">0</strong>
+        </div>
+
+        <div class="summary-card">
+          <span>Admin Users</span>
+          <strong id="usersAdmins">0</strong>
+        </div>
+        <div class="report-chart">
+            <canvas id="userStatusChart"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================
+         ORDER REPORTS
+         ====================== -->
+    <div id="ordersReport" class="report-section" style="display:none">
+
+      <h2>Order Reports</h2>
+
+      <div class="report-filters">
+        <label>Status:</label>
+        <select id="statusFilter">
+          <option value="">All</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
+        <label>From:</label>
+        <input type="date" id="startDate">
+
+        <label>To:</label>
+        <input type="date" id="endDate">
+
+        <button onclick="loadReport()">Generate</button>
+        <button class="secondary" onclick="exportCSV()">Export CSV</button>
+      </div>
+
+      <div class="report-summary">
+        <div class="summary-card">
+          <span>Total Orders</span>
+          <strong id="totalOrders">0</strong>
+        </div>
+
+        <div class="summary-card">
+          <span>Total Amount</span>
+          <strong>₹<span id="totalAmount">0</span></strong>
+        </div>
+      </div>
+
+      <div class="report-chart">
+        <canvas id="orderChart"></canvas>
+      </div>
+
+      <h3 class="section-title">Order Details</h3>
+      <div id="reportList" class="report-list"></div>
+
+    </div>
+
+    <!-- ======================
+         TOP ITEMS REPORT
+         ====================== -->
+    <div id="itemsReport" class="report-section" style="display:none">
+
+      <h2>Top Selling Items</h2>
+
+      <button onclick="loadTopItems()">Load Top Items</button>
+      <div class="report-chart">
+        <canvas id="topItemsChart"></canvas>
+      </div>
+
+
+      <div id="topItemsList" class="report-list"></div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="admin-footer">
+      <a href="dashboard.html">
+        <button class="secondary">Back to Dashboard</button>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/reports-admin.js"></script>
+
+<script>
+  checkAdmin();
+
+  function switchReport() {
+    const type = document.getElementById("reportType").value;
+
+    document.getElementById("usersReport").style.display =
+      type === "users" ? "block" : "none";
+
+    document.getElementById("ordersReport").style.display =
+      type === "orders" ? "block" : "none";
+
+    document.getElementById("itemsReport").style.display =
+      type === "items" ? "block" : "none";
+  }
+
+  // DEFAULT = USER REPORT
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("reportType").value = "users";
+    switchReport();
+  });
+</script>
+
+</body>
+</html>

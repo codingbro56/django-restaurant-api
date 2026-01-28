@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Cart – BharatBites</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/cart.css">
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<section class="cart-page">
+  <h1>Your Cart</h1>
+
+  <div id="cart-items"></div>
+
+  <div class="cart-summary">
+    <h3 id="total"></h3>
+    <button onclick="placeOrder()">Place Order</button>
+  </div>
+</section>
+
+<script src="../js/config.js"></script>
+<script src="../js/header.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/orders.js"></script>
+
+<script>
+  fetch("../partials/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-container").innerHTML = html;
+      loadHeader();
+    });
+</script>
+
+</body>
+</html>

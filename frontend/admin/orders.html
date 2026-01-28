@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Orders</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/order-admin.css">
+</head>
+<body>
+
+<div class="admin-orders-wrapper">
+  <div class="admin-orders-card">
+
+    <h1>Orders</h1>
+    <p class="admin-subtitle">View and manage all customer orders</p>
+
+    <!-- ORDERS LIST -->
+    <div id="admin-orders" class="orders-grid">
+      <!-- Orders injected by JS -->
+    </div>
+
+    <div class="admin-footer">
+      <a href="dashboard.html">
+        <button class="secondary">Back to Dashboard</button>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/orders-admin.js"></script>
+<script>
+  checkAdmin();
+</script>
+
+</body>
+</html>
