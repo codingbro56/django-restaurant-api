@@ -140,3 +140,6 @@ STATIC_URL = 'static/'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+FRONTEND_BASE_URL = "http://127.0.0.1:5500/frontend"

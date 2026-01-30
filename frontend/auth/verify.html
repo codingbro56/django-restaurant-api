@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Verification</title>
+</head>
+<body>
+
+<h2>Email Verification</h2>
+<p id="msg">Verifying...</p>
+
+<script src="../js/config.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const uid = params.get("uid");
+  const token = params.get("token");
+
+  fetch(API_BASE_URL + `/api/auth/verify/?uid=${uid}&token=${token}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("msg").innerText =
+        data.message || data.error;
+    });
+</script>
+
+</body>
+</html>

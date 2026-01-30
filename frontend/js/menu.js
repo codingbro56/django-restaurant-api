@@ -1,4 +1,4 @@
-fetch(API_BASE_URL + "api/menu/")
+fetch(API_BASE_URL + "/api/menu/")
   .then(res => res.json())
   .then(items => {
     const grid = document.getElementById("menu-grid");
@@ -19,10 +19,12 @@ fetch(API_BASE_URL + "api/menu/")
       grid.appendChild(card);
     });
   })
-  .catch(() => {
+  .catch(err => {
+    console.error("MENU LOAD ERROR:", err);
     document.getElementById("menu-grid").innerText =
       "Failed to load menu";
   });
+
 
 function addToCart(itemId) {
   const token = localStorage.getItem("access_token");

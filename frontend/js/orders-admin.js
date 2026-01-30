@@ -134,31 +134,30 @@ function loadAdminOrderDetail() {
 document.addEventListener("DOMContentLoaded", loadAdminOrderDetail);
 
 // Order Status Update
-function updateOrderStatus(newStatus) {
-    const params = new URLSearchParams(window.location.search);
-    const orderId = params.get("id");
-    if (!orderId) return;
+function updateOrderStatus(status) {
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("id");
 
-    if (!confirm("Change order status to " + newStatus + "?")) return;
-
-    fetch(API_BASE_URL + "/api/orders/admin/" + orderId + "/status/", {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("admin_token")
-        },
-        body: JSON.stringify({ status: newStatus })
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Failed");
-        return res.json();
-    })
-    .then(() => {
-        alert("Order " + newStatus);
-        loadAdminOrderDetail(); // refresh status on page
-    })
-    .catch(() => {
-        alert("Failed to update order status");
-    });
+  fetch(API_BASE_URL + "/api/orders/admin/" + orderId + "/status/", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("admin_token")
+    },
+    body: JSON.stringify({ status: status })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Update failed");
+    return res.json();
+  })
+  .then(() => {
+    alert("Order updated");
+    window.location.href = "orders.html";
+  })
+  .catch(err => {
+    console.error("ORDER STATUS ERROR:", err);
+    alert("Failed to update order");
+  });
 }
+
 

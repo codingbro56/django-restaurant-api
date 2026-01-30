@@ -16,24 +16,34 @@ function loadReport() {
     })
     .then(res => res.json())
     .then(data => {
-        document.getElementById("totalOrders").innerText = data.total_orders;
-        document.getElementById("totalAmount").innerText = data.total_amount;
+      document.getElementById("totalOrders").innerText = data.total_orders;
+      document.getElementById("totalAmount").innerText = data.total_amount;
 
-        const box = document.getElementById("reportList");
-        box.innerHTML = "";
+      const box = document.getElementById("reportList");
+      box.innerHTML = "";
 
-        data.orders.forEach(o => {
-            box.innerHTML += `
-                <div>
-                    Order #${o.id} — ${o.user} — ₹${o.total}
-                    (${o.status}) — ${o.date}
-                </div>
-            `;
-        });
+      // ✅ ADD THIS HERE
+      const statusMap = {
+          placed: "Pending",
+          completed: "Completed",
+          cancelled: "Cancelled"
+      };
 
-        // 🔹 CHART CALL
-        drawChart(data.orders);
+      data.orders.forEach(o => {
+          const displayStatus = statusMap[o.status] || o.status;
+
+          box.innerHTML += `
+              <div>
+                  Order #${o.id} — ${o.user} — ₹${o.total}
+                  (${displayStatus}) — ${o.date}
+              </div>
+          `;
+      });
+
+      // 🔹 CHART CALL
+      drawChart(data.orders);
     });
+
 }
 
 
@@ -72,34 +82,34 @@ function exportCSV() {
 let chartInstance = null;
 
 function drawChart(orders) {
-    const counts = {};
+  const counts = {
+    Pending: 0,
+    Completed: 0,
+    Cancelled: 0
+  };
 
-    orders.forEach(o => {
-        counts[o.status] = (counts[o.status] || 0) + 1;
-    });
+  orders.forEach(o => {
+    if (o.status === "placed") counts.Pending++;
+    else if (o.status === "completed") counts.Completed++;
+    else if (o.status === "cancelled") counts.Cancelled++;
+  });
 
-    const ctx = document.getElementById("orderChart").getContext("2d");
+  const ctx = document.getElementById("orderChart").getContext("2d");
 
-    if (chartInstance) {
-        chartInstance.destroy();
+  if (chartInstance) chartInstance.destroy();
+
+  chartInstance = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: Object.keys(counts),
+      datasets: [{
+        data: Object.values(counts),
+        backgroundColor: ["#facc15", "#22c55e", "#ef4444"]
+      }]
     }
-
-    chartInstance = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: Object.keys(counts),
-            datasets: [{
-                label: "Orders by Status",
-                data: Object.values(counts),
-                backgroundColor: [
-                    "#4caf50",
-                    "#f44336",
-                    "#ff9800"
-                ]
-            }]
-        }
-    });
+  });
 }
+
 
 
 function loadUserReport() {

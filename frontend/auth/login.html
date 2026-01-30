@@ -2,34 +2,68 @@
 <html>
 <head>
   <title>Login</title>
+  <meta charset="UTF-8">
+
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/auth.css">
 </head>
+
 <body class="auth-bg">
+
+  <!-- Optional header (kept as-is, commented) -->
   <div id="header-container"></div>
+
   <div class="auth-card">
+
+    <!-- Logo / Title -->
     <div class="auth-logo">✳ Admin</div>
     <h2>Welcome Back!</h2>
 
+    <!-- Username / Email -->
     <label>Email or Username</label>
-    <input id="username" placeholder="Enter your email or username">
+    <input
+      id="username"
+      type="text"
+      placeholder="Enter your email or username"
+      autocomplete="username"
+    >
 
+    <!-- Password -->
     <label>Password</label>
-    <input id="password" type="password" placeholder="Enter your password">
+    <input
+      id="password"
+      type="password"
+      placeholder="Enter your password"
+      autocomplete="current-password"
+    >
 
-    <a class="auth-link">Forgot password?</a>
+    <!-- 🔑 Forgot Password (CONNECTED) -->
+    <a class="auth-link" href="forgot.html">
+      Forgot password?
+    </a>
 
-    <button onclick="loginUser()" class="primary-btn">Login</button>
+    <!-- Login Button -->
+    <button onclick="loginUser()" class="primary-btn">
+      Login
+    </button>
 
+    <!-- Footer -->
     <p class="auth-footer">
       Don’t have an account?
       <a href="register.html">Register</a>
     </p>
 
+    <!-- Result / Error -->
     <pre id="result"></pre>
+
   </div>
+
+  <!-- Scripts -->
   <script src="../js/config.js"></script>
   <script src="../js/auth.js"></script>
+
+  <!-- Header loader (kept commented as you had it) -->
+  <!--
   <script src="/frontend/js/header.js"></script>
   <script>
     fetch("/frontend/partials/header.html")
@@ -39,5 +73,7 @@
         loadHeader();
       });
   </script>
+  -->
+
 </body>
 </html>

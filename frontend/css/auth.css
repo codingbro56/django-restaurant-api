@@ -123,3 +123,18 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.auth-link {
+  display: inline-block;
+  margin: 8px 0 16px;
+  font-size: 13px;
+  color: #93c5fd;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+  color: #bfdbfe;
+}

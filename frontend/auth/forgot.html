@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forgot Password</title>
+</head>
+<body>
+
+<h2>Forgot Password</h2>
+
+<input id="email" type="email" placeholder="Enter your email">
+<br><br>
+<button onclick="sendReset()">Send Reset Link</button>
+
+<p id="msg"></p>
+
+<script src="../js/config.js"></script>
+<script>
+function sendReset() {
+  const email = document.getElementById("email").value;
+
+  fetch(API_BASE_URL + "/api/auth/forgot-password/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("msg").innerText = data.message;
+  });
+}
+</script>
+
+</body>
+</html>
