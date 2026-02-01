@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Profile</title>
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<div class="profile-wrapper">
+  <div class="profile-card">
+    <h2>My Profile</h2>
+
+    <div class="profile-row">
+      <span>Username</span>
+      <strong id="username"></strong>
+    </div>
+
+    <div class="profile-row">
+      <span>Email</span>
+      <strong id="email"></strong>
+    </div>
+
+    <div class="profile-row">
+      <span>Role</span>
+      <strong id="role"></strong>
+    </div>
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/header.js"></script>
+<script src="../js/profile.js"></script>
+
+<script>
+  fetch("../partials/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-container").innerHTML = html;
+      loadHeader();
+    });
+</script>
+
+</body>
+</html>

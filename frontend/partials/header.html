@@ -1,9 +1,22 @@
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/header.css">
+
 <header class="site-header">
   <div class="logo">
     Bharat<span>Bites</span>
   </div>
 
-  <nav id="nav-links">
-    <!-- JS will inject links here -->
-  </nav>
+  <nav id="nav-links"></nav>
+
+  <!-- Profile dropdown (hidden by default) -->
+  <!-- USER PROFILE ICON -->
+  <div id="profile-box" class="profile-box hidden">
+    <img src="../assets/images/user.avif" class="profile-avatar" />
+    <div class="profile-dropdown">
+      <a href="../auth/profile.html">My Profile</a>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+    </div>
+  </div>
 </header>

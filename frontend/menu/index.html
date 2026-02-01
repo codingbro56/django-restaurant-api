@@ -31,5 +31,17 @@
     });
 </script>
 
+<link rel="stylesheet" href="../css/footer.css">
+
+<div id="footer-container"></div>
+
+<script>
+  fetch("../partials/footer.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("footer-container").innerHTML = html;
+    });
+</script>
+
 </body>
 </html>

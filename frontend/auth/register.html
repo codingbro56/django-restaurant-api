@@ -2,35 +2,89 @@
 <html>
 <head>
   <title>Register</title>
+  <meta charset="UTF-8">
+
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/auth.css">
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="auth-bg">
-  <div id="header-container"></div>
+
   <div class="auth-card">
-    <div class="auth-logo">✳ logo</div>
-    <h2>Create Your Account</h2>
 
-    <div class="auth-grid">
-      <div>
-        <label>Full Name</label>
-        <input id="username" placeholder="Enter your full name">
-
-        <label>Email Address</label>
-        <input id="email" placeholder="Enter your email">
-      </div>
-
-      <div>
-        <label>Create Password</label>
-        <input id="password" type="password" placeholder="Enter password">
-
-        <label>Confirm Password</label>
-        <input id="confirm_password" type="password" placeholder="Confirm password">
-      </div>
+    <!-- Logo -->
+    <div class="auth-logo">
+      🍽️ <span>BharatBites</span>
     </div>
 
-    <button onclick="registerUser()" class="primary-btn">Register</button>
+    <h2>Create Your Account</h2>
+    <p class="auth-subtitle">
+      Join us and start ordering delicious food
+    </p>
 
+    <!-- Full Name -->
+    <label>Full Name</label>
+    <div class="input-group">
+      <i data-lucide="user"></i>
+      <input
+        id="username"
+        type="text"
+        placeholder="Enter your full name"
+        autocomplete="name"
+      >
+    </div>
+
+    <!-- Email -->
+    <label>Email Address</label>
+    <div class="input-group">
+      <i data-lucide="mail"></i>
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter your email"
+        autocomplete="email"
+      >
+    </div>
+
+    <!-- Password -->
+    <label>Create Password</label>
+    <div class="input-group">
+      <i data-lucide="lock"></i>
+      <input
+        id="password"
+        type="password"
+        placeholder="Create a strong password"
+        autocomplete="new-password"
+      >
+      <span class="toggle-eye" onclick="togglePassword('password', this)">
+        <i data-lucide="eye"></i>
+      </span>
+    </div>
+
+    <!-- Confirm Password -->
+    <label>Confirm Password</label>
+    <div class="input-group">
+      <i data-lucide="shield-check"></i>
+      <input
+        id="confirm_password"
+        type="password"
+        placeholder="Confirm your password"
+        autocomplete="new-password"
+      >
+      <span class="toggle-eye" onclick="togglePassword('confirm_password', this)">
+        <i data-lucide="eye"></i>
+      </span>
+    </div>
+
+    <!-- Register Button -->
+    <button onclick="registerUser()" class="primary-btn">
+      Create Account
+    </button>
+
+    <!-- Footer -->
     <p class="auth-footer">
       Already have an account?
       <a href="login.html">Login</a>
@@ -38,16 +92,29 @@
 
     <pre id="result"></pre>
   </div>
+
+  <!-- Scripts -->
   <script src="../js/config.js"></script>
   <script src="../js/auth.js"></script>
-  <!-- <script src="/frontend/js/header.js"></script>
+
+  <!-- Icons init -->
   <script>
-    fetch("/frontend/partials/header.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("header-container").innerHTML = html;
-        loadHeader();
-      });
-  </script> -->
+    lucide.createIcons();
+
+    function togglePassword(fieldId, el) {
+      const input = document.getElementById(fieldId);
+      const icon = el.querySelector("i");
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.setAttribute("data-lucide", "eye-off");
+      } else {
+        input.type = "password";
+        icon.setAttribute("data-lucide", "eye");
+      }
+      lucide.createIcons();
+    }
+  </script>
+
 </body>
 </html>

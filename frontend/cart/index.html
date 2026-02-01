@@ -16,12 +16,14 @@
 
   <div class="cart-summary">
     <h3 id="total"></h3>
+
     <div class="cart-actions">
       <button class="secondary" onclick="clearCart()">Clear Cart</button>
-    </div></div></br>
-    <button onclick="placeOrder()">Place Order</button>
+      <button class="primary" onclick="placeOrder()">Place Order</button>
+    </div>
   </div>
 </section>
+
 
 <script src="../js/config.js"></script>
 <script src="../js/header.js"></script>
@@ -36,6 +38,19 @@
       loadHeader();
     });
 </script>
+
+<link rel="stylesheet" href="../css/footer.css">
+
+<div id="footer-container"></div>
+
+<script>
+  fetch("../partials/footer.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("footer-container").innerHTML = html;
+    });
+</script>
+
 
 </body>
 </html>

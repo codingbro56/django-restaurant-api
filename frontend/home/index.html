@@ -2,8 +2,10 @@
 <html>
 <head>
   <title>BharatBites – Authentic Indian Restaurant</title>
+
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/home.css">
+  <script src="../js/menu.js"></script>
 </head>
 <body>
 
@@ -20,6 +22,28 @@
   </div>
 </section>
 
+<!-- 🌟 SPECIAL DISH OF THE DAY -->
+<section class="special-dish">
+  <h2>Our Special Dish of the Day</h2>
+
+  <div class="special-card">
+    <div class="special-image">
+      <img src="../assets/images/special.png" alt="Special Dish">
+    </div>
+
+    <div class="special-content">
+      <h3>Chocolate Lava Dream</h3>
+      <p>
+        Indulge in our rich, warm chocolate lava cake,
+        with a gooey molten center served with fresh raspberries.
+      </p>
+
+      <div class="price">₹679.00</div>
+
+      <button class="add-cart-btn" onclick="A">Add to Cart</button>
+    </div>
+  </div>
+</section>
 <!-- HIGHLIGHTS -->
 <section class="highlights">
   <div class="highlight-card">
@@ -38,11 +62,11 @@
   </div>
 </section>
 
-<script src="js/config.js"></script>
-<script src="../js/home.js"></script>
-<script src="js/header.js"></script>
+<!-- HEADER SCRIPT -->
+<script src="../js/config.js"></script>
+<script src="../js/header.js"></script>
 <script>
-  fetch("partials/header.html")
+  fetch("../partials/header.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("header-container").innerHTML = html;
@@ -50,50 +74,18 @@
     });
 </script>
 
+<link rel="stylesheet" href="../css/footer.css">
+
+<div id="footer-container"></div>
+
+<script>
+  fetch("../partials/footer.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("footer-container").innerHTML = html;
+    });
+</script>
+
+
 </body>
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <title>Home</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/home.css">
-</head>
-<body>
-  <div id="header-container"></div>
-  <div class="home-container">
-    <h1>Welcome to Our Restaurant</h1>
-
-    <div class="home-actions">
-      <a href="../menu/index.html"><button>View Menu</button></a> -->
-      <!-- <a href="../auth/login.html"><button class="secondary">Login</button></a> -->
-
-        <!-- <a id="login-btn" href="../auth/login.html" >
-            <button class="secondary">Login</button>
-        </a> -->
-
-        <!-- <a id="register-btn" href="../auth/register.html">
-            <button class="secondary">Register</button>
-        </a> -->
-<!-- 
-        <button id="logout-btn" style="display:none;" class="secondary">Logout</button>
-        </div>
-
-        <script src="../js/home.js"></script>
-        <script src="/frontend/js/header.js"></script>
-        <script>
-          fetch("/frontend/partials/header.html")
-            .then(res => res.text())
-            .then(html => {
-              document.getElementById("header-container").innerHTML = html;
-              loadHeader();
-            });
-        </script>
-
-    </div>
-  </div>
-
-</body>
-</html> -->

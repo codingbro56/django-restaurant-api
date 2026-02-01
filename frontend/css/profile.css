@@ -1,0 +1,31 @@
+.profile-wrapper {
+  min-height: calc(100vh - 70px);
+  background: radial-gradient(circle at top, #020617, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-card {
+  width: 420px;
+  padding: 30px;
+  background: #020617;
+  border-radius: 18px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.8);
+  color: white;
+}
+
+.profile-card h2 {
+  margin-bottom: 20px;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #1e293b;
+}
+
+.profile-row span {
+  color: #94a3b8;
+}

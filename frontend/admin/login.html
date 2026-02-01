@@ -1,36 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Login</title>
-    <link rel="stylesheet" href="../css/admin.css">
-</head>
-<body>
+  <title>Admin Login</title>
+  <meta charset="UTF-8">
 
-<div class="admin-login-wrapper">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="admin-auth-bg">
+
+  <div class="admin-login-wrapper">
     <div class="admin-login-card">
 
-        <div class="admin-badge">
-            ⚙ Admin Panel
-        </div>
+      <!-- ADMIN HEADER -->
+      <div class="admin-header">
+        <div class="admin-badge">ADMIN ACCESS</div>
+        <h2>Administrator Login</h2>
+        <p class="admin-subtext">
+          Authorized personnel only
+        </p>
+      </div>
 
-        <h2>Welcome Back</h2>
-        <p class="admin-subtext">Restricted access – administrators only</p>
+      <!-- Username -->
+      <label>Username</label>
+      <div class="input-group admin-input">
+        <span class="input-icon">👤</span>
+        <input
+          id="username"
+          type="text"
+          placeholder="Admin username"
+          autocomplete="username"
+        >
+      </div>
 
-        <label>Username</label>
-        <input id="username" placeholder="Enter admin username">
+      <!-- Password -->
+      <label>Password</label>
+      <div class="input-group admin-input">
+        <span class="input-icon">🔒</span>
+        <input
+          id="password"
+          type="password"
+          placeholder="Admin password"
+          autocomplete="current-password"
+        >
+      </div>
 
-        <label>Password</label>
-        <input id="password" type="password" placeholder="Enter password">
+      <!-- Login -->
+      <button class="admin-primary-btn" onclick="adminLogin()">
+        Login to Dashboard
+      </button>
 
-        <button onclick="adminLogin()">Login</button>
+      <!-- Switch -->
+      <p class="auth-footer admin-footer">
+        Not an admin?
+        <a href="../auth/login.html">Go to User Login</a>
+      </p>
 
-        <pre id="result"></pre>
+      <pre id="result"></pre>
 
     </div>
-</div>
+  </div>
 
-<script src="../js/config.js"></script>
-<script src="../js/admin.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/admin.js"></script>
 
 </body>
 </html>

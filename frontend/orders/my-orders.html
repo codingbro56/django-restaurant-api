@@ -6,25 +6,42 @@
   <link rel="stylesheet" href="../css/order.css">
 </head>
 <body>
-  <div id="header-container"></div>
-  <div class="orders-container">
-    <h1 class="orders-title">My Orders</h1>
 
-    <div id="orders-list" class="orders-list">
-      <!-- Orders loaded by JS -->
-    </div>
+<div id="header-container"></div>
+
+<section class="orders-container">
+  <h1 class="orders-title">My Orders</h1>
+
+  <div id="orders-list" class="orders-list">
+    <!-- Orders injected by JS -->
   </div>
+</section>
 
-  <script src="../js/config.js"></script>
-  <script src="../js/orders.js"></script>
-  <script src="/frontend/js/header.js"></script>
-  <script>
-    fetch("/frontend/partials/header.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("header-container").innerHTML = html;
-        loadHeader();
-      });
-  </script>
+<script src="../js/config.js"></script>
+<script src="../js/orders.js"></script>
+<script src="../js/header.js"></script>
+
+<script>
+  fetch("../partials/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("header-container").innerHTML = html;
+      loadHeader();
+    });
+</script>
+
+<link rel="stylesheet" href="../css/footer.css">
+
+<div id="footer-container"></div>
+
+<script>
+  fetch("../partials/footer.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("footer-container").innerHTML = html;
+    });
+</script>
+
+
 </body>
 </html>

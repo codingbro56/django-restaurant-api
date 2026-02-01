@@ -76,3 +76,20 @@ function checkMe() {
             JSON.stringify(data, null, 2);
     });
 }
+
+// Toggle 
+
+function togglePassword() {
+  const input = document.getElementById("password");
+  const icon = document.querySelector(".toggle-eye i");
+
+  if (input.type === "password") {
+    input.type = "text";
+    icon.setAttribute("data-lucide", "eye-off");
+  } else {
+    input.type = "password";
+    icon.setAttribute("data-lucide", "eye");
+  }
+
+  lucide.createIcons(); // re-render icon
+}

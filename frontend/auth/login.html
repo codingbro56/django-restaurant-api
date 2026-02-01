@@ -3,46 +3,61 @@
 <head>
   <title>Login</title>
   <meta charset="UTF-8">
-
+  <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/auth.css">
 </head>
 
 <body class="auth-bg">
 
-  <!-- Optional header (kept as-is, commented) -->
-  <div id="header-container"></div>
-
   <div class="auth-card">
 
-    <!-- Logo / Title -->
-    <div class="auth-logo">✳ Admin</div>
-    <h2>Welcome Back!</h2>
+    <!-- Logo -->
+    <div class="auth-logo">
+      <span class="logo-icon">🍴</span>
+      <span class="logo-text">BharatBites</span>
+    </div>
 
-    <!-- Username / Email -->
+    <h2>Welcome back</h2>
+    <p class="auth-subtitle">
+      Login to access your orders and personalized experience
+    </p>
+
+    <!-- Username -->
     <label>Email or Username</label>
-    <input
-      id="username"
-      type="text"
-      placeholder="Enter your email or username"
-      autocomplete="username"
-    >
+    <div class="input-group">
+      <i data-lucide="user"></i>
+      <input
+        id="username"
+        type="text"
+        placeholder="Enter your email or username"
+        autocomplete="username"
+      >
+    </div>
+
 
     <!-- Password -->
     <label>Password</label>
-    <input
-      id="password"
-      type="password"
-      placeholder="Enter your password"
-      autocomplete="current-password"
-    >
+    <div class="input-group">
+      <i data-lucide="lock"></i>
+      <input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+      >
+      <span class="toggle-eye" onclick="togglePassword()">
+        <i data-lucide="eye"></i>
+      </span>
+    </div>
 
-    <!-- 🔑 Forgot Password (CONNECTED) -->
+
+    <!-- Forgot -->
     <a class="auth-link" href="forgot.html">
       Forgot password?
     </a>
 
-    <!-- Login Button -->
+    <!-- Login -->
     <button onclick="loginUser()" class="primary-btn">
       Login
     </button>
@@ -50,30 +65,31 @@
     <!-- Footer -->
     <p class="auth-footer">
       Don’t have an account?
-      <a href="register.html">Register</a>
+      <a href="register.html">Sign up</a>
     </p>
 
-    <!-- Result / Error -->
-    <pre id="result"></pre>
+    <!-- Admin -->
+    <a href="../admin/login.html" class="admin-login-link">
+      Admin Login
+    </a>
 
+    <pre id="result"></pre>
   </div>
 
   <!-- Scripts -->
   <script src="../js/config.js"></script>
   <script src="../js/auth.js"></script>
 
-  <!-- Header loader (kept commented as you had it) -->
-  <!--
-  <script src="/frontend/js/header.js"></script>
   <script>
-    fetch("/frontend/partials/header.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("header-container").innerHTML = html;
-        loadHeader();
-      });
+    function togglePassword() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    }
   </script>
-  -->
+  <script>
+    lucide.createIcons();
+  </script>
+
 
 </body>
 </html>

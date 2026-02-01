@@ -1,65 +1,91 @@
-/* ===== ORDER SUCCESS ===== */
-.order-success {
-  max-width: 700px;
-  margin: 120px auto;
-  text-align: center;
-  padding: 40px 20px;
-}
+/* =========================
+   MY ORDERS – USER THEME
+   ========================= */
 
-.order-success h1 {
-  font-size: 36px;
-  margin-bottom: 12px;
-}
-
-.order-success p {
-  color: #6b7280;
-  margin-bottom: 30px;
-}
-
-.order-actions {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-/* ===== MY ORDERS ===== */
 .orders-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 60px 20px;
+  padding: 70px 20px;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #0b1220, #020617);
 }
 
 .orders-title {
   text-align: center;
-  font-size: 34px;
-  margin-bottom: 30px;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #eff3f7;
+  margin-bottom: 40px;
 }
 
+/* LIST */
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
+/* ORDER CARD */
 .order-card {
-  background: white;
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  background: linear-gradient(180deg, #0f172a, #020617);
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+  color: white;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 60px rgba(0,0,0,0.75);
+}
+
+/* ORDER HEADER */
 .order-card h3 {
-  margin-bottom: 6px;
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 600;
 }
 
+/* DETAILS */
 .order-card p {
-  font-size: 14px;
-  color: #6b7280;
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
 }
 
-/* ===== RESPONSIVE ===== */
+/* STATUS BADGE */
+.order-status {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+/* STATUS COLORS */
+.status-placed {
+  background: rgba(59,130,246,0.15);
+  color: #60a5fa;
+}
+
+.status-completed {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+}
+
+.status-cancelled {
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
 @media (max-width: 600px) {
-  .order-actions {
-    flex-direction: column;
+  .orders-title {
+    font-size: 1.9rem;
   }
 }
