@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -11,6 +11,8 @@ from django.utils.dateparse import parse_date
 
 import csv
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # CRUD: READ
 @api_view(["GET"])

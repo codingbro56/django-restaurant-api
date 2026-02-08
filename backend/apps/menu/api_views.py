@@ -9,6 +9,7 @@ from apps.users.permissions import IsAdmin
 
 # Categories
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def list_categories(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
@@ -16,6 +17,7 @@ def list_categories(request):
 
 # Public Menu anyone access
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def menu_list(request):
     items = MenuItem.objects.select_related("category").all()
     serializer = MenuItemSerializer(items, many=True)

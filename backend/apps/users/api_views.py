@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, logout
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -18,34 +18,66 @@ from django.conf import settings
 from urllib.parse import unquote
 
 
-@csrf_exempt
-@api_view(['POST'])
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+# from rest_framework import status
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+@api_view(["POST"])
 def register(request):
-    serializer = RegisterSerializer(data=request.data)
+    data = request.data
 
-    if serializer.is_valid():
-        user = serializer.save(is_active=False)  # 🔒 inactive until verified
+    required_fields = [
+        "full_name", "username", "email",
+        "phone_no", "password", "confirm_password"
+    ]
 
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return Response(
+                {"message": f"{field} is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        verify_url = (
-            f"{settings.FRONTEND_BASE_URL}/auth/verify.html"
-            f"?uid={uid}&token={token}"
+    if data["password"] != data["confirm_password"]:
+        return Response(
+            {"message": "Passwords do not match"},
+            status=status.HTTP_400_BAD_REQUEST
         )
 
-        send_mail(
-            subject="Verify your account",
-            message=f"Click to verify your account:\n{verify_url}",
-            from_email="noreply@restaurant.com",
-            recipient_list=[user.email],
+    if User.objects.filter(username=data["username"]).exists():
+        return Response(
+            {"message": "Username already taken"},
+            status=status.HTTP_400_BAD_REQUEST
         )
 
-        return Response({
-            "message": "Registration successful. Check your email to verify."
-        })
+    if User.objects.filter(email=data["email"]).exists():
+        return Response(
+            {"message": "Email already registered"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-    return Response(serializer.errors, status=400)
+    try:
+        user = User.objects.create_user(
+            username=data["username"],
+            email=data["email"],
+            password=data["password"],
+            full_name=data["full_name"],
+            phone_no=data["phone_no"]
+        )
+    except Exception as e:
+        return Response(
+            {"message": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+    return Response(
+        {"message": "User registered successfully"},
+        status=status.HTTP_201_CREATED
+    )
+
 
 @api_view(["GET"])
 def verify_email(request):

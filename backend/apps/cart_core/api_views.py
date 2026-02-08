@@ -21,15 +21,21 @@ def view_cart(request):
     return Response(serializer.data)
 
 # Add to Cart
-@api_view(['POST'])
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
-    cart = get_user_cart(request.user)
+    menu_item_id = request.data.get("menu_item_id")
+    qty = int(request.data.get("quantity", 1))
 
-    menu_item_id = request.data.get('menu_item_id')
-    quantity = int(request.data.get('quantity', 1))
+    if not menu_item_id:
+        return Response({"error": "Menu item required"}, status=400)
 
-    menu_item = get_object_or_404(MenuItem, id=menu_item_id)
+    try:
+        menu_item = MenuItem.objects.get(id=menu_item_id)
+    except MenuItem.DoesNotExist:
+        return Response({"error": "Menu item not found"}, status=404)
+
+    cart, _ = Cart.objects.get_or_create(user=request.user)
 
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
@@ -37,9 +43,9 @@ def add_to_cart(request):
     )
 
     if not created:
-        cart_item.quantity += quantity
+        cart_item.quantity += qty
     else:
-        cart_item.quantity = quantity
+        cart_item.quantity = qty
 
     cart_item.save()
 
@@ -53,6 +59,22 @@ def remove_from_cart(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, cart=cart)
     item.delete()
     return Response({"message": "Item removed"})
+
+# Update Item Quantity
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_cart_item(request, item_id):
+    cart = get_user_cart(request.user)
+    item = get_object_or_404(CartItem, id=item_id, cart=cart)
+    
+    quantity = request.data.get("quantity", 1)
+    if int(quantity) < 1:
+        item.delete()
+    else:
+        item.quantity = int(quantity)
+        item.save()
+    
+    return Response({"message": "Quantity updated"})
 
 #Clear Cart
 @api_view(['DELETE'])

@@ -2,16 +2,26 @@ from rest_framework import serializers
 from .models import Cart, CartItem
 from apps.menu.serializers import MenuItemSerializer
 
-
-class CartItemSerializer(serializers.ModelSerializer):
-    menu_item = MenuItemSerializer(read_only=True)
-    total_price = serializers.DecimalField(
-        max_digits=10, decimal_places=2, read_only=True
+class CartItemSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(source="menu_item.name")
+    price = serializers.DecimalField(
+        source="menu_item.price",
+        max_digits=8,
+        decimal_places=2
     )
+    quantity = serializers.IntegerField()
+    subtotal = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
-    class Meta:
-        model = CartItem
-        fields = ['id', 'menu_item', 'quantity', 'total_price']
+    def get_subtotal(self, obj):
+        return obj.menu_item.price * obj.quantity
+
+    def get_image(self, obj):
+        if obj.menu_item.image:
+            return obj.menu_item.image.url
+        return None
+
 
 
 class CartSerializer(serializers.ModelSerializer):
