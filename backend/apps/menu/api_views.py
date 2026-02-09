@@ -20,6 +20,15 @@ def list_categories(request):
 @permission_classes([AllowAny])
 def menu_list(request):
     items = MenuItem.objects.select_related("category").all()
+
+    is_special = request.GET.get("is_special")
+    if is_special is not None:
+        val = str(is_special).lower()
+        if val in ("1", "true", "yes", "on"):
+            items = items.filter(is_special=True)
+        else:
+            items = items.filter(is_special=False)
+
     serializer = MenuItemSerializer(items, many=True)
     return Response(serializer.data)
 

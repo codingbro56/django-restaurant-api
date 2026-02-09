@@ -19,7 +19,7 @@ def place_order(request):
         return Response({"error": "Cart is empty"}, status=400)
 
     with transaction.atomic():
-        total = sum(item.total_price for item in cart.items.all())
+        total = sum(item.menu_item.price * item.quantity for item in cart.items.all())
 
         order = Order.objects.create(
             user=request.user,
@@ -36,8 +36,7 @@ def place_order(request):
 
         cart.items.all().delete()
 
-    serializer = OrderSerializer(order)
-    return Response(serializer.data, status=201)
+    return Response({"id": order.id}, status=201)
 
 # View User Order
 @api_view(['GET'])

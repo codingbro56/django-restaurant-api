@@ -24,11 +24,25 @@ def view_cart(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
-    menu_item_id = request.data.get("menu_item_id")
-    qty = int(request.data.get("quantity", 1))
+    # Accept either `menu_item_id`, `menu_item` or `item_id` from the client
+    menu_item_id = (
+        request.data.get("menu_item_id")
+        or request.data.get("menu_item")
+        or request.data.get("item_id")
+    )
 
     if not menu_item_id:
-        return Response({"error": "Menu item required"}, status=400)
+        return Response({"error": "Missing required field: menu_item_id"}, status=400)
+
+    # Validate quantity: must be positive integer
+    quantity_raw = request.data.get("quantity", 1)
+    try:
+        qty = int(quantity_raw)
+    except (TypeError, ValueError):
+        return Response({"error": "Quantity must be an integer"}, status=400)
+
+    if qty < 1:
+        return Response({"error": "Quantity must be at least 1"}, status=400)
 
     try:
         menu_item = MenuItem.objects.get(id=menu_item_id)
@@ -42,14 +56,14 @@ def add_to_cart(request):
         menu_item=menu_item
     )
 
-    if not created:
-        cart_item.quantity += qty
-    else:
+    if created:
         cart_item.quantity = qty
+    else:
+        cart_item.quantity += qty
 
     cart_item.save()
 
-    return Response({"message": "Item added to cart"})
+    return Response({"message": "Item added to cart", "id": cart_item.id}, status=201)
 
 # Remove Item
 @api_view(['DELETE'])
