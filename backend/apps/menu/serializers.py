@@ -8,11 +8,18 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 class MenuItemSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
-
     class Meta:
         model = MenuItem
-        fields = ["id", "name", "price", "image", "category_id", "is_available", "is_special"]
+        fields = [
+            "id",
+            "name",
+            "description",
+            "price",
+            "image",
+            "is_available",
+            "is_special",
+            "special_day",
+        ]
 
     def get_image(self, obj):
         if obj.image:

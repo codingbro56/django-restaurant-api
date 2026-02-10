@@ -63,6 +63,8 @@ def admin_menu_items(request):
             "category": i.category.name,
             "category_id": i.category.id,
             "is_available": i.is_available,
+                   "is_special": i.is_special,
+                   "special_day": i.special_day,
         }
         for i in items
     ])
@@ -125,3 +127,24 @@ def admin_update_menu_item(request, item_id):
 def admin_delete_menu_item(request, item_id):
     MenuItem.objects.filter(id=item_id).delete()
     return Response({"message": "Item deleted"})
+
+# New API to update special settings (manual toggle + auto weekly special)
+@api_view(["PUT"])
+@permission_classes([IsAdminUser])
+def update_special_settings(request, item_id):
+    try:
+        item = MenuItem.objects.get(id=item_id)
+    except MenuItem.DoesNotExist:
+        return Response({"error": "Item not found"}, status=404)
+
+    # Manual special toggle
+    if "is_special" in request.data:
+        item.is_special = bool(request.data.get("is_special"))
+
+    # Auto weekly special
+    if "special_day" in request.data:
+        value = request.data.get("special_day")
+        item.special_day = value if value != "" else None
+
+    item.save()
+    return Response({"message": "Special settings updated"})

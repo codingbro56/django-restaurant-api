@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from .models import MenuItem, Category
 from .serializers import MenuItemSerializer, CategorySerializer
 from apps.users.permissions import IsAdmin
+from datetime import datetime
 
 # Categories
 @api_view(["GET"])
@@ -66,3 +67,34 @@ def delete_menu_item(request, item_id):
 def category_list(request):
     categories = Category.objects.all().values("id", "name")
     return Response(categories)
+
+#  Special Endpoint to get current special menu item 
+@api_view(["GET"])
+def get_special_menu_item(request):
+    """
+    Priority:
+    1. Manual special (is_special=True)
+    2. Auto weekly special (special_day = today)
+    """
+
+    # 1️⃣ Manual special has highest priority
+    manual = MenuItem.objects.filter(
+        is_special=True,
+        is_available=True
+    ).first()
+
+    if manual:
+        return Response(MenuItemSerializer(manual).data)
+
+    # 2️⃣ Auto weekly special
+    today = datetime.today().weekday()  # 0 = Monday
+    auto = MenuItem.objects.filter(
+        special_day=today,
+        is_available=True
+    ).first()
+
+    if auto:
+        return Response(MenuItemSerializer(auto).data)
+
+    # 3️⃣ No special available
+    return Response({})
