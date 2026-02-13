@@ -113,11 +113,17 @@ def admin_disable_user(request, user_id):
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
 def admin_dashboard(request):
+
+    orders = Order.objects.all()
+
+    total_revenue = sum(o.total_amount for o in orders)
+
     data = {
         "total_users": User.objects.filter(is_active=True).count(),
-        "total_orders": Order.objects.count(),
+        "total_orders": orders.count(),
         "total_menu_items": MenuItem.objects.count(),
         "total_categories": Category.objects.count(),
+        "total_revenue": total_revenue,  # ADD THIS
         "recent_orders": [
             {
                 "id": o.id,
@@ -125,10 +131,12 @@ def admin_dashboard(request):
                 "total": o.total_amount,
                 "status": o.status
             }
-            for o in Order.objects.order_by("-id")[:5]
+            for o in orders.order_by("-id")[:5]
         ]
     }
+
     return Response(data)
+
 
 
 @api_view(["GET"])

@@ -17,6 +17,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from urllib.parse import unquote
 
+from .models import User, UserProfile
+
 
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
@@ -24,6 +26,7 @@ from urllib.parse import unquote
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
 
 @api_view(["POST"])
 def register(request):
@@ -60,6 +63,7 @@ def register(request):
         )
 
     try:
+        # 1️⃣ Create User
         user = User.objects.create_user(
             username=data["username"],
             email=data["email"],
@@ -67,6 +71,16 @@ def register(request):
             full_name=data["full_name"],
             phone_no=data["phone_no"]
         )
+
+        # 2️⃣ Create Profile (address optional at registration)
+        UserProfile.objects.create(
+            user=user,
+            address=data.get("address", ""),
+            city=data.get("city", ""),
+            state=data.get("state", ""),
+            pincode=data.get("pincode", "")
+        )
+
     except Exception as e:
         return Response(
             {"message": str(e)},
@@ -77,6 +91,7 @@ def register(request):
         {"message": "User registered successfully"},
         status=status.HTTP_201_CREATED
     )
+
 
 
 @api_view(["GET"])
@@ -206,14 +221,6 @@ def forgot_password(request):
         {"message": "If the email exists, reset link sent"}
     )
 
-# from django.contrib.auth.models import User
-# from django.contrib.auth.tokens import default_token_generator
-# from django.utils.http import urlsafe_base64_decode
-# from django.utils.encoding import force_str
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
-# from rest_framework import status
-
 
 @api_view(["POST"])
 def reset_password(request):
@@ -241,3 +248,39 @@ def reset_password(request):
     user.save()
 
     return Response({"message": "Password reset successful"})
+
+
+@api_view(["GET", "PUT"])
+@permission_classes([IsAuthenticated])
+def user_profile(request):
+    user = request.user
+
+    # Ensure profile exists
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+
+    if request.method == "GET":
+        return Response({
+            "username": user.username,
+            "email": user.email,
+            "full_name": user.full_name,
+            "phone_no": user.phone_no,
+            "address": profile.address,
+            "city": profile.city,
+            "state": profile.state,
+            "pincode": profile.pincode
+        })
+
+    # PUT → update
+    data = request.data
+
+    user.full_name = data.get("full_name", user.full_name)
+    user.phone_no = data.get("phone_no", user.phone_no)
+    user.save()
+
+    profile.address = data.get("address", profile.address)
+    profile.city = data.get("city", profile.city)
+    profile.state = data.get("state", profile.state)
+    profile.pincode = data.get("pincode", profile.pincode)
+    profile.save()
+
+    return Response({"message": "Profile updated successfully"})

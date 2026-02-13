@@ -16,4 +16,6 @@ urlpatterns = [
     path("api/auth/verify/", api_views.verify_email),
     path("api/auth/forgot-password/", api_views.forgot_password),
     path("api/auth/reset-password/", api_views.reset_password),
+
+    path("api/auth/profile/", api_views.user_profile),
 ]
