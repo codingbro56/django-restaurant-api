@@ -3,9 +3,9 @@
 <head>
   <title>BharatBites – Authentic Indian Restaurant</title>
 
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/home.css">
-  <script src="../js/home.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
 
@@ -30,7 +30,7 @@
         </p>
 
         <div class="hero-buttons">
-          <a href="../menu/index.html" class="btn-primary">View Full Menu</a>
+          <a href="menu/index.html" class="btn-primary">View Full Menu</a>
           <a href="#about" class="btn-outline">Our Story</a>
         </div>
 
@@ -116,39 +116,27 @@
   </section>
 
 
-  <div id="ui-toast" class="ui-toast"></div>
-
   <div id="footer-container"></div>
-
-  <!-- </body> -->
-
   <div id="ui-toast" class="ui-toast"></div>
 
+  <!-- JS: config.js must load before header.js, which must load before home.js -->
+  <script src="js/config.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/home.js"></script>
 
-<!-- HEADER SCRIPT -->
-<script src="../js/config.js"></script>
-<script src="../js/header.js"></script>
-<script>
-  fetch("../partials/header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-container").innerHTML = html;
-      loadHeader();
-    });
-</script>
-
-<link rel="stylesheet" href="../css/footer.css">
-
-<div id="footer-container"></div>
-
-<script>
-  fetch("../partials/footer.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("footer-container").innerHTML = html;
-    });
-</script>
-
+  <script>
+    fetch("partials/header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("header-container").innerHTML = html;
+        loadHeader();
+      });
+    fetch("partials/footer.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("footer-container").innerHTML = html;
+      });
+  </script>
 
 </body>
 </html>
