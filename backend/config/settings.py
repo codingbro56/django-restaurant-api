@@ -149,7 +149,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://your-frontend-domain.com"
+    "https://bharat-bites.netlify.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
