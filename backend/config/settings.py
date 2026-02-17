@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +47,8 @@ INSTALLED_APPS = [
     'apps.menu',
     'apps.orders',
     'apps.users',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 from datetime import timedelta
@@ -158,5 +165,11 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 FRONTEND_BASE_URL = "http://127.0.0.1:5500/frontend"
 
 # Media files (User uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY': os.environ.get("CLOUDINARY_API_KEY"),
+    'API_SECRET': os.environ.get("CLOUDINARY_API_SECRET"),
+}
