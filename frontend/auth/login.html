@@ -23,6 +23,9 @@
       Login to access your orders and personalized experience
     </p>
 
+    <!-- FORM ERROR -->
+    <div id="formError" class="form-error"></div>
+
     <!-- Username -->
     <label>Email or Username</label>
     <div class="input-group">
@@ -35,7 +38,6 @@
       >
     </div>
 
-
     <!-- Password -->
     <label>Password</label>
     <div class="input-group">
@@ -46,11 +48,10 @@
         placeholder="Enter your password"
         autocomplete="current-password"
       >
-      <span class="toggle-eye" onclick="togglePassword()">
+      <span class="toggle-eye toggle-password" data-target="password">
         <i data-lucide="eye"></i>
       </span>
     </div>
-
 
     <!-- Forgot -->
     <a class="auth-link" href="forgot.html">
@@ -73,7 +74,6 @@
       Admin Login
     </a>
 
-    <pre id="result"></pre>
   </div>
 
   <!-- Scripts -->
@@ -81,15 +81,8 @@
   <script src="../js/auth.js"></script>
 
   <script>
-    function togglePassword() {
-      const input = document.getElementById("password");
-      input.type = input.type === "password" ? "text" : "password";
-    }
-  </script>
-  <script>
     lucide.createIcons();
   </script>
-
 
 </body>
 </html>

@@ -1,91 +1,81 @@
-/* =========================
-   MY ORDERS – USER THEME
-   ========================= */
-
-.orders-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 70px 20px;
-  min-height: 100vh;
-  background: radial-gradient(circle at top, #0b1220, #020617);
+.orders-page {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 0 20px;
 }
 
 .orders-title {
   text-align: center;
-  font-size: 2.3rem;
-  font-weight: 700;
-  color: #eff3f7;
-  margin-bottom: 40px;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #ffffff;
 }
 
-/* LIST */
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
 }
 
-/* ORDER CARD */
 .order-card {
-  background: linear-gradient(180deg, #0f172a, #020617);
-  border-radius: 18px;
-  padding: 20px 22px;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.55);
-  color: white;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: linear-gradient(180deg, #1b2333, #0f172a);
+  padding: 18px 22px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
-.order-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 28px 60px rgba(0,0,0,0.75);
+.order-left h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #e5e7eb;
 }
 
-/* ORDER HEADER */
-.order-card h3 {
-  margin: 0 0 6px;
-  font-size: 1.05rem;
-  font-weight: 600;
-}
-
-/* DETAILS */
-.order-card p {
-  margin: 4px 0;
-  font-size: 0.9rem;
+.order-date {
+  font-size: 12px;
   color: #9ca3af;
+  margin: 4px 0;
 }
 
-/* STATUS BADGE */
-.order-status {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.75rem;
+.order-amount {
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.4px;
-}
-
-/* STATUS COLORS */
-.status-placed {
-  background: rgba(59,130,246,0.15);
   color: #60a5fa;
 }
 
-.status-completed {
-  background: rgba(34,197,94,0.15);
-  color: #22c55e;
+.order-status {
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  text-transform: capitalize;
 }
 
-.status-cancelled {
-  background: rgba(239,68,68,0.15);
-  color: #ef4444;
+.order-status.completed {
+  background: #1f2937;
+  color: #d1d5db;
 }
 
-/* =========================
-   RESPONSIVE
-   ========================= */
-@media (max-width: 600px) {
-  .orders-title {
-    font-size: 1.9rem;
+.order-status.placed {
+  background: #1e3a8a;
+  color: #93c5fd;
+}
+
+.order-status.cancelled {
+  background: #7f1d1d;
+  color: #fecaca;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .order-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .order-right {
+    align-self: flex-end;
   }
 }

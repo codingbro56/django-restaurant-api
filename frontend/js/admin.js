@@ -1,83 +1,74 @@
-function adminLogin() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    const result = document.getElementById("result");
+// ===============================
+// ADMIN LOGIN
+// ===============================
 
-    fetch(API_BASE_URL + "/api/auth/token-login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    })
+function adminLogin() {
+  const usernameEl = document.getElementById("username");
+  const passwordEl = document.getElementById("password");
+  const resultEl = document.getElementById("result");
+
+  if (!resultEl) return;
+  resultEl.innerText = "";
+
+  const username = usernameEl ? usernameEl.value.trim() : "";
+  const password = passwordEl ? passwordEl.value : "";
+
+  if (!username || !password) {
+    resultEl.innerText = "Username and password required";
+    return;
+  }
+
+  fetch(API_BASE_URL + "/api/auth/token-login/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  })
     .then(res => res.json())
     .then(data => {
-        if (!data.access) {
-            result.innerText = "Invalid credentials";
-            return;
-        }
+      if (!data || !data.access) {
+        resultEl.innerText = "Invalid credentials";
+        return Promise.reject(new Error("No token"));
+      }
 
-        // Store token first
-        localStorage.setItem("admin_token", data.access);
+      // Save as ADMIN TOKEN
+      localStorage.setItem("admin_token", data.access);
 
-        // VERIFY ADMIN ROLE
-        return fetch(API_BASE_URL + "/api/auth/me/", {
-            headers: {
-                Authorization: "Bearer " + data.access
-            }
-        });
+      // Verify role
+      return fetch(API_BASE_URL + "/api/auth/me/", {
+        headers: { Authorization: "Bearer " + data.access }
+      });
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        localStorage.removeItem("admin_token");
+        resultEl.innerText = "Admin verification failed";
+        return Promise.reject(new Error("Unauthorized"));
+      }
+      return res.json();
+    })
     .then(user => {
-        if (!user.is_staff) {
-            result.innerText = "Admin access required";
-            localStorage.removeItem("admin_token");
-            return;
-        }
+      if (!user || !user.is_staff) {
+        localStorage.removeItem("admin_token");
+        resultEl.innerText = "Admin access required";
+        return;
+      }
 
-        // ✅ ADMIN VERIFIED
-        window.location.href = "dashboard.html";
+      // Redirect after verification
+      window.location.href = "dashboard.html";
     })
-    .catch(() => {
-        result.innerText = "Login failed";
+    .catch(err => {
+      if (resultEl) {
+        resultEl.innerText = "Login failed. Try again.";
+      }
+      console.error("[admin] login error:", err && err.message ? err.message : err);
     });
 }
 
-
-// STRICT ADMIN CHECK (USE ON ALL ADMIN PAGES)
-function checkAdmin() {
-    // ⛔ DO NOT check admin on login page
-    if (window.location.pathname.includes("login.html")) {
-        return;
-    }
-
-    const token = localStorage.getItem("admin_token");
-    if (!token) {
-        window.location.href = "login.html";
-    }
-}
-
+// ===============================
+// ADMIN LOGOUT
+// ===============================
 
 function adminLogout() {
-    localStorage.removeItem("admin_token");
-    window.location.href = "login.html";
+  localStorage.removeItem("admin_token");
+  window.location.href = "login.html";
 }
-
-
-checkAdmin();
-
-// Load admin dashboard stats
-function loadAdminDashboard() {
-    fetch(API_BASE_URL + "/api/admin/dashboard/", {
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("admin_token")
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById("usersCount").innerText = data.total_users;
-        document.getElementById("ordersCount").innerText = data.total_orders;
-        document.getElementById("menuCount").innerText = data.total_menu_items;
-        document.getElementById("categoryCount").innerText = data.total_categories;
-    });
-}
-
-document.addEventListener("DOMContentLoaded", loadAdminDashboard);

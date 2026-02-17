@@ -2,25 +2,77 @@
 <html>
 <head>
   <title>Email Verification</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/auth.css">
 </head>
-<body>
 
-<h2>Email Verification</h2>
-<p id="msg">Verifying...</p>
+<body class="auth-bg">
 
-<script src="../js/config.js"></script>
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const uid = params.get("uid");
-  const token = params.get("token");
+  <div class="auth-card">
 
-  fetch(API_BASE_URL + `/api/auth/verify/?uid=${uid}&token=${token}`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("msg").innerText =
-        data.message || data.error;
-    });
-</script>
+    <h2>Email Verification</h2>
+    <p class="auth-subtitle">
+      Please wait while we verify your email address
+    </p>
+
+    <!-- UI messages -->
+    <div id="formError" class="form-error"></div>
+    <div id="formSuccess" class="form-success"></div>
+
+    <!-- Status text -->
+    <p id="statusText" class="auth-footer">
+      Verifying…
+    </p>
+
+    <!-- Footer -->
+    <p class="auth-footer">
+      Back to
+      <a href="login.html">Login</a>
+    </p>
+
+  </div>
+
+  <script src="../js/config.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const uid = params.get("uid");
+    const token = params.get("token");
+
+    const errorBox = document.getElementById("formError");
+    const successBox = document.getElementById("formSuccess");
+    const statusText = document.getElementById("statusText");
+
+    if (!uid || !token) {
+      statusText.style.display = "none";
+      errorBox.innerText = "Invalid or expired verification link.";
+      errorBox.style.display = "block";
+    } else {
+      fetch(API_BASE_URL + `/api/auth/verify/?uid=${uid}&token=${token}`)
+        .then(res => res.json().then(data => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+          statusText.style.display = "none";
+
+          if (!ok) {
+            errorBox.innerText =
+              data.error || data.message || "Verification failed.";
+            errorBox.style.display = "block";
+            return;
+          }
+
+          successBox.innerText =
+            data.message || "Email verified successfully!";
+          successBox.style.display = "block";
+        })
+        .catch(() => {
+          statusText.style.display = "none";
+          errorBox.innerText = "Server error. Please try again later.";
+          errorBox.style.display = "block";
+        });
+    }
+  </script>
 
 </body>
 </html>

@@ -1,66 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/admin.css">
+  <title>Admin Dashboard | BharatBites</title>
+  <link rel="stylesheet" href="../css/admin-layout.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="admin-dashboard-wrapper">
-  <div class="admin-dashboard-card">
+<div class="admin-app">
 
-    <div class="admin-badge">⚙ Admin Panel</div>
-
-    <h1>Dashboard</h1>
-    <p class="admin-subtitle">Manage restaurant operations</p>
-
-    <!-- DASHBOARD STATS -->
-    <div class="dashboard-stats">
-      <div class="stat-card">
-        <span>Users</span>
-        <strong id="usersCount">0</strong>
-      </div>
-      <div class="stat-card">
-        <span>Orders</span>
-        <strong id="ordersCount">0</strong>
-      </div>
-      <div class="stat-card">
-        <span>Menu Items</span>
-        <strong id="menuCount">0</strong>
-      </div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>BharatBites</h2>
+      <span class="sidebar-role">Admin Panel</span>
     </div>
 
-    <!-- ACTION BUTTONS -->
-    <div class="admin-actions">
-      <a href="users.html">
-        <button class="admin-btn users">User Management</button>
-      </a>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="menu-manage.html">Menu Management</a>
+      <a href="orders.html">Orders</a>
+      <a href="users.html">Users</a>
+      <a href="reports.html">Reports</a>
+    </nav>
 
-      <a href="menu-manage.html">
-        <button class="admin-btn menu">Manage Menu</button>
-      </a>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </aside>
 
-      <a href="orders.html">
-        <button class="admin-btn orders">View Orders</button>
-      </a>
+  <!-- MAIN CONTENT -->
+  <div class="main">
 
-      <a href="reports.html">
-        <button class="admin-btn reports">Reports</button>
-      </a>
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <h1>Admin Dashboard</h1>
 
-      <button class="admin-btn logout" onclick="adminLogout()">Logout</button>
+      <div class="topbar-actions">
+        <input type="text" placeholder="Search..." class="search-input">
+        <div class="admin-profile">
+          <span>Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT AREA -->
+    <div class="content">
+
+      <!-- KPI GRID -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <span>Total Orders</span>
+          <h2 id="ordersCount">--</h2>
+          <div class="growth positive">+12.5%</div>
+        </div>
+
+        <div class="kpi-card">
+          <span>Total Revenue</span>
+          <h2 id="revenueCount">--</h2>
+          <div class="growth positive">+12.5%</div>
+        </div>
+
+        <div class="kpi-card">
+          <span>Menu Items</span>
+          <h2 id="menuCount">--</h2>
+          <div class="growth positive">+12.5%</div>
+        </div>
+
+        <div class="kpi-card">
+          <span>Active Customers</span>
+          <h2 id="usersCount">--</h2>
+          <div class="growth positive">+12.5%</div>
+        </div>
+      </section>
+
+      <!-- MAIN GRID -->
+      <section class="dashboard-grid">
+        <!-- LEFT SIDE: Recent Orders -->
+        <div class="card">
+
+          <div class="card-header recent-header">
+            <div class="recent-left">
+              <h3>Recent Orders</h3>
+              <p class="recent-subtitle">
+                Live transaction monitoring across all terminals.
+              </p>
+            </div>
+
+            <a href="orders.html" class="view-all-link">
+              View All Orders
+            </a>
+          </div>
+
+          <div class="card-body">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="recentOrders">
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDE COLUMN -->
+        <div class="right-column">
+
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Quick Actions</h3>
+            </div>
+
+            <div class="card-body actions">
+              <a href="menu-manage.html" class="action-btn">Add Menu Item</a>
+              <a href="orders.html" class="action-btn">Process Orders</a>
+              <a href="reports.html" class="action-btn">Generate Report</a>
+            </div>
+          </div>
+
+          <!-- Growth Tip -->
+          <div class="card growth-tip">
+            <div class="card-body">
+              <h4>Growth Tip</h4>
+              <p>Your best selling items are growing 20% this week. Promote them.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
     </div>
-
   </div>
 </div>
 
 <script src="../js/config.js"></script>
-<script src="../js/admin.js"></script>
+<script src="../js/admin-guard.js"></script>
 <script src="../js/admin-dashboard.js"></script>
-<script>
-  checkAdmin();
-</script>
-
 </body>
 </html>

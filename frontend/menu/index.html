@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Menu – BharatBites</title>
+
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/menu.css">
 </head>
@@ -9,15 +10,28 @@
 
 <!-- HEADER -->
 <div id="header-container"></div>
+<div id="ui-toast" class="ui-toast"></div>
 
 <section class="menu-page">
-  <h1 class="menu-title">Our Menu</h1>
 
-  <div id="menu-grid" class="menu-grid">
-    <!-- JS injects cards -->
-  </div>
+  <aside class="menu-sidebar">
+    <h3>Categories</h3>
+    <div id="categoryBar" class="category-list">
+      <!-- JS injects category buttons -->
+    </div>
+  </aside>
+
+  <main class="menu-content">
+    <h1 class="menu-title">Our Delicious Menu</h1>
+
+    <div id="menuGrid" class="menu-grid">
+      <!-- JS injects menu cards -->
+    </div>
+  </main>
+
 </section>
 
+<!-- SCRIPTS -->
 <script src="../js/config.js"></script>
 <script src="../js/header.js"></script>
 <script src="../js/menu.js"></script>
@@ -32,7 +46,6 @@
 </script>
 
 <link rel="stylesheet" href="../css/footer.css">
-
 <div id="footer-container"></div>
 
 <script>

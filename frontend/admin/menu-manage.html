@@ -1,56 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Menu Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/menu-manage.css">
 </head>
+
 <body>
 
-<div class="menu-wrapper">
-  <div class="menu-card">
+<div class="admin-layout">
 
-    <h2>Menu Management</h2>
-    <p class="menu-subtitle">Add and manage categories & menu items</p>
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <h2 class="brand">🍽 BharatBites</h2>
 
-    <!-- ================= CATEGORY SECTION ================= -->
-    <div class="menu-section">
-      <h3>Add Category</h3>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a class="active" href="#">Menu Mgmt</a>
+      <a href="orders.html">Orders</a>
+      <a href="users.html">Users</a>
+      <a href="reports.html">Reports</a>
+    </nav>
 
-      <div class="form-row">
-        <input type="text" id="catName" placeholder="Category name">
-        <button onclick="addCategory()">Add</button>
-      </div>
+    <a class="logout" id="logoutLink" href="#">Logout</a>
+  </aside>
 
-      <h4>Manage Categories</h4>
-      <div id="categoryList" class="category-list"></div>
-    </div>
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="content">
 
-    <!-- ================= MENU ITEM SECTION ================= -->
-    <div class="menu-section">
-      <h3>Add Menu Item</h3>
+    <h1>Menu Management</h1>
 
-      <div class="form-row">
+    <div class="content-grid">
+
+      <!-- LEFT PANEL -->
+      <section class="panel">
+
+        <h3>Manage Categories</h3>
+
+        <input id="catName" placeholder="New category">
+        <button id="addCategoryBtn">Add Category</button>
+
+        <select id="deleteCategory">
+          <option value="">Delete category</option>
+        </select>
+        <button class="danger" id="deleteCategoryBtn">Delete</button>
+
+        <hr>
+
+        <h3>Add New Menu Item</h3>
+
         <input id="itemName" placeholder="Item name">
         <input id="itemPrice" type="number" placeholder="Price">
-        <select id="categorySelect">
-          <option value="">Select Category</option>
-        </select>
-        <button onclick="addMenuItem()">Add Item</button>
-      </div>
 
-      <h4>All Menu Items</h4>
-      <div id="menuList" class="menu-list"></div>
+        <select id="itemCategory">
+          <option value="">Select category</option>
+        </select>
+
+        <input id="itemImage" type="file" accept="image/*">
+
+        <button id="addMenuItemBtn">Add Menu Item</button>
+
+      </section>
+
+      <!-- RIGHT PANEL -->
+      <section class="panel wide">
+        <h3>Current Menu Items</h3>
+
+        <div id="menuGrid" class="menu-grid">
+          <!-- Cards injected by JS -->
+        </div>
+      </section>
+
     </div>
-    <div class="admin-footer">
-      <a href="dashboard.html">
-        <button class="secondary">Back to Dashboard</button>
-  </a>
+
+  </main>
+
 </div>
+
+<!-- ========== EDIT MODAL ========== -->
+<div id="editModal" class="modal-overlay">
+  <div class="modal-card">
+
+    <h3>Edit Menu Item</h3>
+
+    <input type="text" id="editName" placeholder="Item name">
+    <input type="number" id="editPrice" placeholder="Price">
+    <input type="file" id="editImage" accept="image/*">
+
+    <div class="modal-actions">
+      <button class="secondary" id="cancelEditBtn">Cancel</button>
+      <button class="primary" id="updateMenuItemBtn">Update</button>
+    </div>
 
   </div>
 </div>
 
+<div id="toast" class="toast"></div>
+
 <script src="../js/config.js"></script>
+<script src="../js/admin-guard.js"></script>
 <script src="../js/admin.js"></script>
 <script src="../js/menu-admin.js"></script>
 

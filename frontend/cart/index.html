@@ -2,55 +2,79 @@
 <html>
 <head>
   <title>Your Cart – BharatBites</title>
+
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/cart.css">
+  <link rel="stylesheet" href="../css/footer.css">
 </head>
 <body>
 
+<!-- HEADER -->
 <div id="header-container"></div>
-
+<div id="ui-toast" class="ui-toast"></div>
 <section class="cart-page">
   <h1>Your Cart</h1>
 
-  <div id="cart-items"></div>
+  <div class="cart-layout">
 
-  <div class="cart-summary">
-    <h3 id="total"></h3>
+    <!-- LEFT: CART ITEMS -->
+    <div id="cart-items" class="cart-items">
+      <!-- Injected by cart.js -->
+    </div>
 
-    <div class="cart-actions">
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>₹<span id="subtotal">0</span></span>
+      </div>
+
+      <div class="summary-row">
+        <span>Tax (8%)</span>
+        <span>₹<span id="tax">0</span></span>
+      </div>
+
+      <hr>
+
+      <div class="summary-total">
+        <span>Grand Total</span>
+        <span>₹<span id="grandTotal">0</span></span>
+      </div>
+
       <button class="secondary" onclick="clearCart()">Clear Cart</button>
       <button class="primary" onclick="placeOrder()">Place Order</button>
     </div>
+
   </div>
 </section>
 
+<!-- FOOTER -->
+<div id="footer-container"></div>
 
+<!-- SCRIPTS -->
 <script src="../js/config.js"></script>
 <script src="../js/header.js"></script>
 <script src="../js/cart.js"></script>
 <script src="../js/orders.js"></script>
 
 <script>
+  // Load header
   fetch("../partials/header.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("header-container").innerHTML = html;
       loadHeader();
     });
-</script>
 
-<link rel="stylesheet" href="../css/footer.css">
-
-<div id="footer-container"></div>
-
-<script>
+  // Load footer
   fetch("../partials/footer.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("footer-container").innerHTML = html;
     });
 </script>
-
 
 </body>
 </html>

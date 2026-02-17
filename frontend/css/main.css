@@ -1,38 +1,208 @@
+/* =========================
+   GLOBAL THEME – BharatBites
+   ========================= */
+
 :root {
-  --primary: #b91c1c;      /* deep red */
-  --accent: #f59e0b;       /* saffron */
-  --bg: #fff7ed;           /* warm background */
-  --text: #1f2933;
-  --muted: #6b7280;
-  --radius: 10px;
+  --primary: #2563eb;      /* blue (actions) */
+  --danger: #dc2626;       /* delete / warning */
+  --accent: #f59e0b;       /* saffron highlight */
+  --bg-dark: #020617;      /* app background */
+  --bg-card: #0f172a;      /* cards */
+  --text-main: #ffffff;
+  --text-muted: #9ca3af;
+  --radius: 12px;
 }
+
+/* =========================
+   RESET
+   ========================= */
 
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--bg-dark);
+  color: var(--text-main);
 }
 
+/* =========================
+   LINKS
+   ========================= */
+
+a {
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.85;
+}
+
+/* =========================
+   HEADER / NAVBAR
+   ========================= */
+
+header,
+.navbar {
+  background: #000000;
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.navbar nav a {
+  margin-left: 22px;
+  font-size: 15px;
+  color: #e5e7eb;
+}
+
+.navbar nav a:hover {
+  color: var(--accent);
+}
+
+/* =========================
+   BUTTONS (BASE ONLY)
+   ========================= */
+
 button {
-  background: var(--primary);
-  color: white;
   border: none;
-  padding: 10px 18px;
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 15px;
+  padding: 10px 18px;
 }
 
-button:hover {
-  opacity: 0.9;
+button.primary {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: white;
 }
 
 button.secondary {
-  background: var(--accent);
-  color: black;
+  background: #1e293b;
+  color: white;
+}
+
+button.danger {
+  background: var(--danger);
+  color: white;
+}
+
+button:hover {
+  opacity: 0.95;
+}
+
+/* =========================
+   PAGE CONTAINER HELPERS
+   ========================= */
+
+section {
+  width: 100%;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* =========================
+   FOOTER (SAFE DEFAULT)
+   ========================= */
+
+footer {
+  background: #000000;
+  padding: 30px;
+  margin-top: 60px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+footer a {
+  color: var(--text-muted);
+}
+
+footer a:hover {
+  color: white;
+}
+
+/* =========================
+   UTILITIES
+   ========================= */
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.center {
+  text-align: center;
+}
+
+
+/* =========================
+   UI TOAST MESSAGES (CLEAN)
+   ========================= */
+
+.ui-toast {
+  position: fixed;
+  top: 80px;              /* below header */
+  right: 24px;
+
+  background: #111827;    /* neutral dark */
+  color: #ffffff;
+
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: all 0.25s ease;
+
+  z-index: 9999;
+}
+
+/* visible */
+.ui-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* success */
+.ui-toast.success {
+  background: linear-gradient(90deg, #14532d, #166534);
+}
+
+/* error */
+.ui-toast.error {
+  background: linear-gradient(90deg, #7f1d1d, #991b1b);
+}
+
+.profile-avatar-header {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-avatar-header:hover {
+  transform: scale(1.05);
 }

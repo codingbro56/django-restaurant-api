@@ -25,72 +25,143 @@
       Join us and start ordering delicious food
     </p>
 
-    <!-- Full Name -->
-    <label>Full Name</label>
-    <div class="input-group">
-      <i data-lucide="user"></i>
-      <input
-        id="username"
-        type="text"
-        placeholder="Enter your full name"
-        autocomplete="name"
-      >
+    <div id="formError" class="form-error"></div>
+    <div id="formSuccess" class="form-success"></div>
+
+    <!-- ================= BASIC INFO ================= -->
+    <div class="form-section">
+      <div class="section-title">Basic Information</div>
+
+      <div class="form-grid two-col">
+
+        <div>
+          <label>Full Name</label>
+          <div class="input-group">
+            <i data-lucide="user"></i>
+            <input id="full_name" type="text" placeholder="Enter your full name">
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+        <div>
+          <label>Username</label>
+          <div class="input-group">
+            <i data-lucide="at-sign"></i>
+            <input id="username" type="text" placeholder="Choose a username">
+            <small class="error-text"></small>
+            <div id="usernameSuggestions" class="suggestions"></div>
+          </div>
+        </div>
+
+        <div>
+          <label>Email Address</label>
+          <div class="input-group">
+            <i data-lucide="mail"></i>
+            <input id="email" type="email" placeholder="Enter your email">
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+        <div>
+          <label>Phone Number</label>
+          <div class="input-group phone-wrapper">
+            <span class="country-code">+91</span>
+            <input id="phone" type="text" placeholder="10-digit number">
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Email -->
-    <label>Email Address</label>
-    <div class="input-group">
-      <i data-lucide="mail"></i>
-      <input
-        id="email"
-        type="email"
-        placeholder="Enter your email"
-        autocomplete="email"
-      >
+    <!-- ================= ADDRESS ================= -->
+    <div class="form-section">
+      <div class="section-title">Address Information</div>
+
+      <div>
+        <label>Address</label>
+        <div class="input-group">
+          <i data-lucide="map-pin"></i>
+          <input id="address" type="text" placeholder="House no, street, area">
+          <small class="error-text"></small>
+        </div>
+      </div>
+
+      <div class="form-grid three-col">
+
+        <div>
+          <label>City</label>
+          <div class="input-group">
+            <i data-lucide="building"></i>
+            <input id="city" type="text" placeholder="City">
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+        <div>
+          <label>State</label>
+          <div class="input-group">
+            <i data-lucide="map"></i>
+            <input id="state" type="text" placeholder="State">
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+        <div>
+          <label>Pincode</label>
+          <div class="input-group">
+            <i data-lucide="hash"></i>
+            <input id="pincode" type="text" placeholder="6-digit pincode">
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Password -->
-    <label>Create Password</label>
-    <div class="input-group">
-      <i data-lucide="lock"></i>
-      <input
-        id="password"
-        type="password"
-        placeholder="Create a strong password"
-        autocomplete="new-password"
-      >
-      <span class="toggle-eye" onclick="togglePassword('password', this)">
-        <i data-lucide="eye"></i>
-      </span>
+    <!-- ================= SECURITY ================= -->
+    <div class="form-section">
+      <div class="section-title">Security</div>
+
+      <div class="form-grid two-col">
+
+        <div>
+          <label>Create Password</label>
+          <div class="input-group">
+            <i data-lucide="lock"></i>
+            <input id="password" type="password" placeholder="Create password">
+            <span class="toggle-eye toggle-password" data-target="password">
+              <i data-lucide="eye"></i>
+            </span>
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+        <div>
+          <label>Confirm Password</label>
+          <div class="input-group">
+            <i data-lucide="shield-check"></i>
+            <input id="confirm_password" type="password" placeholder="Confirm password">
+            <span class="toggle-eye toggle-password" data-target="confirm_password">
+              <i data-lucide="eye"></i>
+            </span>
+            <small class="error-text"></small>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Confirm Password -->
-    <label>Confirm Password</label>
-    <div class="input-group">
-      <i data-lucide="shield-check"></i>
-      <input
-        id="confirm_password"
-        type="password"
-        placeholder="Confirm your password"
-        autocomplete="new-password"
-      >
-      <span class="toggle-eye" onclick="togglePassword('confirm_password', this)">
-        <i data-lucide="eye"></i>
-      </span>
-    </div>
-
-    <!-- Register Button -->
-    <button onclick="registerUser()" class="primary-btn">
+    <button type="button" onclick="registerUser()" class="primary-btn">
       Create Account
     </button>
 
-    <!-- Footer -->
     <p class="auth-footer">
       Already have an account?
       <a href="login.html">Login</a>
     </p>
 
-    <pre id="result"></pre>
+
   </div>
 
   <!-- Scripts -->
@@ -100,20 +171,6 @@
   <!-- Icons init -->
   <script>
     lucide.createIcons();
-
-    function togglePassword(fieldId, el) {
-      const input = document.getElementById(fieldId);
-      const icon = el.querySelector("i");
-
-      if (input.type === "password") {
-        input.type = "text";
-        icon.setAttribute("data-lucide", "eye-off");
-      } else {
-        input.type = "password";
-        icon.setAttribute("data-lucide", "eye");
-      }
-      lucide.createIcons();
-    }
   </script>
 
 </body>

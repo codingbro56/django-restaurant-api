@@ -1,72 +1,135 @@
 const token = localStorage.getItem("access_token");
+const TAX_RATE = 0.08;
 
 if (!token) {
   window.location.href = "../auth/login.html";
 }
 
 // LOAD CART
-fetch(API_BASE_URL + "/api/cart/", {
-  headers: {
-    "Authorization": "Bearer " + token
-  }
-})
-.then(res => {
-  if (!res.ok) throw new Error("Failed to load cart");
-  return res.json();
-})
-.then(data => {
-  const container = document.getElementById("cart-items");
-  let total = 0;
-
-  container.innerHTML = "";
-
-  if (!data.items || data.items.length === 0) {
-    container.innerText = "Your cart is empty";
-    return;
-  }
-
-  data.items.forEach(item => {
-    total += Number(item.total_price);
-
-    const div = document.createElement("div");
-    div.className = "cart-item";
-
-    div.innerHTML = `
-      <h4>${item.menu_item.name}</h4>
-      <p>₹${item.total_price}</p>
-      <button onclick="removeItem(${item.menu_item.id})">
-        Remove
-      </button>
-    `;
-
-    container.appendChild(div);
-  });
-
-  document.getElementById("total").innerText =
-    "Total: ₹" + total.toFixed(2);
-})
-.catch(err => {
-  console.error("CART LOAD ERROR:", err);
-  document.getElementById("cart-items").innerText =
-    "Failed to load cart";
-});
-
-
-// REMOVE ITEM (by menu_item_id)
-function removeItem(menuItemId) {
-  fetch(API_BASE_URL + `/api/cart/remove/${menuItemId}/`, {
-    method: "DELETE",
+function loadCart() {
+  fetch(API_BASE_URL + "/api/cart/", {
     headers: {
-      "Authorization": "Bearer " + token
+      Authorization: "Bearer " + token
     }
   })
   .then(res => {
-    if (!res.ok) throw new Error("Remove failed");
-    location.reload();
+    if (!res.ok) throw new Error();
+    return res.json();
   })
-  .catch(err => {
-    console.error("REMOVE ERROR:", err);
-    alert("Failed to remove item");
+  .then(data => {
+    const container = document.getElementById("cart-items");
+
+    container.innerHTML = "";
+
+    let subtotal = 0;
+
+    if (!data.items || data.items.length === 0) {
+      container.innerHTML = "<p>Your cart is empty</p>";
+      updateSummary(0);
+      return;
+    }
+
+    data.items.forEach(item => {
+      subtotal += item.subtotal;
+
+      const imageUrl = item.image ? API_BASE_URL + item.image : '../assets/images/hero-food.jpg';
+
+      container.innerHTML += `
+        <div class="cart-item">
+          <img src="${imageUrl}">
+
+          <div class="item-info">
+            <h4>${item.name}</h4>
+            <small>₹${item.price} / item</small>
+          </div>
+
+          <div class="qty-controls">
+            <button onclick="updateQty(${item.id}, ${item.quantity - 1})">−</button>
+            <span>${item.quantity}</span>
+            <button onclick="updateQty(${item.id}, ${item.quantity + 1})">+</button>
+          </div>
+
+          <div class="price">₹${item.subtotal}</div>
+
+          <button class="delete" onclick="removeItem(${item.id})">🗑</button>
+        </div>
+      `;
+    });
+
+    updateSummary(subtotal);
+  })
+  .catch(() => {
+    document.getElementById("cart-items").innerText =
+      "Failed to load cart";
+  });
+}
+
+// UPDATE SUMMARY
+function updateSummary(subtotal) {
+  const tax = subtotal * TAX_RATE;
+  const total = subtotal + tax;
+
+  document.getElementById("subtotal").innerText = subtotal.toFixed(2);
+  document.getElementById("tax").innerText = tax.toFixed(2);
+  document.getElementById("grandTotal").innerText = total.toFixed(2);
+}
+
+// UPDATE QUANTITY
+function updateQty(id, qty) {
+  if (qty < 1) return;
+
+  fetch(API_BASE_URL + `/api/cart/update/${id}/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({ quantity: qty })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error();
+    loadCart();
+  })
+  .catch(() => {
+    showToast("Failed to update quantity", "error");
+  });
+}
+
+
+// REMOVE ITEM
+function removeItem(id) {
+  fetch(API_BASE_URL + `/api/cart/remove/${id}/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error();
+    showToast("Item removed from cart", "success");
+    loadCart();
+  })
+  .catch(() => {
+    showToast("Failed to remove item", "error");
+  });
+}
+
+
+// CLEAR CART
+function clearCart() {
+  fetch(API_BASE_URL + "/api/cart/clear/", {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error();
+    showToast("Cart cleared", "success");
+    loadCart();
+  })
+  .catch(() => {
+    showToast("Failed to clear cart", "error");
   });
 }
 
@@ -76,38 +139,35 @@ function placeOrder() {
   fetch(API_BASE_URL + "/api/orders/place/", {
     method: "POST",
     headers: {
-      "Authorization": "Bearer " + token
+      Authorization: "Bearer " + token
     }
   })
   .then(res => {
-    if (!res.ok) throw new Error("Order failed");
-    return res.json();
+    if (!res.ok) throw new Error();
+    showToast("Order placed successfully", "success");
+
+    setTimeout(() => {
+      window.location.href = "../orders/success.html";
+    }, 800);
   })
-  .then(() => {
-    window.location.href = "../orders/success.html";
-  })
-  .catch(err => {
-    console.error("ORDER ERROR:", err);
-    alert("Order could not be placed");
+  .catch(() => {
+    showToast("Order could not be placed", "error");
   });
 }
 
 
-function clearCart() {
-  if (!confirm("Clear all items from cart?")) return;
+document.addEventListener("DOMContentLoaded", loadCart);
 
-  fetch(API_BASE_URL + "/api/cart/clear/", {
-    method: "DELETE",
-    headers: {
-      "Authorization": "Bearer " + token
-    }
-  })
-  .then(res => {
-    if (!res.ok) throw new Error("Clear failed");
-    location.reload();
-  })
-  .catch(err => {
-    console.error("CLEAR CART ERROR:", err);
-    alert("Failed to clear cart");
-  });
+
+function showToast(message, type = "success") {
+  const toast = document.getElementById("ui-toast");
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.className = `ui-toast show ${type}`;
+
+  setTimeout(() => {
+    toast.className = "ui-toast";
+  }, 2500);
 }
+

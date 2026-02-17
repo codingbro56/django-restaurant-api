@@ -5,62 +5,125 @@
 
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/home.css">
-  <script src="../js/menu.js"></script>
+  <script src="../js/home.js"></script>
 </head>
 <body>
 
-<!-- HEADER -->
-<div id="header-container"></div>
+  <div id="header-container"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <h1>Authentic Indian Food</h1>
-    <p>Freshly prepared • Traditional flavors • Delivered hot</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
 
-    <a href="../menu/index.html" class="cta-btn">View Menu</a>
-  </div>
-</section>
+      <!-- LEFT -->
+      <div class="hero-left">
+        <span class="hero-tag">Traditional Recipes • Modern Delivery</span>
 
-<!-- 🌟 SPECIAL DISH OF THE DAY -->
-<section class="special-dish">
-  <h2>Our Special Dish of the Day</h2>
+        <h1>
+          Authentic Indian <br>
+          Food For Your Soul
+        </h1>
 
-  <div class="special-card">
-    <div class="special-image">
-      <img src="../assets/images/special.png" alt="Special Dish">
+        <p class="hero-description">
+          Freshly prepared. Traditional flavors. Delivered hot.
+          Experience real Indian cuisine from the comfort of your home.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="../menu/index.html" class="btn-primary">View Full Menu</a>
+          <a href="#about" class="btn-outline">Our Story</a>
+        </div>
+
+        <div class="hero-trust">
+          <span>Trusted by 10k+ food lovers</span>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="hero-right">
+        <div id="special-card" class="special-card loading">
+          <p>Loading special dish...</p>
+        </div>
+      </div>
+
     </div>
+  </section>
 
-    <div class="special-content">
-      <h3>Chocolate Lava Dream</h3>
-      <p>
-        Indulge in our rich, warm chocolate lava cake,
-        with a gooey molten center served with fresh raspberries.
+
+  <!-- WHY CHOOSE US -->
+  <section class="why-section">
+    <div class="container">
+      <h2 class="section-title">Why Choose BharatBites?</h2>
+      <p class="section-subtitle">
+        Crafted with love, inspired by heritage.
       </p>
 
-      <div class="price">₹679.00</div>
+      <div class="why-grid">
+        <div class="why-card">
+          <h3>Fresh Ingredients</h3>
+          <p>Daily sourced vegetables and spices for maximum flavor.</p>
+        </div>
 
-      <button class="add-cart-btn" onclick="A">Add to Cart</button>
+        <div class="why-card">
+          <h3>Authentic Taste</h3>
+          <p>Time-honored recipes passed through generations.</p>
+        </div>
+
+        <div class="why-card">
+          <h3>Fast Delivery</h3>
+          <p>Hot and fresh food delivered at your doorstep.</p>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
-<!-- HIGHLIGHTS -->
-<section class="highlights">
-  <div class="highlight-card">
-    <h3>Fresh Ingredients</h3>
-    <p>Quality vegetables and spices sourced daily</p>
-  </div>
+  </section>
 
-  <div class="highlight-card">
-    <h3>Authentic Taste</h3>
-    <p>Traditional recipes from Indian kitchens</p>
-  </div>
 
-  <div class="highlight-card">
-    <h3>Fast Delivery</h3>
-    <p>Quick and reliable order fulfillment</p>
-  </div>
-</section>
+  <!-- APP DOWNLOAD -->
+  <section class="app-banner">
+    <div class="container app-grid">
+
+      <div class="app-left">
+        <h2>Download the app for exclusive 30% discount</h2>
+        <p>
+          Track your orders in real-time and earn rewards on every purchase.
+        </p>
+
+        <div class="app-buttons">
+          <button class="btn-dark">App Store</button>
+          <button class="btn-dark">Google Play</button>
+        </div>
+      </div>
+
+      <div class="app-right">
+        <div class="app-mockup"></div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- SUBSCRIBE -->
+  <section class="subscribe-section">
+    <div class="container">
+      <h2>Join the Spice Circle</h2>
+      <p>Get updates, offers, and secret recipes.</p>
+
+      <div class="subscribe-form">
+        <input type="email" id="subscribeEmail" placeholder="Enter your email">
+        <button class="btn-primary" id="subscribeBtn">Join Now</button>
+      </div>
+    </div>
+  </section>
+
+
+  <div id="ui-toast" class="ui-toast"></div>
+
+  <div id="footer-container"></div>
+
+  <!-- </body> -->
+
+  <div id="ui-toast" class="ui-toast"></div>
+
 
 <!-- HEADER SCRIPT -->
 <script src="../js/config.js"></script>

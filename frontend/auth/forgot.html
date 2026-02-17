@@ -2,33 +2,89 @@
 <html>
 <head>
   <title>Forgot Password</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/auth.css">
 </head>
-<body>
 
-<h2>Forgot Password</h2>
+<body class="auth-bg">
 
-<input id="email" type="email" placeholder="Enter your email">
-<br><br>
-<button onclick="sendReset()">Send Reset Link</button>
+  <div class="auth-card">
 
-<p id="msg"></p>
+    <h2>Forgot Password</h2>
+    <p class="auth-subtitle">
+      Enter your registered email to receive a reset link
+    </p>
 
-<script src="../js/config.js"></script>
-<script>
-function sendReset() {
-  const email = document.getElementById("email").value;
+    <!-- UI message -->
+    <div id="formError" class="form-error"></div>
+    <div id="formSuccess" class="form-success"></div>
 
-  fetch(API_BASE_URL + "/api/auth/forgot-password/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email })
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("msg").innerText = data.message;
-  });
-}
-</script>
+    <!-- Email -->
+    <label>Email Address</label>
+    <div class="input-group">
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter your email"
+        autocomplete="email"
+      >
+    </div>
+
+    <!-- Button -->
+    <button class="primary-btn" onclick="sendReset()">
+      Send Reset Link
+    </button>
+
+    <!-- Footer -->
+    <p class="auth-footer">
+      Remembered your password?
+      <a href="login.html">Login</a>
+    </p>
+
+  </div>
+
+  <script src="../js/config.js"></script>
+
+  <script>
+    function sendReset() {
+      const email = document.getElementById("email").value.trim();
+      const errorBox = document.getElementById("formError");
+      const successBox = document.getElementById("formSuccess");
+
+      errorBox.style.display = "none";
+      successBox.style.display = "none";
+
+      if (!email) {
+        errorBox.innerText = "Please enter your email address";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      fetch(API_BASE_URL + "/api/auth/forgot-password/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      })
+      .then(res => res.json().then(data => ({ ok: res.ok, data })))
+      .then(({ ok, data }) => {
+        if (!ok) {
+          errorBox.innerText = data.message || "Unable to send reset link";
+          errorBox.style.display = "block";
+          return;
+        }
+
+        successBox.innerText =
+          "If the email exists, a reset link has been sent.";
+        successBox.style.display = "block";
+      })
+      .catch(() => {
+        errorBox.innerText = "Server error. Please try again later.";
+        errorBox.style.display = "block";
+      });
+    }
+  </script>
 
 </body>
 </html>

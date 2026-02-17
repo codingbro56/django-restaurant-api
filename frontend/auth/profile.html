@@ -1,46 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Profile</title>
-  <link rel="stylesheet" href="../css/header.css">
+  <title>My Profile – BharatBites</title>
+
+  <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/profile.css">
 </head>
+
 <body>
 
 <div id="header-container"></div>
 
-<div class="profile-wrapper">
-  <div class="profile-card">
-    <h2>My Profile</h2>
+<section class="profile-page">
+  <div class="container">
 
-    <div class="profile-row">
-      <span>Username</span>
-      <strong id="username"></strong>
+    <!-- HEADER SECTION -->
+    <div class="profile-header">
+      <div class="profile-identity">
+        <div class="profile-avatar" id="profileAvatar">KS</div>
+        <div>
+          <h2 id="profileName">Loading...</h2>
+          <p id="profileEmail" class="text-muted"></p>
+        </div>
+      </div>
+
+      <button id="editBtn" class="primary">Edit Profile</button>
+      <button id="saveBtn" class="primary" style="display:none;">Save Changes</button>
     </div>
 
-    <div class="profile-row">
-      <span>Email</span>
-      <strong id="email"></strong>
-    </div>
+    <!-- CONTENT GRID -->
+    <div class="profile-grid">
 
-    <div class="profile-row">
-      <span>Role</span>
-      <strong id="role"></strong>
+      <!-- PERSONAL INFO -->
+      <div class="profile-section">
+        <h3>Personal Information</h3>
+        <div class="info-grid two-col">
+
+          <div class="form-group">
+            <label>Full Name</label>
+            <input id="full_name" disabled>
+          </div>
+
+          <div class="form-group">
+            <label>Phone</label>
+            <input id="phone_no" disabled>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ADDRESS INFO -->
+      <div class="profile-section">
+        <h3>Address Details</h3>
+        <div class="info-grid two-col">
+
+          <div class="form-group">
+            <label>Address</label>
+            <input id="address" disabled>
+          </div>
+
+          <div class="form-group">
+            <label>City</label>
+            <input id="city" disabled>
+          </div>
+
+          <div class="form-group">
+            <label>State</label>
+            <input id="state" disabled>
+          </div>
+
+          <div class="form-group">
+            <label>Pincode</label>
+            <input id="pincode" disabled>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
+</section>
 
 <script src="../js/config.js"></script>
 <script src="../js/header.js"></script>
 <script src="../js/profile.js"></script>
+<script src="../js/auth.js"></script>
 
 <script>
-  fetch("../partials/header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("header-container").innerHTML = html;
-      loadHeader();
-    });
+fetch("../partials/header.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("header-container").innerHTML = html;
+    loadHeader();
+  });
 </script>
 
 </body>

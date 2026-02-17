@@ -1,31 +1,99 @@
-.profile-wrapper {
-  min-height: calc(100vh - 70px);
-  background: radial-gradient(circle at top, #020617, #000);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.profile-page {
+  padding: 60px 0;
 }
 
-.profile-card {
-  width: 420px;
+/* ================= HEADER ================= */
+
+.profile-header {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   padding: 30px;
-  background: #020617;
-  border-radius: 18px;
-  box-shadow: 0 30px 70px rgba(0,0,0,0.8);
-  color: white;
-}
-
-.profile-card h2 {
-  margin-bottom: 20px;
-}
-
-.profile-row {
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #1e293b;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.profile-row span {
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* ================= SECTIONS ================= */
+
+.profile-grid {
+  display: grid;
+  gap: 30px;
+}
+
+.profile-section {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.profile-section h3 {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #60a5fa;
+}
+
+.info-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.two-col {
+  grid-template-columns: 1fr;
+}
+
+/* ================= FORM ================= */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
   color: #94a3b8;
+}
+
+.form-group input {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 12px;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+}
+
+.form-group input:disabled {
+  opacity: 0.7;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (min-width: 900px) {
+
+  .two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+
 }

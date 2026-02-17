@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Orders</title>
+  <title>My Orders – BharatBites</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/order.css">
 </head>
@@ -9,17 +9,18 @@
 
 <div id="header-container"></div>
 
-<section class="orders-container">
+<section class="orders-page">
   <h1 class="orders-title">My Orders</h1>
 
-  <div id="orders-list" class="orders-list">
-    <!-- Orders injected by JS -->
-  </div>
+  <div id="orders-list" class="orders-list"></div>
+
+  <!-- UI Message -->
+  <div id="orders-msg" class="ui-message hidden"></div>
 </section>
 
 <script src="../js/config.js"></script>
-<script src="../js/orders.js"></script>
 <script src="../js/header.js"></script>
+<script src="../js/orders.js"></script>
 
 <script>
   fetch("../partials/header.html")
@@ -31,7 +32,6 @@
 </script>
 
 <link rel="stylesheet" href="../css/footer.css">
-
 <div id="footer-container"></div>
 
 <script>
@@ -41,7 +41,6 @@
       document.getElementById("footer-container").innerHTML = html;
     });
 </script>
-
 
 </body>
 </html>
