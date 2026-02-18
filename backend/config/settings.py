@@ -155,11 +155,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
-CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = True #[
     # "https://bharat-bites.netlify.app"
     # "https://bharat-bites-r.netlify.app"
-    "https://django-restaurant-api.vercel.app"
-]
+    # "https://django-restaurant-api.vercel.app"
+# ]
 
 CORS_ALLOW_CREDENTIALS = True
 
