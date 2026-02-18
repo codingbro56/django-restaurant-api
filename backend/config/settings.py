@@ -168,12 +168,15 @@ CORS_ALLOWED_ORIGINS = [
 ]'''
 
 # Allow all Vercel subdomains (including preview deployments)
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.vercel\.app$",
-]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"^https://.*\.vercel\.app$",
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = False
 
 # Allow credentials (cookies, authorization headers) in cross-origin requests
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
 # Explicitly define allowed HTTP methods for preflight requests
 CORS_ALLOW_METHODS = [
