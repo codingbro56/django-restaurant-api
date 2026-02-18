@@ -172,10 +172,6 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.vercel\.app$",
 ]
 
-# Allow Authorization header (JWT) in cross-origin requests
-CORS_ALLOW_CREDENTIALS = True
-
-
 # Allow credentials (cookies, authorization headers) in cross-origin requests
 CORS_ALLOW_CREDENTIALS = True
 
