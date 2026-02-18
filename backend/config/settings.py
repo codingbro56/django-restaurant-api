@@ -162,10 +162,19 @@ SIMPLE_JWT = {
 # ============================================================================
 # Allow requests from the Vercel-hosted frontend.
 # Restrict to specific origins to prevent unauthorized cross-origin requests.
-
+'''
 CORS_ALLOWED_ORIGINS = [
     "https://django-restaurant-api.vercel.app",
+]'''
+
+# Allow all Vercel subdomains (including preview deployments)
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.vercel\.app$",
 ]
+
+# Allow Authorization header (JWT) in cross-origin requests
+CORS_ALLOW_CREDENTIALS = True
+
 
 # Allow credentials (cookies, authorization headers) in cross-origin requests
 CORS_ALLOW_CREDENTIALS = True
