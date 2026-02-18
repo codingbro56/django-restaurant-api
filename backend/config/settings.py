@@ -221,18 +221,22 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 WHITENOISE_COMPRESS = True
 WHITENOISE_AUTOREFRESH = False  # Disable auto-refresh in production
 
-# ============================================================================
-# MEDIA FILES - CLOUDINARY STORAGE
-# ============================================================================
-# Use Cloudinary for storing user uploads (images, etc.) instead of local storage.
-# Provides CDN-backed, scalable image storage and optimization.
+# ================================
+# CLOUDINARY MEDIA STORAGE
+# ================================
 
+# Required even when using Cloudinary
+MEDIA_URL = "/media/"
+
+# Use Cloudinary for all uploaded files
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
+# Configure Cloudinary from environment variables
 cloudinary.config(
     cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
     api_key=os.environ.get("CLOUDINARY_API_KEY"),
     api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+    secure=True,
 )
 
 # ============================================================================
