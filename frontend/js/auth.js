@@ -305,7 +305,10 @@ function loginUser() {
       localStorage.setItem("user_initials", initials);
       localStorage.setItem("user_email", (profileData && profileData.email) || "");
 
-      window.location.href = "../home/index.html";
+      // Redirect to the homepage after login for static hosting (Vercel).
+      // Do NOT use "/home/index.html" (absolute path) because static hosts like Vercel will return 404 if the file doesn't exist at that absolute path.
+      // Instead, use "index.html" (relative path) or "/" to ensure it works from any directory depth.
+      window.location.href = "index.html";
     })
     .catch(err => {
       if (formError) {
@@ -323,7 +326,10 @@ function logout() {
   localStorage.removeItem("user_initials");
   localStorage.removeItem("user_email");
 
-  window.location.href = "../home/index.html";
+  // Redirect to the homepage after logout for static hosting (Vercel).
+  // Do NOT use "/home/index.html" (absolute path) because static hosts like Vercel will return 404 if the file doesn't exist at that absolute path.
+  // Instead, use "index.html" (relative path) or "/" to ensure it works from any directory depth.
+  window.location.href = "index.html";
 }
 
 
