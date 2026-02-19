@@ -8,6 +8,8 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 class MenuItemSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = MenuItem
         fields = [
