@@ -1,98 +1,73 @@
 from django.contrib.auth import authenticate, logout
-# from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
-
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.tokens import default_token_generator
-
-from .serializers import RegisterSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from urllib.parse import unquote
-
-from .models import User, UserProfile
-
-
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
-# from rest_framework import status
+from .models import User
 from django.contrib.auth import get_user_model
-
 User = get_user_model()
 
 
 @api_view(["POST"])
 def register(request):
-    data = request.data
-
     required_fields = [
-        "full_name", "username", "email",
-        "phone_no", "password", "confirm_password"
+        "full_name",
+        "username",
+        "email",
+        "phone_no",
+        "password",
+        "confirm_password",
     ]
 
     for field in required_fields:
-        if field not in data or not data[field]:
+        if not request.data.get(field):
             return Response(
-                {"message": f"{field} is required"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": f"{field} is required"},
+                status=400
             )
 
-    if data["password"] != data["confirm_password"]:
+    if request.data["password"] != request.data["confirm_password"]:
         return Response(
-            {"message": "Passwords do not match"},
-            status=status.HTTP_400_BAD_REQUEST
+            {"error": "Passwords do not match"},
+            status=400
         )
 
-    if User.objects.filter(username=data["username"]).exists():
+    if User.objects.filter(username=request.data["username"]).exists():
         return Response(
-            {"message": "Username already taken"},
-            status=status.HTTP_400_BAD_REQUEST
+            {"error": "Username already taken"},
+            status=400
         )
 
-    if User.objects.filter(email=data["email"]).exists():
+    if User.objects.filter(email=request.data["email"]).exists():
         return Response(
-            {"message": "Email already registered"},
-            status=status.HTTP_400_BAD_REQUEST
+            {"error": "Email already registered"},
+            status=400
         )
 
-    try:
-        # 1️⃣ Create User
-        user = User.objects.create_user(
-            username=data["username"],
-            email=data["email"],
-            password=data["password"],
-            full_name=data["full_name"],
-            phone_no=data["phone_no"]
-        )
-
-        # 2️⃣ Create Profile (address optional at registration)
-        UserProfile.objects.create(
-            user=user,
-            address=data.get("address", ""),
-            city=data.get("city", ""),
-            state=data.get("state", ""),
-            pincode=data.get("pincode", "")
-        )
-
-    except Exception as e:
-        return Response(
-            {"message": str(e)},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+    user = User.objects.create_user(
+        username=request.data["username"],
+        email=request.data["email"],
+        password=request.data["password"],
+        full_name=request.data["full_name"],
+        phone_no=request.data["phone_no"],
+        address=request.data.get("address", ""),
+        city=request.data.get("city", ""),
+        state=request.data.get("state", ""),
+        pincode=request.data.get("pincode", ""),
+    )
 
     return Response(
         {"message": "User registered successfully"},
-        status=status.HTTP_201_CREATED
+        status=201
     )
-
-
 
 @api_view(["GET"])
 def verify_email(request):
@@ -249,14 +224,10 @@ def reset_password(request):
 
     return Response({"message": "Password reset successful"})
 
-
 @api_view(["GET", "PUT"])
 @permission_classes([IsAuthenticated])
 def user_profile(request):
     user = request.user
-
-    # Ensure profile exists
-    profile, _ = UserProfile.objects.get_or_create(user=user)
 
     if request.method == "GET":
         return Response({
@@ -264,23 +235,20 @@ def user_profile(request):
             "email": user.email,
             "full_name": user.full_name,
             "phone_no": user.phone_no,
-            "address": profile.address,
-            "city": profile.city,
-            "state": profile.state,
-            "pincode": profile.pincode
+            "address": user.address,
+            "city": user.city,
+            "state": user.state,
+            "pincode": user.pincode,
         })
 
-    # PUT → update
-    data = request.data
+    # PUT (Update Profile)
+    user.full_name = request.data.get("full_name", user.full_name)
+    user.phone_no = request.data.get("phone_no", user.phone_no)
+    user.address = request.data.get("address", user.address)
+    user.city = request.data.get("city", user.city)
+    user.state = request.data.get("state", user.state)
+    user.pincode = request.data.get("pincode", user.pincode)
 
-    user.full_name = data.get("full_name", user.full_name)
-    user.phone_no = data.get("phone_no", user.phone_no)
     user.save()
-
-    profile.address = data.get("address", profile.address)
-    profile.city = data.get("city", profile.city)
-    profile.state = data.get("state", profile.state)
-    profile.pincode = data.get("pincode", profile.pincode)
-    profile.save()
 
     return Response({"message": "Profile updated successfully"})

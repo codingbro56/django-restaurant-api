@@ -1,44 +1,97 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import UserProfile
 
-class RegisterSerializer(serializers.ModelSerializer):
-    confirm_password = serializers.CharField(write_only=True)
+User = get_user_model()
 
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password', 'confirm_password']
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
 
-    def validate(self, data):
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("Passwords do not match")
-        return data
-
-    def create(self, validated_data):
-        validated_data.pop('confirm_password')
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        return user
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = '__all__'
-
-# For Admin CRUD Managememtn of User
-class AdminUserSerializer(serializers.ModelSerializer):
+# -----------------------------
+# Admin List Serializer
+# -----------------------------
+class AdminListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
             "id",
+            "full_name",
             "username",
             "email",
             "is_active",
-            "is_staff",
+            "date_joined",
+        ]
+
+
+# -----------------------------
+# Admin Detail Serializer
+# -----------------------------
+class AdminDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "full_name",
+            "username",
+            "email",
+            "phone_no",
+            "address",
+            "city",
+            "state",
+            "pincode",
+            "is_active",
+            "date_joined",
+        ]
+
+
+# -----------------------------
+# Admin Create Serializer
+# -----------------------------
+class AdminCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "full_name",
+            "username",
+            "email",
+            "phone_no",
+            "address",
+            "city",
+            "state",
+            "pincode",
+            "password",
+        ]
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data["email"],
+            password=validated_data["password"],
+            full_name=validated_data["full_name"],
+            phone_no=validated_data["phone_no"],
+            address=validated_data.get("address", ""),
+            city=validated_data.get("city", ""),
+            state=validated_data.get("state", ""),
+            pincode=validated_data.get("pincode", ""),
+        )
+        user.is_staff = True
+        user.save()
+        return user
+
+
+# -----------------------------
+# Admin Update Serializer
+# -----------------------------
+class AdminUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "full_name",
+            "username",
+            "email",
+            "phone_no",
+            "address",
+            "city",
+            "state",
+            "pincode",
+            "is_active",
         ]

@@ -10,7 +10,7 @@ urlpatterns = [
     path('admin/', api_views.admin_orders_list),
     path('admin/<int:order_id>/', api_views.admin_order_detail),
 
-    # ✅ ONLY ONE status update endpoint
+    #ONLY ONE status update endpoint
     path('admin/<int:order_id>/status/', admin_views.admin_update_order),
 
     # reports

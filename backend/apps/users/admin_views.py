@@ -6,7 +6,6 @@ from rest_framework import status
 from apps.menu.models import MenuItem, Category
 from apps.orders.models import Order
 
-from .serializers import AdminUserSerializer
 from django.utils.dateparse import parse_date
 
 import csv
@@ -14,101 +13,89 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-# CRUD: READ
+from .serializers import (
+    AdminListSerializer,
+    AdminDetailSerializer,
+    AdminCreateSerializer,
+    AdminUpdateSerializer,
+)
+
+# -----------------------------
+# Admin List (Only Admins)
+# -----------------------------
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
 def admin_user_list(request):
-    users = User.objects.all().order_by("-date_joined")
-    serializer = AdminUserSerializer(users, many=True)
+    admins = User.objects.filter(is_staff=True).order_by("-date_joined")
+    serializer = AdminListSerializer(admins, many=True)
     return Response(serializer.data)
 
-# Create User
-# @api_view(["POST"])
-# @permission_classes([IsAdminUser])
-# def admin_create_user(request):
-#     data = request.data
 
-#     if User.objects.filter(username=data["username"]).exists():
-#         return Response(
-#             {"error": "Username already exists"},
-#             status=status.HTTP_400_BAD_REQUEST
-#         )
+# -----------------------------
+# Admin Detail (Single Admin)
+# -----------------------------
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def admin_user_detail(request, user_id):
+    try:
+        admin = User.objects.get(id=user_id, is_staff=True)
+    except User.DoesNotExist:
+        return Response({"error": "Admin not found"}, status=404)
 
-#     user = User.objects.create_user(
-#         username=data["username"],
-#         email=data.get("email", ""),
-#         password=data["password"]
-#     )
+    serializer = AdminDetailSerializer(admin)
+    return Response(serializer.data)
 
-#     return Response(
-#         {"message": "User created successfully"},
-#         status=status.HTTP_201_CREATED
-#     )
+
+# -----------------------------
+# Create Admin (Full Details)
+# -----------------------------
 @api_view(["POST"])
 @permission_classes([IsAdminUser])
 def admin_create_user(request):
-    username = request.data.get("username")
-    email = request.data.get("email")
-    password = request.data.get("password")
-    is_staff = request.data.get("is_staff", False)
+    serializer = AdminCreateSerializer(data=request.data)
 
-    if not username or not password:
-        return Response(
-            {"error": "Username and password required"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Admin created successfully"}, status=201)
 
-    if User.objects.filter(username=username).exists():
-        return Response(
-            {"error": "Username already exists"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    return Response(serializer.errors, status=400)
 
-    user = User.objects.create_user(
-        username=username,
-        email=email,
-        password=password
-    )
-    user.is_staff = is_staff
-    user.save()
 
-    return Response({"message": "User created successfully"})
-
-# CRUD: UPDATE
+# -----------------------------
+# Update Admin
+# -----------------------------
 @api_view(["PUT"])
 @permission_classes([IsAdminUser])
 def admin_update_user(request, user_id):
     try:
-        user = User.objects.get(id=user_id)
+        admin = User.objects.get(id=user_id, is_staff=True)
     except User.DoesNotExist:
-        return Response(
-            {"error": "User not found"},
-            status=status.HTTP_404_NOT_FOUND
-        )
+        return Response({"error": "Admin not found"}, status=404)
 
-    user.email = request.data.get("email", user.email)
-    user.is_active = request.data.get("is_active", user.is_active)
-    user.is_staff = request.data.get("is_staff", user.is_staff)
-    user.save()
+    serializer = AdminUpdateSerializer(admin, data=request.data, partial=True)
 
-    return Response({"message": "User updated successfully"})
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Admin updated successfully"})
 
-# CRUD: DELETE (soft = deactivate)
+    return Response(serializer.errors, status=400)
+
+
+# -----------------------------
+# Deactivate Admin
+# -----------------------------
 @api_view(["DELETE"])
 @permission_classes([IsAdminUser])
 def admin_disable_user(request, user_id):
     try:
-        user = User.objects.get(id=user_id)
+        admin = User.objects.get(id=user_id, is_staff=True)
     except User.DoesNotExist:
-        return Response(
-            {"error": "User not found"},
-            status=status.HTTP_404_NOT_FOUND
-        )
+        return Response({"error": "Admin not found"}, status=404)
 
-    user.is_active = False
-    user.save()
+    admin.is_active = False
+    admin.save()
 
-    return Response({"message": "User deactivated"})
+    return Response({"message": "Admin deactivated successfully"})
 
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
