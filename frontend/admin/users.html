@@ -1,80 +1,194 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin – User Management</title>
-    <meta charset="UTF-8">
+  <title>Admin – User Management</title>
+  <meta charset="UTF-8">
 
-    <!-- Admin styles -->
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/user-manage.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/user-manage.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="admin-container">
+<div class="admin-layout">
 
-  <h1>User Management</h1>
-  <p class="admin-subtitle">Create, manage and control system users</p>
-
-  <!-- =====================
-       CREATE USER
-       ===================== -->
-  <div class="admin-card">
-    <h3>Create User</h3>
-
-    <div class="form-row">
-      <input type="text" id="newUsername" placeholder="Username">
-      <input type="email" id="newEmail" placeholder="Email">
-      <input type="password" id="newPassword" placeholder="Password">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>BharatBites</h2>
+      <span>Admin Panel</span>
     </div>
 
-    <label class="checkbox-row">
-      <input type="checkbox" id="newIsStaff">
-      <span>Admin User</span>
-    </label>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="menu.html">Menu</a>
+      <a href="orders.html">Orders</a>
+      <a href="user-management.html" class="active">Users</a>
+      <a href="reports.html">Reports</a>
+    </nav>
+  </aside>
 
-    <button class="primary" id="createUserBtn">Create User</button>
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="admin-main">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1>User Management</h1>
+        <p>Manage and control system administrators</p>
+      </div>
+      <button class="primary" id="openCreateDrawerBtn">
+        + Create Admin
+      </button>
+    </div>
+
+    <!-- ================= MASTER DETAIL ================= -->
+    <div class="master-detail">
+
+      <!-- LEFT PANEL (LIST) -->
+      <div class="admin-list-card">
+        <div class="card-header">
+          <input type="text" id="searchInput" placeholder="Search admin...">
+        </div>
+
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Username</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <!-- Loaded via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RIGHT PANEL (DETAIL) -->
+      <div class="admin-detail-card" id="adminDetailPanel">
+
+        <div class="empty-state" id="emptyState">
+          <p>Select an administrator to view details</p>
+        </div>
+
+        <div class="detail-content hidden" id="detailContent">
+
+          <h3>Admin Details</h3>
+
+          <div class="form-grid">
+
+            <label>Full Name</label>
+            <input id="detail_full_name" disabled>
+
+            <label>Username</label>
+            <input id="detail_username" disabled>
+
+            <label>Email</label>
+            <input id="detail_email" disabled>
+
+            <label>Phone</label>
+            <input id="detail_phone_no" disabled>
+
+            <label>Address</label>
+            <input id="detail_address" disabled>
+
+            <label>City</label>
+            <input id="detail_city" disabled>
+
+            <label>State</label>
+            <input id="detail_state" disabled>
+
+            <label>Pincode</label>
+            <input id="detail_pincode" disabled>
+
+          </div>
+
+          <div class="account-controls">
+            <label>
+              <input type="checkbox" id="detail_is_active" disabled>
+              Active
+            </label>
+
+            <div class="detail-actions">
+              <button class="secondary" id="editAdminBtn">Edit</button>
+              <button class="primary hidden" id="saveAdminBtn">Save</button>
+              <button class="outline" id="resetPasswordBtn">
+                Send Password Reset
+              </button>
+              <button class="danger" id="disableAdminBtn">
+                Deactivate
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- ================= CREATE ADMIN DRAWER ================= -->
+<div class="drawer hidden" id="createAdminDrawer">
+  <div class="drawer-content">
+
+    <div class="drawer-header">
+      <h2>Create New Administrator</h2>
+      <button id="closeDrawerBtn">✕</button>
+    </div>
+
+    <div class="drawer-body">
+
+      <div class="form-grid">
+
+        <label>Full Name</label>
+        <input id="create_full_name">
+
+        <label>Username</label>
+        <input id="create_username">
+
+        <label>Email</label>
+        <input id="create_email">
+
+        <label>Phone</label>
+        <input id="create_phone_no">
+
+        <label>Address</label>
+        <input id="create_address">
+
+        <label>City</label>
+        <input id="create_city">
+
+        <label>State</label>
+        <input id="create_state">
+
+        <label>Pincode</label>
+        <input id="create_pincode">
+
+        <label>Password</label>
+        <input type="password" id="create_password">
+
+      </div>
+
+      <div class="drawer-actions">
+        <button class="secondary" id="cancelCreateBtn">Cancel</button>
+        <button class="primary" id="createAdminBtn">Create Admin</button>
+      </div>
+
+    </div>
+
   </div>
-
-  <!-- =====================
-       USER LIST
-       ===================== -->
-  <div class="admin-card">
-    <h3>All Users</h3>
-
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Active</th>
-          <th>Staff</th>
-          <th class="actions">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="userTable">
-        <!-- Rows injected by JS -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- =====================
-       FOOTER
-       ===================== -->
-  <div class="admin-footer">
-    <a href="dashboard.html">
-      <button class="secondary">Back to Dashboard</button>
-    </a>
-  </div>
-
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script src="../js/config.js"></script>
 <script src="../js/admin-guard.js"></script>
-<script src="../js/admin.js"></script>
 <script src="../js/user-admin.js"></script>
 
 </body>

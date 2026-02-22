@@ -329,7 +329,7 @@ function logout() {
   // Redirect to the homepage after logout for static hosting (Vercel).
   // Do NOT use "/home/index.html" (absolute path) because static hosts like Vercel will return 404 if the file doesn't exist at that absolute path.
   // Instead, use "index.html" (relative path) or "/" to ensure it works from any directory depth.
-  window.location.href = "index.html";
+  window.location.href = "";
 }
 
 

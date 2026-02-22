@@ -1,39 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Orders</title>
-  <link rel="stylesheet" href="../css/main.css">
+  <title>Orders | BharatBites</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/admin-layout.css">
+  <link rel="stylesheet" href="../css/dashboard.css"> <!-- reuse grid styles -->
   <link rel="stylesheet" href="../css/order-admin.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="admin-orders-wrapper">
-  <div class="admin-orders-card">
+<div class="admin-app">
 
-    <h1>Orders</h1>
-    <p class="admin-subtitle">View and manage all customer orders</p>
-
-    <!-- ORDERS LIST -->
-    <div id="admin-orders" class="orders-grid">
-      <!-- Orders injected by JS -->
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>BharatBites</h2>
+      <span class="sidebar-role">Admin Panel</span>
     </div>
 
-    <div class="admin-footer">
-      <a href="dashboard.html">
-        <button class="secondary">Back to Dashboard</button>
-      </a>
-    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="menu-manage.html">Menu Management</a>
+      <a href="orders.html" class="active">Orders</a>
+      <a href="users.html">Users</a>
+      <a href="reports.html">Reports</a>
+    </nav>
 
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <h1>Order Management</h1>
+
+      <div class="topbar-actions">
+        <input type="text" placeholder="Search..." class="search-input">
+        <div class="admin-profile">
+          <span>Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- KPI GRID (reusing dashboard style) -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <span>Total Orders</span>
+          <h2 id="totalOrders">--</h2>
+        </div>
+
+        <div class="kpi-card">
+          <span>Pending</span>
+          <h2 id="pendingOrders">--</h2>
+        </div>
+
+        <div class="kpi-card">
+          <span>Completed</span>
+          <h2 id="completedOrders">--</h2>
+        </div>
+
+        <div class="kpi-card">
+          <span>Cancelled</span>
+          <h2 id="cancelledOrders">--</h2>
+        </div>
+      </section>
+
+      <!-- MAIN GRID (same layout as dashboard) -->
+      <section class="dashboard-grid">
+
+        <!-- LEFT SIDE: Orders Table -->
+        <div class="card">
+
+          <div class="recent-header">
+            <div class="recent-left">
+              <h3>All Orders</h3>
+              <p class="recent-subtitle">
+                Manage and process customer orders
+              </p>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="ordersList">
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDE: Details -->
+        <div class="right-column">
+          <div class="card">
+            <div class="card-header">
+              <h3>Order Details</h3>
+            </div>
+            <div class="card-body" id="orderDetails">
+              Select an order to view details
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
   </div>
-</div>
 
-<div id="toast" class="toast"></div>
+</div>
 
 <script src="../js/config.js"></script>
 <script src="../js/admin-guard.js"></script>
-<script src="../js/admin.js"></script>
 <script src="../js/orders-admin.js"></script>
-
 </body>
 </html>

@@ -1,244 +1,271 @@
-/* =========================
-   ADMIN CONTAINER
-   ========================= */
+/* =========================================
+   USER MANAGEMENT – MASTER DETAIL LAYOUT
+   Dark Theme | Blue Accent | SaaS Style
+========================================= */
 
-.admin-container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 20px;
+:root {
+  --bg-dark: #0f172a;
+  --card-bg: #1e293b;
+  --border: #334155;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --danger: #ef4444;
+  --text-light: #f1f5f9;
+  --text-muted: #94a3b8;
 }
 
-.admin-subtitle {
-  color: #9ca3af;
-  margin-bottom: 30px;
-}
-
-/* =========================
-   CARDS
-   ========================= */
-
-.admin-card {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 18px;
-  padding: 24px;
-  margin-bottom: 30px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-}
-
-.admin-card h3 {
-  margin-bottom: 16px;
-}
-
-/* =========================
-   FORM
-   ========================= */
-
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
-  margin-bottom: 14px;
-}
-
-.form-row input {
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: none;
-  background: #020617;
-  color: #fff;
-}
-
-.checkbox-row {
+/* Layout */
+.admin-layout {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  min-height: 100vh;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  font-family: "Inter", sans-serif;
 }
 
-/* =========================
-   TABLE
-   ========================= */
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #0b1220;
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+}
 
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.sidebar-header span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.sidebar nav {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* Main */
+.admin-main {
+  flex: 1;
+  padding: 32px;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.page-header p {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+}
+
+/* Master Detail */
+.master-detail {
+  display: flex;
+  gap: 20px;
+}
+
+/* Cards */
+.admin-list-card,
+.admin-detail-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.admin-list-card {
+  width: 45%;
+}
+
+.admin-detail-card {
+  flex: 1;
+  min-height: 500px;
+}
+
+/* Table */
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-}
-
-.admin-table thead {
-  background: rgba(255,255,255,0.06);
+  margin-top: 16px;
 }
 
 .admin-table th,
 .admin-table td {
-  padding: 14px;
-  font-size: 14px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
   text-align: left;
 }
 
-.admin-table th {
-  color: #9ca3af;
-  font-weight: 600;
-}
-
 .admin-table tbody tr {
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .admin-table tbody tr:hover {
-  background: rgba(255,255,255,0.04);
+  background: rgba(59, 130, 246, 0.1);
 }
 
-.admin-table .actions {
-  text-align: right;
-  white-space: nowrap;
+/* Inputs */
+input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0f172a;
+  color: var(--text-light);
+  outline: none;
 }
 
-/* =========================
-   BUTTONS
-   ========================= */
+input:disabled {
+  opacity: 0.6;
+}
+
+input:focus {
+  border-color: var(--accent);
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+  margin-top: 16px;
+}
+
+/* Buttons */
+button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
 
 button.primary {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 12px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
+  background: var(--accent);
+  color: white;
+}
+
+button.primary:hover {
+  background: var(--accent-hover);
 }
 
 button.secondary {
-  background: linear-gradient(135deg, #374151, #1f2937);
-  color: #fff;
-  padding: 12px 26px;
-  border-radius: 14px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
+  background: #475569;
+  color: white;
 }
 
-/* Action buttons (used by JS) */
-.btn-edit {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 10px;
-  border: none;
-  margin-right: 6px;
+button.outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-light);
 }
 
-.btn-disable {
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 10px;
-  border: none;
+button.danger {
+  background: var(--danger);
+  color: white;
 }
 
-/* Center Create User button */
-.admin-card button.primary {
-  display: block;
-  margin: 20px auto 0 auto;
-}
-
-
-/* =========================
-   ADMIN CHECKBOX STYLING
-   ========================= */
-
-.checkbox-row {
+.detail-actions {
   display: flex;
-  align-items: center;
   gap: 10px;
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #374151;
+  margin-top: 20px;
 }
 
-/* Checkbox itself */
-.checkbox-row input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: #f59e0b; /* amber warning tone */
-}
-
-/* Label text */
-.checkbox-row span {
-  color: #92400e; /* admin = sensitive */
-}
-
-/* Optional helper text (if you want later) */
-.checkbox-row::after {
-  content: " (full access)";
-  font-size: 13px;
-  color: #6b7280;
-  font-weight: 400;
-}
-
-
-/* =========================
-   FOOTER
-   ========================= */
-
-.admin-footer {
+/* Empty State */
+.empty-state {
   text-align: center;
-  margin-top: 40px;
-}
-/* =========================
-   USER TABLE – CONTRAST FIX
-   ========================= */
-
-/* Header */
-.admin-table th {
-  color: #4b5563; /* darker gray */
-  font-weight: 600;
+  margin-top: 100px;
+  color: var(--text-muted);
 }
 
-/* Normal cells */
-.admin-table td {
-  color: #111827; /* near-black for readability */
+/* Hidden Utility */
+.hidden {
+  display: none !important;
 }
 
-/* Username emphasis */
-.admin-table td:nth-child(2) {
-  font-weight: 600;
-  color: #020617;
+/* Drawer */
+.drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 420px;
+  background: var(--card-bg);
+  border-left: 1px solid var(--border);
+  box-shadow: -10px 0 25px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
+  z-index: 1000;
 }
 
-/* Email */
-.admin-table td:nth-child(3) {
-  color: #374151;
-  font-size: 14px;
+.drawer.hidden {
+  transform: translateX(100%);
 }
 
-/* Status colors */
-.admin-table .status-active {
-  color: #15803d; /* dark green */
-  font-weight: 600;
+.drawer-content {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.admin-table .status-disabled {
-  color: #b91c1c; /* dark red */
-  font-weight: 600;
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Role colors */
-.admin-table .role-admin {
-  color: #92400e; /* amber/brown */
-  font-weight: 600;
+.drawer-body {
+  margin-top: 20px;
 }
 
-.admin-table .role-user {
-  color: #1e40af; /* blue */
-  font-weight: 600;
+.drawer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
 }
 
-.admin-table tbody tr {
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--accent);
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  display: none;
 }
 
-.admin-table tbody tr:hover {
-  background: rgba(0,0,0,0.03);
+.toast.error {
+  background: var(--danger);
 }

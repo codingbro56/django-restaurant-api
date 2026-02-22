@@ -1,221 +1,312 @@
+console.log("Orders JS loaded"); // temporary debug log to confirm script is running
+
 // ===============================
-// ORDERS ADMIN MODULE
+// SAFE INITIALIZATION
 // ===============================
 
-function getAdminToken() {
-  return localStorage.getItem("admin_token");
-}
+(function initOrdersModule() {
+  console.log("Orders module initialized");
 
-function handleAuthError(status) {
-  if (status === 401) {
-    localStorage.removeItem("admin_token");
-    window.location.href = "login.html";
+  // If DOM is already loaded, run immediately
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+
+  function start() {
+    loadOrders();
+    setupLogout();
+  }
+})();
+
+// ===============================
+// ADMIN ORDER MANAGEMENT (TABLE VERSION)
+// ===============================
+
+let ordersData = [];
+let selectedOrderId = null;
+let highlightedRow = null;
+
+
+// ===============================
+// LOAD ORDERS
+// ===============================
+
+async function loadOrders() {
+  console.log("Fetching orders..."); // debug log to confirm function is called
+  const token = localStorage.getItem("admin_token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/orders/admin/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      console.error("Failed to fetch orders:", res.status);
+      return;
+    }
+
+    const data = await res.json();
+    ordersData = Array.isArray(data) ? data : (data.results || []);
+
+    renderKPIs();
+    renderOrdersTable();
+
+    // If an order is selected, keep it highlighted and show details
+    if (selectedOrderId) {
+      const selectedOrder = ordersData.find(o => o.id === selectedOrderId);
+      if (selectedOrder) {
+        renderOrderDetails(selectedOrder);
+        highlightSelectedRow();
+      } else {
+        selectedOrderId = null;
+        clearOrderDetails();
+      }
+    }
+
+  } catch (err) {
+    console.error("Orders fetch error:", err);
   }
 }
 
-function showToast(message, isError = false) {
-  const toast = document.getElementById("toast");
-  if (!toast) {
-    const temp = document.createElement("div");
-    temp.style.cssText = "position:fixed;top:20px;right:20px;padding:12px 20px;background:#333;color:#fff;border-radius:8px;z-index:9999;";
-    temp.innerText = message;
-    document.body.appendChild(temp);
-    setTimeout(() => temp.remove(), 3000);
+// ===============================
+// RENDER KPI COUNTS
+// ===============================
+
+function renderKPIs() {
+  document.getElementById("totalOrders").innerText = ordersData.length;
+
+  // Pending = placed
+  document.getElementById("pendingOrders").innerText =
+    ordersData.filter(o => o.status === "placed").length;
+
+  document.getElementById("completedOrders").innerText =
+    ordersData.filter(o => o.status === "completed").length;
+
+  document.getElementById("cancelledOrders").innerText =
+    ordersData.filter(o => o.status === "cancelled").length;
+}
+
+// ===============================
+// RENDER TABLE
+// ===============================
+
+function renderOrdersTable() {
+  const tbody = document.getElementById("ordersList");
+  tbody.innerHTML = "";
+
+  if (!ordersData.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align:center;">No orders found</td>
+      </tr>
+    `;
     return;
   }
 
-  toast.innerText = message;
-  toast.className = "toast" + (isError ? " error" : "");
-  toast.style.display = "block";
+  ordersData.forEach(order => {
+    const tr = document.createElement("tr");
+    tr.style.cursor = "pointer";
+    tr.dataset.orderId = order.id;
 
-  setTimeout(() => {
-    toast.style.display = "none";
-  }, 3000);
-}
+    tr.innerHTML = `
+      <td>#${order.id}</td>
+      <td>${order.user || order.customer || "N/A"}</td>
+      <td>${renderStatusBadge(order.status)}</td>
+      <td>₹${order.total_amount}</td>
+    `;
 
-// ===============================
-// LOAD ALL ADMIN ORDERS
-// ===============================
-function loadAdminOrders() {
-  const token = getAdminToken();
-  if (!token) return;
-
-  const box = document.getElementById("admin-orders");
-  if (!box) return;
-
-  box.innerHTML = "Loading...";
-
-  fetch(API_BASE_URL + "/api/orders/admin/", {
-    headers: { Authorization: "Bearer " + token }
-  })
-    .then(res => {
-      if (!res.ok) {
-        handleAuthError(res.status);
-        return Promise.reject(new Error("Failed to load orders"));
-      }
-      return res.json();
-    })
-    .then(data => {
-      box.innerHTML = "";
-
-      if (!data || data.length === 0) {
-        box.innerText = "No orders found";
-        return;
-      }
-
-      data.forEach(order => {
-        const div = document.createElement("div");
-        div.classList.add("admin-order-card");
-
-        div.innerHTML = `
-          <div class="admin-order-info">
-            <h3>Order #${order.id}</h3>
-            <p>User: ${order.user}</p>
-            <p>Status: ${order.status}</p>
-          </div>
-
-          <div class="admin-order-actions">
-            <strong>₹${order.total_amount}</strong>
-            <a href="order-detail.html?id=${order.id}"><button>View</button></a>
-          </div>
-        `;
-
-        box.appendChild(div);
-      });
-    })
-    .catch(err => {
-      box.innerText = "Failed to load orders";
-      console.warn("[orders-admin] loadAdminOrders error:", err && err.message ? err.message : err);
+    tr.addEventListener("click", () => {
+      selectedOrderId = order.id;
+      renderOrderDetails(order);
+      highlightRow(tr);
     });
+
+    tbody.appendChild(tr);
+  });
+  highlightSelectedRow();
 }
 
 // ===============================
-// LOAD SINGLE ORDER DETAIL
+// STATUS BADGE
 // ===============================
-function loadAdminOrderDetail() {
-  const token = getAdminToken();
-  if (!token) return;
 
-  const infoDiv = document.getElementById("order-info");
-  const itemsDiv = document.getElementById("order-items");
-  if (!infoDiv || !itemsDiv) return;
+function renderStatusBadge(status) {
 
-  const params = new URLSearchParams(window.location.search);
-  const orderId = params.get("id");
-  if (!orderId) return;
+  let label = status;
 
-  fetch(API_BASE_URL + "/api/orders/admin/" + orderId + "/", {
-    headers: { Authorization: "Bearer " + token }
-  })
-    .then(res => {
-      if (!res.ok) {
-        handleAuthError(res.status);
-        return Promise.reject(new Error("Failed to load order"));
-      }
-      return res.json();
-    })
-    .then(order => {
-      // Order summary
-      infoDiv.innerHTML = `
-        <p><strong>Order ID:</strong> ${order.id}</p>
-        <p><strong>User:</strong> ${order.user}</p>
-        <p><strong>Status:</strong> ${order.status}</p>
-        <p><strong>Total:</strong> ₹${order.total_amount}</p>
-      `;
+  if (status === "placed") {
+    label = "pending";
+  }
 
-      // Order items
-      itemsDiv.innerHTML = "";
-
-      if (!order.items || order.items.length === 0) {
-        itemsDiv.innerText = "No items found";
-        return;
-      }
-
-      order.items.forEach(item => {
-        const itemName =
-          item.menu_item?.name ||
-          item.menu_item_name ||
-          item.menu_item ||
-          "Unknown Item";
-
-        const quantity = item.quantity || 0;
-
-        const unitPrice =
-          item.price ||
-          item.menu_item?.price ||
-          item.menu_item_price ||
-          0;
-
-        const itemTotal =
-          item.total_price ||
-          item.total_amount ||
-          item.total ||
-          (unitPrice * (item.quantity || 1));
-
-        const div = document.createElement("div");
-        div.classList.add("admin-order-item");
-
-        div.innerHTML = `
-          <span>${itemName} × ${quantity}</span>
-          <strong>₹${itemTotal}</strong>
-        `;
-
-        itemsDiv.appendChild(div);
-      });
-    })
-    .catch(err => {
-      infoDiv.innerText = "Failed to load order";
-      itemsDiv.innerHTML = "";
-      console.warn("[orders-admin] loadAdminOrderDetail error:", err && err.message ? err.message : err);
-    });
+  return `
+    <span class="status-badge status-${status}">
+      ${label}
+    </span>
+  `;
 }
 
 // ===============================
-// UPDATE ORDER STATUS
+// HIGHLIGHT SELECTED ROW
 // ===============================
-function updateOrderStatus(status) {
-  const token = getAdminToken();
-  if (!token) return;
 
-  const params = new URLSearchParams(window.location.search);
-  const orderId = params.get("id");
+function highlightRow(selectedRow) {
+  const rows = document.querySelectorAll("#ordersList tr");
+  rows.forEach(row => row.classList.remove("active-row"));
+  selectedRow.classList.add("active-row");
+  highlightedRow = selectedRow;
+}
 
-  fetch(API_BASE_URL + "/api/orders/admin/" + orderId + "/status/", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({ status })
-  })
-    .then(res => {
-      if (!res.ok) {
-        handleAuthError(res.status);
-        return Promise.reject(new Error("Update failed"));
-      }
-      return res.json();
-    })
-    .then(() => {
-      showToast("Order updated");
-      setTimeout(() => {
-        window.location.href = "orders.html";
-      }, 1000);
-    })
-    .catch(err => {
-      showToast(err && err.message ? err.message : "Failed to update order", true);
-      console.warn("[orders-admin] updateOrderStatus error:", err && err.message ? err.message : err);
-    });
+function highlightSelectedRow() {
+  if (!selectedOrderId) return;
+  const rows = document.querySelectorAll("#ordersList tr");
+  rows.forEach(row => {
+    if (row.dataset.orderId == selectedOrderId) {
+      row.classList.add("active-row");
+      highlightedRow = row;
+    } else {
+      row.classList.remove("active-row");
+    }
+  });
+}
+
+function clearOrderDetails() {
+  const detailBox = document.getElementById("orderDetails");
+  detailBox.innerHTML = "<p>Select an order to view details.</p>";
 }
 
 // ===============================
-// INITIALIZE
+// RENDER ORDER DETAILS (RIGHT SIDE)
 // ===============================
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.includes("order-detail.html")) {
-    loadAdminOrderDetail();
-  } else {
-    loadAdminOrders();
+
+function renderOrderDetails(order) {
+  const detailBox = document.getElementById("orderDetails");
+
+  detailBox.innerHTML = `
+    <p><strong>Order ID:</strong> #${order.id}</p>
+    <p><strong>Customer:</strong> ${order.user || order.customer}</p>
+    <p><strong>Status:</strong> 
+      ${renderStatusBadge(order.status)}
+    </p>
+    <p><strong>Total Amount:</strong> ₹${order.total_amount}</p>
+
+    <hr style="margin:15px 0; border-color:#1e293b;">
+
+    <h4>Items</h4>
+    <div id="orderItems"></div>
+
+    <div class="order-actions">
+      ${renderActionButtons(order.status)}
+    </div>
+  `;
+
+  renderOrderItems(order.items);
+}
+
+// ===============================
+// RENDER ORDER ITEMS
+// ===============================
+
+function renderOrderItems(items) {
+  const container = document.getElementById("orderItems");
+
+  if (!items || !items.length) {
+    container.innerHTML = "<p>No items found</p>";
+    return;
+  }
+
+  container.innerHTML = items.map(item => `
+    <div class="order-item-row">
+      <span>${item.name || item.menu_item_name}</span>
+      <span>x${item.quantity}</span>
+      <strong>₹${item.total || item.total_price}</strong>
+    </div>
+  `).join("");
+}
+
+// ===============================
+// ACTION BUTTONS (STATUS CONTROL)
+// ===============================
+
+function renderActionButtons(status) {
+
+  // Only allow action if order is still placed
+  if (status === "placed") {
+    return `
+      <button class="btn-accept" onclick="updateOrderStatus('completed')">
+        Accept
+      </button>
+      <button class="btn-reject" onclick="updateOrderStatus('cancelled')">
+        Reject
+      </button>
+    `;
+  }
+
+  // If already completed or cancelled → no buttons
+  return "";
+}
+
+// Attach event listeners to action buttons after rendering order details
+document.getElementById("orderDetails").addEventListener("click", async function(e) {
+  if (e.target && e.target.matches("button[data-status]")) {
+    const newStatus = e.target.getAttribute("data-status");
+    await updateOrderStatus(newStatus);
   }
 });
 
 
+// ===============================
+// UPDATE ORDER STATUS
+// ===============================
+
+async function updateOrderStatus(newStatus) {
+  const token = localStorage.getItem("admin_token");
+  if (!token || !selectedOrderId) return;
+
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/orders/admin/${selectedOrderId}/status/`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      }
+    );
+
+    if (!res.ok) {
+      console.error("Status update failed:", res.status);
+      return;
+    }
+
+    // Reload all orders
+    await loadOrders();
+
+    // Re-render selected order
+    const updated = ordersData.find(o => o.id === selectedOrderId);
+    if (updated) renderOrderDetails(updated);
+
+  } catch (err) {
+    console.error("Update error:", err);
+  }
+}
+
+// ===============================
+// LOGOUT
+// ===============================
+
+function setupLogout() {
+  const btn = document.getElementById("logoutBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    localStorage.removeItem("admin_token");
+    window.location.href = "login.html";
+  });
+}

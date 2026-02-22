@@ -1,30 +1,17 @@
-// ===============================
-// USER ADMIN MANAGEMENT
-// ===============================
+// ========================================
+// ADMIN USER MANAGEMENT (MASTER-DETAIL)
+// ========================================
 
-function getAdminToken() {
-  return localStorage.getItem("admin_token");
+const token = localStorage.getItem("admin_token");
+if (!token) {
+  window.location.href = "login.html";
 }
 
-function handleAuthError(status) {
-  if (status === 401) {
-    localStorage.removeItem("admin_token");
-    window.location.href = "login.html";
-  }
-}
-
+// ===============================
+// UTIL
+// ===============================
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
-  if (!toast) {
-    // Fallback: create temp element if toast doesn't exist
-    const temp = document.createElement("div");
-    temp.style.cssText = "position:fixed;top:20px;right:20px;padding:12px 20px;background:#333;color:#fff;border-radius:8px;z-index:9999;";
-    temp.innerText = message;
-    document.body.appendChild(temp);
-    setTimeout(() => temp.remove(), 3000);
-    return;
-  }
-
   toast.innerText = message;
   toast.className = "toast" + (isError ? " error" : "");
   toast.style.display = "block";
@@ -34,236 +21,203 @@ function showToast(message, isError = false) {
   }, 3000);
 }
 
+function apiFetch(url, options = {}) {
+  return fetch(API_BASE_URL + url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+      ...(options.headers || {})
+    }
+  }).then(res => {
+    if (res.status === 401) {
+      localStorage.removeItem("admin_token");
+      window.location.href = "login.html";
+    }
+    return res.json();
+  });
+}
+
 // ===============================
-// LOAD USERS
+// LOAD ADMIN LIST
 // ===============================
-function loadUsers() {
-  const token = getAdminToken();
-  if (!token) return;
+function loadAdmins() {
+  const tbody = document.getElementById("adminTableBody");
+  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
 
-  const table = document.getElementById("userTable");
-  if (!table) return;
-
-  table.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
-
-  fetch(API_BASE_URL + "/api/admin/users/", {
-    headers: { Authorization: "Bearer " + token }
-  })
-    .then(res => {
-      if (!res.ok) {
-        handleAuthError(res.status);
-        return Promise.reject(new Error("Failed to load users"));
-      }
-      return res.json();
-    })
+  apiFetch("/api/admin/users/")
     .then(data => {
-      table.innerHTML = "";
+      tbody.innerHTML = "";
 
       if (!data || data.length === 0) {
-        table.innerHTML = "<tr><td colspan='6'>No users found</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='4'>No admins found</td></tr>";
         return;
       }
 
-      data.forEach(user => {
+      data.forEach(admin => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.username}</td>
-          <td>${user.email || "-"}</td>
-          <td>${user.is_active ? "Active" : "Disabled"}</td>
-          <td>${user.is_staff ? "Admin" : "User"}</td>
-          <td>
-            <button class="edit-user-btn" data-id="${user.id}" data-email="${user.email || ""}" data-is-staff="${user.is_staff}">Edit</button>
-            ${user.is_active ? `<button class="disable-user-btn" data-id="${user.id}">Disable</button>` : "-"}
-          </td>
+          <td>${admin.id}</td>
+          <td>${admin.full_name}</td>
+          <td>${admin.username}</td>
+          <td>${admin.is_active ? "Active" : "Disabled"}</td>
         `;
-        table.appendChild(row);
+
+        row.addEventListener("click", () => {
+          selectAdmin(admin.id);
+        });
+
+        tbody.appendChild(row);
       });
-
-      attachUserListeners();
     })
-    .catch(err => {
-      table.innerHTML = "<tr><td colspan='6'>Failed to load users</td></tr>";
-      console.warn("[user-admin] loadUsers error:", err && err.message ? err.message : err);
+    .catch(() => {
+      tbody.innerHTML = "<tr><td colspan='4'>Failed to load</td></tr>";
     });
 }
 
 // ===============================
-// CREATE USER
+// LOAD ADMIN DETAIL
 // ===============================
-function createUser() {
-  const token = getAdminToken();
-  if (!token) return;
+let selectedAdminId = null;
 
-  const usernameEl = document.getElementById("newUsername");
-  const emailEl = document.getElementById("newEmail");
-  const passwordEl = document.getElementById("newPassword");
-  const isStaffEl = document.getElementById("newIsStaff");
+function selectAdmin(id) {
+  selectedAdminId = id;
 
-  const username = usernameEl ? usernameEl.value.trim() : "";
-  const email = emailEl ? emailEl.value.trim() : "";
-  const password = passwordEl ? passwordEl.value : "";
-  const isStaff = isStaffEl ? isStaffEl.checked : false;
+  apiFetch(`/api/admin/users/${id}/detail/`)
+    .then(admin => {
+      document.getElementById("emptyState").classList.add("hidden");
+      document.getElementById("detailContent").classList.remove("hidden");
 
-  if (!username || !password) {
-    showToast("Username and password required", true);
-    return;
-  }
-
-  fetch(API_BASE_URL + "/api/admin/users/create/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({
-      username,
-      email: email || null,
-      password,
-      is_staff: isStaff
-    })
-  })
-    .then(res => {
-      if (!res.ok) {
-        handleAuthError(res.status);
-        return res.json().then(d => Promise.reject(new Error(d && d.error ? d.error : "Create failed")));
-      }
-      return res.json();
-    })
-    .then(data => {
-      if (data && data.error) {
-        showToast(data.error, true);
-        return;
-      }
-
-      showToast("User created");
-      if (usernameEl) usernameEl.value = "";
-      if (emailEl) emailEl.value = "";
-      if (passwordEl) passwordEl.value = "";
-      if (isStaffEl) isStaffEl.checked = false;
-      loadUsers();
-    })
-    .catch(err => {
-      showToast(err && err.message ? err.message : "Create user failed", true);
-      console.warn("[user-admin] createUser error:", err && err.message ? err.message : err);
+      document.getElementById("detail_full_name").value = admin.full_name || "";
+      document.getElementById("detail_username").value = admin.username || "";
+      document.getElementById("detail_email").value = admin.email || "";
+      document.getElementById("detail_phone_no").value = admin.phone_no || "";
+      document.getElementById("detail_address").value = admin.address || "";
+      document.getElementById("detail_city").value = admin.city || "";
+      document.getElementById("detail_state").value = admin.state || "";
+      document.getElementById("detail_pincode").value = admin.pincode || "";
+      document.getElementById("detail_is_active").checked = admin.is_active;
     });
 }
 
 // ===============================
-// EDIT USER
+// EDIT / SAVE
 // ===============================
-function editUser(userId, currentEmail, currentIsStaff) {
-  const token = getAdminToken();
-  if (!token) return;
+const editBtn = document.getElementById("editAdminBtn");
+const saveBtn = document.getElementById("saveAdminBtn");
 
-  const newEmail = prompt("Enter new email:", currentEmail);
-  if (newEmail === null) return;
-
-  const makeAdmin = confirm(
-    currentIsStaff
-      ? "User is admin. Remove admin role?"
-      : "Make this user admin?"
-  );
-
-  fetch(API_BASE_URL + "/api/admin/users/" + userId + "/", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({
-      email: newEmail,
-      is_staff: makeAdmin
-    })
-  })
-    .then(res => {
-      if (!res.ok) {
-        handleAuthError(res.status);
-        return res.json().then(d => Promise.reject(new Error(d && d.error ? d.error : "Update failed")));
-      }
-      return res.json();
-    })
-    .then(data => {
-      if (data && data.error) {
-        showToast(data.error, true);
-        return;
-      }
-
-      showToast("User updated");
-      loadUsers();
-    })
-    .catch(err => {
-      showToast(err && err.message ? err.message : "Update user failed", true);
-      console.warn("[user-admin] editUser error:", err && err.message ? err.message : err);
-    });
-}
-
-// ===============================
-// DISABLE USER
-// ===============================
-function disableUser(userId) {
-  const token = getAdminToken();
-  if (!token) return;
-
-  if (!confirm("Disable this user?")) return;
-
-  fetch(API_BASE_URL + "/api/admin/users/" + userId + "/disable/", {
-    method: "DELETE",
-    headers: { Authorization: "Bearer " + token }
-  })
-    .then(res => {
-      if (!res.ok) {
-        handleAuthError(res.status);
-        return Promise.reject(new Error("Disable failed"));
-      }
-      return res.json();
-    })
-    .then(() => {
-      showToast("User disabled");
-      loadUsers();
-    })
-    .catch(err => {
-      showToast(err && err.message ? err.message : "Disable user failed", true);
-      console.warn("[user-admin] disableUser error:", err && err.message ? err.message : err);
-    });
-}
-
-// ===============================
-// ATTACH EVENT LISTENERS
-// ===============================
-function attachUserListeners() {
-  document.querySelectorAll(".edit-user-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-id");
-      const email = btn.getAttribute("data-email");
-      const isStaff = btn.getAttribute("data-is-staff") === "true";
-      editUser(id, email, isStaff);
-    });
-  });
-
-  document.querySelectorAll(".disable-user-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-id");
-      disableUser(id);
-    });
-  });
-}
-
-// ===============================
-// ATTACH CREATE BUTTON
-// ===============================
-function attachCreateListener() {
-  const createBtn = document.getElementById("createUserBtn");
-  if (createBtn) {
-    createBtn.addEventListener("click", createUser);
-  }
-}
-
-// ===============================
-// INITIALIZE
-// ===============================
-document.addEventListener("DOMContentLoaded", () => {
-  loadUsers();
-  attachCreateListener();
+editBtn.addEventListener("click", () => {
+  toggleEdit(true);
 });
 
+saveBtn.addEventListener("click", () => {
+  saveAdmin();
+});
+
+function toggleEdit(enable) {
+  const inputs = document.querySelectorAll("#detailContent input");
+  inputs.forEach(input => {
+    if (input.id !== "detail_username") {
+      input.disabled = !enable;
+    }
+  });
+
+  editBtn.classList.toggle("hidden", enable);
+  saveBtn.classList.toggle("hidden", !enable);
+}
+
+function saveAdmin() {
+  if (!selectedAdminId) return;
+
+  const payload = {
+    full_name: document.getElementById("detail_full_name").value,
+    email: document.getElementById("detail_email").value,
+    phone_no: document.getElementById("detail_phone_no").value,
+    address: document.getElementById("detail_address").value,
+    city: document.getElementById("detail_city").value,
+    state: document.getElementById("detail_state").value,
+    pincode: document.getElementById("detail_pincode").value,
+    is_active: document.getElementById("detail_is_active").checked
+  };
+
+  apiFetch(`/api/admin/users/${selectedAdminId}/update/`, {
+    method: "PUT",
+    body: JSON.stringify(payload)
+  })
+    .then(() => {
+      showToast("Admin updated");
+      toggleEdit(false);
+      loadAdmins();
+    })
+    .catch(() => showToast("Update failed", true));
+}
+
+// ===============================
+// DEACTIVATE
+// ===============================
+document.getElementById("disableAdminBtn")
+  .addEventListener("click", () => {
+    if (!selectedAdminId) return;
+
+    apiFetch(`/api/admin/users/${selectedAdminId}/disable/`, {
+      method: "DELETE"
+    })
+      .then(() => {
+        showToast("Admin deactivated");
+        loadAdmins();
+      })
+      .catch(() => showToast("Failed to deactivate", true));
+  });
+
+// ===============================
+// CREATE DRAWER
+// ===============================
+const drawer = document.getElementById("createAdminDrawer");
+
+document.getElementById("openCreateDrawerBtn")
+  .addEventListener("click", () => {
+    drawer.classList.remove("hidden");
+  });
+
+document.getElementById("closeDrawerBtn")
+  .addEventListener("click", () => {
+    drawer.classList.add("hidden");
+  });
+
+document.getElementById("cancelCreateBtn")
+  .addEventListener("click", () => {
+    drawer.classList.add("hidden");
+  });
+
+document.getElementById("createAdminBtn")
+  .addEventListener("click", () => {
+    const payload = {
+      full_name: document.getElementById("create_full_name").value,
+      username: document.getElementById("create_username").value,
+      email: document.getElementById("create_email").value,
+      phone_no: document.getElementById("create_phone_no").value,
+      address: document.getElementById("create_address").value,
+      city: document.getElementById("create_city").value,
+      state: document.getElementById("create_state").value,
+      pincode: document.getElementById("create_pincode").value,
+      password: document.getElementById("create_password").value
+    };
+
+    apiFetch("/api/admin/users/create/", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+      .then(() => {
+        showToast("Admin created");
+        drawer.classList.add("hidden");
+        loadAdmins();
+      })
+      .catch(() => showToast("Create failed", true));
+  });
+
+// ===============================
+// INIT
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  loadAdmins();
+});
