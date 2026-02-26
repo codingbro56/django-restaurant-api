@@ -12,14 +12,54 @@
 <section class="success-page">
   <div class="success-card">
 
+    <!-- Success Icon -->
     <div class="success-icon">✓</div>
 
     <h1>Order Placed Successfully</h1>
-    <p>Your delicious food is being prepared and will be delivered soon.</p>
+    <p class="success-subtext">
+      Your delicious food is being prepared.
+    </p>
 
+    <!-- Divider -->
+    <div class="success-divider"></div>
+
+    <!-- Structured Summary -->
+    <div class="success-summary">
+
+      <div class="summary-row">
+        <span>Order ID</span>
+        <strong id="success-order-id"></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Total Amount</span>
+        <strong id="success-total"></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Payment Method</span>
+        <strong id="success-payment-method"></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Payment Status</span>
+        <strong id="success-payment-status"></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Estimated Delivery</span>
+        <strong id="success-delivery"></strong>
+      </div>
+
+    </div>
+
+    <!-- Divider -->
+    <div class="success-divider"></div>
+
+    <!-- Action Buttons -->
     <div class="actions">
-      <a href="../menu/index.html" class="primary-btn">Order More</a>
-      <a href="../home/index.html" class="secondary-btn">Back to Home</a>
+      <a href="/orders/my-orders.html" class="primary-btn">View My Orders</a>
+      <a href="../menu/index.html" class="secondary-btn">Continue Ordering</a>
     </div>
 
   </div>
@@ -27,6 +67,7 @@
 
 <script src="../js/config.js"></script>
 <script src="../js/header.js"></script>
+<script src="../js/order-success.js"></script>
 
 <script>
   fetch("../partials/header.html")

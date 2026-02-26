@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment | BharatBites</title>
+    <link rel="stylesheet" href="css/payment.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="checkout-header">
+        <div class="container header-inner">
+            <div class="logo">BharatBites</div>
+            <div class="secure-tag">🔒 Secure Checkout</div>
+        </div>
+    </header>
+
+    <!-- MAIN SECTION -->
+    <section class="payment-section">
+        <div class="container payment-grid">
+
+            <!-- LEFT COLUMN -->
+            <div class="payment-main">
+
+                <!-- Order Summary -->
+                <div class="card order-summary">
+                    <h2>Order Summary</h2>
+                    <div id="order-items"></div>
+
+                    <div class="divider"></div>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal"></span>
+                    </div>
+
+                    <div class="summary-row total-row">
+                        <span>Total</span>
+                        <span id="total-amount"></span>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="card payment-method">
+                    <h2>Select Payment Method</h2>
+
+                    <label class="payment-option active">
+                        <input type="radio" checked disabled>
+                        <div>
+                            <strong>Cash on Delivery</strong>
+                            <p>Pay in cash when your order is delivered.</p>
+                        </div>
+                    </label>
+
+                    <button class="btn-primary" id="confirm-btn">
+                        Confirm Order
+                    </button>
+
+                    <div class="trust-info">
+                        ✓ Secure Checkout <br>
+                        ✓ 30–45 Min Delivery
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <aside class="payment-sidebar">
+
+                <div class="card address-card">
+                    <h3>Delivery Address</h3>
+                    <p id="delivery-address">
+                        Loading...
+                    </p>
+                </div>
+
+                <div class="card guarantee-card">
+                    <h3>Why BharatBites?</h3>
+                    <p>✔ Fresh Ingredients</p>
+                    <p>✔ On-time Delivery</p>
+                </div>
+
+            </aside>
+
+        </div>
+    </section>
+
+    <!-- Toast -->
+    <div id="toast-container"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/payment.js"></script>
+
+</body>
+</html>

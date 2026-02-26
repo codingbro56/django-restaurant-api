@@ -1,91 +1,91 @@
-/* =========================
-   ORDER SUCCESS PAGE
-   ========================= */
-
 .success-page {
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  background: #070f1f;
+  padding: 40px 20px;
 }
 
 .success-card {
-  background: linear-gradient(180deg, #0f172a, #020617);
-  padding: 50px 40px;
-  border-radius: 20px;
-  text-align: center;
-  color: #ffffff;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
-  max-width: 420px;
+  background: #0f1b2d;
+  padding: 40px;
+  border-radius: 16px;
   width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  text-align: center;
 }
 
 .success-icon {
-  font-size: 48px;
+  width: 70px;
+  height: 70px;
   background: #16a34a;
-  width: 80px;
-  height: 80px;
+  color: #fff;
+  font-size: 32px;
   border-radius: 50%;
-  line-height: 80px;
-  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px auto;
 }
 
-.success-card h1 {
-  margin-bottom: 10px;
-  font-size: 28px;
+.success-subtext {
+  color: #94a3b8;
+  margin-bottom: 25px;
 }
 
-.success-card p {
-  color: #9ca3af;
+.success-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 25px 0;
+}
+
+.success-summary {
+  text-align: left;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
   font-size: 15px;
-  line-height: 1.5;
+}
+
+.summary-row strong {
+  color: #3b82f6;
 }
 
 .actions {
-  margin-top: 30px;
   display: flex;
-  gap: 16px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.actions a {
+.primary-btn,
+.secondary-btn {
+  display: block;
+  padding: 12px;
+  border-radius: 12px;
   text-decoration: none;
+  font-weight: 600;
+  text-align: center;
 }
 
-/* =========================
-   MOBILE RESPONSIVE
-   ========================= */
+.primary-btn {
+  background: #3b82f6;
+  color: #fff;
+}
 
-@media (max-width: 768px) {
+.primary-btn:hover {
+  background: #2563eb;
+}
 
-  .success-card {
-    padding: 35px 22px;
-    border-radius: 16px;
-  }
+.secondary-btn {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
 
-  .success-icon {
-    width: 64px;
-    height: 64px;
-    font-size: 36px;
-    line-height: 64px;
-  }
-
-  .success-card h1 {
-    font-size: 22px;
-  }
-
-  .success-card p {
-    font-size: 14px;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .actions a {
-    width: 100%;
-    text-align: center;
-  }
+.secondary-btn:hover {
+  background: rgba(255,255,255,0.15);
 }

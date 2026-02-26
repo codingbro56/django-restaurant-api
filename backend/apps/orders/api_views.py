@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from .serializers import OrderDetailSerializer
+from .serializers import OrderDetailSerializer, PaymentOrderSerializer
 
 from .models import Order, OrderItem
 from .serializers import OrderSerializer 
@@ -38,6 +38,19 @@ def place_order(request):
 
     return Response({"id": order.id}, status=201)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_order_detail(request, order_id):
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        user=request.user
+    )
+
+    serializer = OrderDetailSerializer(order)
+    return Response(serializer.data)
+
 # View User Order
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -47,17 +60,29 @@ def my_orders(request):
     return Response(serializer.data)
 
 # To see Admin All Orders
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes([IsAdminUser])
 def admin_orders_list(request):
-    orders = Order.objects.all().order_by('-id')
+    orders = Order.objects.all().order_by("-created_at")
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
 
 # To see Admin Order Detail
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes([IsAdminUser])
 def admin_order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     serializer = OrderDetailSerializer(order)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def payment_order_detail(request, order_id):
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        user=request.user
+    )
+
+    serializer = PaymentOrderSerializer(order)
     return Response(serializer.data)
