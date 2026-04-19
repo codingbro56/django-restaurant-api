@@ -21,8 +21,8 @@
     .then(res => {
       if (!res.ok) {
         if (res.status === 401) {
-          localStorage.removeItem("admin_token");
-          window.location.href = "login.html";
+          console.warn("401 from /api/auth/me/ — but not deleting token for debugging");
+          return;
         }
         return Promise.reject(new Error("Profile check failed"));
       }

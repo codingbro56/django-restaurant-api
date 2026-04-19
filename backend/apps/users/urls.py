@@ -18,4 +18,10 @@ urlpatterns = [
     path("api/auth/reset-password/", api_views.reset_password),
 
     path("api/auth/profile/", api_views.user_profile),
+
+    # Communication
+    path('api/communication/contact/', api_views.submit_contact),
+    path('api/communication/feedback/', api_views.submit_feedback),
+    path('api/admin/feedback/', api_views.admin_feedback_list),
+    path('api/admin/feedback/<int:feedback_id>/reply/', api_views.admin_feedback_reply),
 ]

@@ -42,7 +42,7 @@ class CODPaymentView(APIView):
         payment = Payment.objects.create(
             order=order,
             method="COD",
-            status="pending",
+            status="paid",
             amount=order.total_amount
         )
 

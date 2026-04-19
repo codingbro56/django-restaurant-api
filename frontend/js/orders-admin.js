@@ -82,7 +82,7 @@ function renderKPIs() {
 
   // Pending = placed
   document.getElementById("pendingOrders").innerText =
-    ordersData.filter(o => o.status === "placed").length;
+    ordersData.filter(o => o.status === "pending").length;
 
   document.getElementById("completedOrders").innerText =
     ordersData.filter(o => o.status === "completed").length;
@@ -115,15 +115,15 @@ function renderOrdersTable() {
 
     tr.innerHTML = `
       <td>#${order.id}</td>
-      <td>${order.user || order.customer || "N/A"}</td>
+      <td>${order.username || "N/A"}</td>
       <td>${renderStatusBadge(order.status)}</td>
       <td>₹${order.total_amount}</td>
     `;
 
-    tr.addEventListener("click", () => {
+    tr.addEventListener("click", async () => {
       selectedOrderId = order.id;
-      renderOrderDetails(order);
       highlightRow(tr);
+      await fetchAndRenderOrderDetails(order.id);
     });
 
     tbody.appendChild(tr);
@@ -183,12 +183,37 @@ function clearOrderDetails() {
 // RENDER ORDER DETAILS (RIGHT SIDE)
 // ===============================
 
+
+// Fetch order detail from API and render
+async function fetchAndRenderOrderDetails(orderId) {
+  const token = localStorage.getItem("admin_token");
+  if (!token) {
+    clearOrderDetails();
+    return;
+  }
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/orders/admin/${orderId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if (!res.ok) {
+      clearOrderDetails();
+      return;
+    }
+    const detail = await res.json();
+    renderOrderDetails(detail);
+  } catch (err) {
+    clearOrderDetails();
+  }
+}
+
 function renderOrderDetails(order) {
   const detailBox = document.getElementById("orderDetails");
 
   detailBox.innerHTML = `
     <p><strong>Order ID:</strong> #${order.id}</p>
-    <p><strong>Customer:</strong> ${order.user || order.customer}</p>
+    <p><strong>Customer:</strong> ${order.username || "N/A"}</p>
     <p><strong>Status:</strong> 
       ${renderStatusBadge(order.status)}
     </p>
@@ -215,15 +240,19 @@ function renderOrderItems(items) {
   const container = document.getElementById("orderItems");
 
   if (!items || !items.length) {
-    container.innerHTML = "<p>No items found</p>";
+    container.innerHTML = "<p style='color:#94a3b8;'>No items found</p>";
     return;
   }
 
   container.innerHTML = items.map(item => `
     <div class="order-item-row">
-      <span>${item.name || item.menu_item_name}</span>
-      <span>x${item.quantity}</span>
-      <strong>₹${item.total || item.total_price}</strong>
+      <div class="order-item-left">
+        <span class="order-item-name">${item.item_name}</span>
+        <span class="order-item-qty">Quantity: ${item.quantity}</span>
+      </div>
+      <div class="order-item-price">
+        ₹${item.total}
+      </div>
     </div>
   `).join("");
 }
@@ -234,8 +263,8 @@ function renderOrderItems(items) {
 
 function renderActionButtons(status) {
 
-  // Only allow action if order is still placed
-  if (status === "placed") {
+  // Backend raw status
+  if (status === "pending") {
     return `
       <button class="btn-accept" onclick="updateOrderStatus('completed')">
         Accept
@@ -245,8 +274,6 @@ function renderActionButtons(status) {
       </button>
     `;
   }
-
-  // If already completed or cancelled → no buttons
   return "";
 }
 
@@ -288,9 +315,10 @@ async function updateOrderStatus(newStatus) {
     // Reload all orders
     await loadOrders();
 
-    // Re-render selected order
-    const updated = ordersData.find(o => o.id === selectedOrderId);
-    if (updated) renderOrderDetails(updated);
+    // Re-fetch and render selected order detail
+    if (selectedOrderId) {
+      await fetchAndRenderOrderDetails(selectedOrderId);
+    }
 
   } catch (err) {
     console.error("Update error:", err);

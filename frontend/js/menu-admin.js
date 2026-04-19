@@ -478,7 +478,7 @@ function attachFormListeners() {
   const addItemBtn = document.getElementById("addMenuItemBtn");
   const cancelBtn = document.getElementById("cancelEditBtn");
   const updateBtn = document.getElementById("updateMenuItemBtn");
-  const logoutLink = document.getElementById("logoutLink");
+  const logoutLink = document.getElementById("logoutLink") || document.getElementById("logoutBtn");
 
   if (addCatBtn) addCatBtn.addEventListener("click", addCategory);
   if (deleteCatBtn) deleteCatBtn.addEventListener("click", deleteCategory);
@@ -486,7 +486,7 @@ function attachFormListeners() {
   if (cancelBtn) cancelBtn.addEventListener("click", closeEditModal);
   if (updateBtn) updateBtn.addEventListener("click", updateMenuItem);
   if (logoutLink) {
-    logoutLink.removeAttribute("href");
+    logoutLink.removeAttribute?.("href");
     logoutLink.addEventListener("click", e => {
       e.preventDefault();
       adminLogout();
@@ -526,4 +526,21 @@ function initPage() {
 // ===============================
 // READY
 // ===============================
-document.addEventListener("DOMContentLoaded", initPage);
+document.addEventListener("DOMContentLoaded", () => {
+  initPage();
+
+  // Enhance file input display for menu item image upload
+  const itemImageInput = document.getElementById("itemImage");
+  const fileNameDisplay = document.getElementById("fileName");
+  if (itemImageInput && fileNameDisplay) {
+    itemImageInput.addEventListener("change", () => {
+      if (itemImageInput.files && itemImageInput.files.length > 0) {
+        fileNameDisplay.textContent = itemImageInput.files[0].name;
+      } else {
+        fileNameDisplay.textContent = "No file chosen";
+      }
+    });
+    // Set initial state
+    fileNameDisplay.textContent = "No file chosen";
+  }
+});

@@ -5,8 +5,7 @@ urlpatterns = [
     # PUBLIC ROUTES (no authentication required)
     path('', api_views.menu_list),
     path('categories/', api_views.list_categories),
-        path("special/", api_views.get_special_menu_item),
-    # path("special/", api_views.get_special_menu_item),
+    path("special/", api_views.get_special_menu_item),
 
     # ADMIN ROUTES (IsAdminUser required)
     path("admin/categories/", admin_views.admin_categories),

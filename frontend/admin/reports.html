@@ -1,174 +1,225 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Admin Reports</title>
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Reports | BharatBites</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/reports-admin.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../css/admin-layout.css">
+    <link rel="stylesheet" href="../css/theme.css">
+
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="../css/reports-admin.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- PDF + Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
 </head>
+
 <body>
 
-<div class="reports-wrapper">
-  <div class="reports-card">
+<div class="admin-layout admin-app">
 
-    <h1>Reports</h1>
-    <p class="admin-subtitle">View system analytics</p>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="adminSidebar"></aside>
 
-    <!-- REPORT SELECTOR -->
-    <label>Select Report Type:</label>
-    <select id="reportType" onchange="switchReport()">
-      <option value="users">User Reports</option>
-      <option value="orders">Order Reports</option>
-      <option value="items">Top Selling Items</option>
-    </select>
 
-    <!-- ======================
-         USER REPORTS (DEFAULT)
-         ====================== -->
-    <div id="usersReport" class="report-section">
+    <!-- MAIN CONTENT -->
+    <main class="admin-content main">
 
-      <h2>User Reports (Monthly)</h2>
+        <!-- PAGE HEADER -->
+        <div class="page-header">
 
-      <label>Select Month:</label>
-      <input type="month" id="userReportMonth">
+            <div>
+                <h1>Analytics Overview</h1>
+                <p>Business insights & performance metrics</p>
+            </div>
 
-      <button onclick="loadUserReport()">Generate</button>
+            <div class="header-actions">
+                <button id="exportCsvBtn" class="btn btn-primary">
+                    Export CSV
+                </button>
 
-      <div class="report-summary">
-        <div class="summary-card">
-          <span>Users Added</span>
-          <strong id="usersTotal">0</strong>
+                <button id="exportPdfBtn" class="btn btn-primary">
+                    Export PDF
+                </button>
+            </div>
+
         </div>
 
-        <div class="summary-card">
-          <span>Active Users</span>
-          <strong id="usersActive">0</strong>
-        </div>
 
-        <div class="summary-card">
-          <span>Disabled Users</span>
-          <strong id="usersDisabled">0</strong>
-        </div>
+        <!-- FILTER SECTION -->
+        <section class="filter-section">
 
-        <div class="summary-card">
-          <span>Admin Users</span>
-          <strong id="usersAdmins">0</strong>
-        </div>
-        <div class="report-chart">
-            <canvas id="userStatusChart"></canvas>
-        </div>
+            <div class="range-selector">
 
-      </div>
+                <button data-range="daily">Daily</button>
+                <button data-range="weekly">Weekly</button>
+                <button data-range="monthly" class="active">Monthly</button>
+                <button data-range="yearly">Yearly</button>
 
-    </div>
+            </div>
 
-    <!-- ======================
-         ORDER REPORTS
-         ====================== -->
-    <div id="ordersReport" class="report-section" style="display:none">
+            <div class="custom-range">
 
-      <h2>Order Reports</h2>
+                <label>From</label>
+                <input type="date" id="startDate">
 
-      <div class="report-filters">
-        <label>Status:</label>
-        <select id="statusFilter">
-          <option value="">All</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-          <option value="pending">Pending</option>
-        </select>
+                <label>To</label>
+                <input type="date" id="endDate">
 
-        <label>From:</label>
-        <input type="date" id="startDate">
+                <button id="applyFilterBtn" class="btn btn-primary">
+                    Apply
+                </button>
 
-        <label>To:</label>
-        <input type="date" id="endDate">
+            </div>
 
-        <button onclick="loadReport()">Generate</button>
-        <button class="secondary" onclick="exportCSV()">Export CSV</button>
-      </div>
-
-      <div class="report-summary">
-        <div class="summary-card">
-          <span>Total Orders</span>
-          <strong id="totalOrders">0</strong>
-        </div>
-
-        <div class="summary-card">
-          <span>Total Amount</span>
-          <strong>₹<span id="totalAmount">0</span></strong>
-        </div>
-      </div>
-
-      <div class="report-chart">
-        <canvas id="orderChart"></canvas>
-      </div>
-
-      <h3 class="section-title">Order Details</h3>
-      <div id="reportList" class="report-list"></div>
-
-    </div>
-
-    <!-- ======================
-         TOP ITEMS REPORT
-         ====================== -->
-    <div id="itemsReport" class="report-section" style="display:none">
-
-      <h2>Top Selling Items</h2>
-
-      <button onclick="loadTopItems()">Load Top Items</button>
-      <div class="report-chart">
-        <canvas id="topItemsChart"></canvas>
-      </div>
+        </section>
 
 
-      <div id="topItemsList" class="report-list"></div>
+        <!-- KPI CARDS -->
+        <section class="kpi-grid">
 
-    </div>
+            <div class="kpi-card">
+                <span>Total Revenue</span>
+                <h2>₹<span id="totalRevenue">0</span></h2>
+            </div>
 
-    <!-- FOOTER -->
-    <div class="admin-footer">
-      <a href="dashboard.html">
-        <button class="secondary">Back to Dashboard</button>
-      </a>
-    </div>
+            <div class="kpi-card">
+                <span>Total Orders</span>
+                <h2 id="totalOrders">0</h2>
+            </div>
 
-  </div>
+            <div class="kpi-card">
+                <span>Avg Order Value</span>
+                <h2>₹<span id="avgOrderValue">0</span></h2>
+            </div>
+
+            <div class="kpi-card">
+                <span>Repeat Customers</span>
+                <h2><span id="repeatPercent">0</span>%</h2>
+            </div>
+
+            <div class="kpi-card">
+                <span>Payment Success</span>
+                <h2><span id="paymentSuccessRate">0</span>%</h2>
+            </div>
+
+            <div class="kpi-card">
+                <span>Special Dish Revenue</span>
+                <h2>₹<span id="specialDishRevenue">0</span></h2>
+            </div>
+
+        </section>
+
+
+        <!-- TABLE + PIE -->
+        <section class="analytics-row">
+
+            <!-- TABLE -->
+            <div class="card table-section">
+
+                <div class="card-header">
+                    <h3>Top Selling Items</h3>
+                </div>
+
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Category</th>
+                            <th>Units Sold</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="topItemsTable"></tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- PIE CHART -->
+            <div class="card chart-section">
+
+                <div class="card-header">
+                    <h3>Order Status Distribution</h3>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CATEGORY BAR -->
+        <section class="card chart-section">
+
+            <div class="card-header">
+                <h3>Category Revenue Comparison</h3>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+        </section>
+
+
+        <!-- REVENUE LINE -->
+        <section class="card chart-section">
+
+            <div class="card-header">
+                <h3>Revenue Trend</h3>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+
+        </section>
+
+
+        <!-- WEEKLY PERFORMANCE -->
+        <section class="card chart-section">
+
+            <div class="card-header">
+                <h3>Weekly Order Performance</h3>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+
+        </section>
+
+
+    </main>
+
 </div>
 
-<!-- SCRIPTS -->
+
+<!-- JS -->
 <script src="../js/config.js"></script>
-<script src="../js/admin.js"></script>
+<script src="../js/admin-guard.js"></script>
+<script src="../js/sidebar-loader.js"></script>
 <script src="../js/reports-admin.js"></script>
-
-<script>
-  checkAdmin();
-
-  function switchReport() {
-    const type = document.getElementById("reportType").value;
-
-    document.getElementById("usersReport").style.display =
-      type === "users" ? "block" : "none";
-
-    document.getElementById("ordersReport").style.display =
-      type === "orders" ? "block" : "none";
-
-    document.getElementById("itemsReport").style.display =
-      type === "items" ? "block" : "none";
-  }
-
-  // DEFAULT = USER REPORT
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("reportType").value = "users";
-    switchReport();
-  });
-</script>
 
 </body>
 </html>

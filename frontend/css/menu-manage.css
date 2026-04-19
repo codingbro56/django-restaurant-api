@@ -1,240 +1,239 @@
+@import url("./theme.css");
 
-/* -----------> */
-* {
-  box-sizing: border-box;
-  font-family: system-ui, sans-serif;
+/* ===============================
+LAYOUT FIX (LOCK PAGE SCROLL)
+=============================== */
+
+.main {
+  height: 100vh;
+  overflow: hidden;
 }
 
-body {
-  margin: 0;
-  background: #020617;
-  color: #fff;
-}
-
-/* Layout */
-.admin-layout {
+.content {
+  height: 100%;
+  padding: 32px;
   display: flex;
-  min-height: 100vh;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 220px;
-  background: #020617;
+/* ===============================
+GRID
+=============================== */
+
+.content-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  overflow: hidden;
+}
+
+/* ===============================
+PANELS
+=============================== */
+
+.panel {
+  background: var(--color-bg-surface);
+  border-radius: 18px;
   padding: 20px;
+  border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
 }
 
-.brand {
-  margin-bottom: 30px;
-}
-
-.sidebar nav a {
-  display: block;
-  padding: 10px;
-  color: #cbd5f5;
-  text-decoration: none;
-  border-radius: 8px;
-  margin-bottom: 6px;
-}
-
-.sidebar nav a.active,
-.sidebar nav a:hover {
-  background: #1e293b;
-}
-
-.logout {
-  margin-top: auto;
-  color: #f87171;
-  text-decoration: none;
-}
-
-/* Content */
-.content {
-  flex: 1;
-  padding: 30px;
-}
-
-.content-grid {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 20px;
-}
-
-/* Panels */
-.panel {
-  background: #0f172a;
-  border-radius: 16px;
-  padding: 20px;
-}
-
 .panel.wide {
-  grid-column: span 1;
+  overflow: hidden;
 }
+
+/* ===============================
+HEADINGS
+=============================== */
 
 .panel h3 {
-  margin-top: 0;
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
+
+/* ===============================
+INPUTS (FIXED + CONSISTENT)
+=============================== */
 
 .panel input,
-.panel select,
-.panel button {
+.panel select {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
+  height: 42px;
+  padding: 0 14px;
+  margin-bottom: 12px;
   border-radius: 10px;
-  border: none;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: 0.2s;
 }
 
-.panel button {
-  background: #3b82f6;
-  color: white;
+.panel input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.panel input:focus,
+.panel select:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg-surface-2);
+}
+
+/* ===============================
+SELECT DROPDOWN
+=============================== */
+
+.panel select {
+  appearance: none;
   cursor: pointer;
 }
 
+/* ===============================
+FILE INPUT (FIXED UGLY DEFAULT)
+=============================== */
+
+.panel input[type="file"] {
+  padding: 6px;
+  height: auto;
+  background: var(--color-bg-main);
+  cursor: pointer;
+}
+
+/* ===============================
+BUTTONS
+=============================== */
+
+.panel button {
+  height: 42px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--color-primary);
+  color: white;
+  transition: 0.2s;
+}
+
+.panel button:hover {
+  background: var(--color-primary-hover);
+}
+
 .panel button.danger {
-  background: #ef4444;
+  background: var(--color-danger);
 }
 
-/* Menu grid */
+.panel button.danger:hover {
+  background: #dc2626;
+}
+
+/* ===============================
+MENU GRID (SCROLL ENABLED)
+=============================== */
+
+.panel.wide {
+  display: flex;
+  flex-direction: column;
+}
+
 .menu-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
 }
 
-/* Card */
+/* SCROLLBAR */
+
+.menu-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.menu-grid::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 10px;
+}
+
+.menu-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* ===============================
+MENU CARD
+=============================== */
+
 .menu-card {
-  background: #020617;
+  background: var(--color-bg-main);
   border-radius: 14px;
-  padding: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  transition: 0.2s;
+}
+
+.menu-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
 }
 
 .menu-card img {
   width: 100%;
-  height: 120px;
+  height: 140px;
   object-fit: cover;
   border-radius: 10px;
 }
 
 .menu-card h4 {
-  margin: 8px 0 4px;
+  margin: 10px 0 4px;
+  font-size: 15px;
+  color: var(--color-text-primary);
 }
 
 .menu-card .price {
-  color: #60a5fa;
   font-size: 14px;
+  color: var(--color-primary);
 }
 
-.card-actions {
+/* ===============================
+ITEM ACTIONS
+=============================== */
+
+.item-actions {
   display: flex;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
-.card-actions button {
+.item-actions button {
   flex: 1;
-  padding: 6px;
+  height: 34px;
+  font-size: 13px;
   border-radius: 8px;
-  border: none;
-  cursor: pointer;
 }
 
-.card-actions .edit {
-  background: #22c55e;
+.edit-btn {
+  background: var(--color-primary);
 }
 
-.card-actions .delete {
-  background: #ef4444;
+.delete-btn {
+  background: var(--color-danger);
 }
 
-/* Mobile */
-@media (max-width: 900px) {
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    display: none;
-  }
-}
-
-
-/* ================= EDIT MODAL ================= */
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-card {
-  background: #0f172a;
-  padding: 24px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 400px;
-}
-
-.modal-card h3 {
-  margin-top: 0;
-  margin-bottom: 14px;
-}
-
-.modal-card input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  border: none;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.modal-actions .primary {
-  flex: 1;
-  background: #22c55e;
-}
-
-.modal-actions .secondary {
-  flex: 1;
-  background: #1f2937;
-}
-
-
-/* For delete msg */
-.toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: #16a34a;
-  color: #fff;
-  padding: 14px 20px;
-  border-radius: 10px;
-  font-size: 14px;
-  display: none;
-  z-index: 999999; /* FORCE on top */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-.toast.error {
-  background: #dc2626;
-}
-
-/* For SPecial DIsh */
+/* ===============================
+SPECIAL CONTROLS
+=============================== */
 
 .special-controls {
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px solid #1f2937;
+  border-top: 1px solid var(--color-border);
   display: flex;
   gap: 10px;
   align-items: center;
@@ -242,17 +241,250 @@ body {
 }
 
 .special-controls select {
-  padding: 4px 6px;
-  background: #020617;
-  color: #e5e7eb;
-  border-radius: 6px;
-  border: 1px solid #334155;
+  height: 28px;
+  font-size: 12px;
 }
 
 .special-controls label {
   display: flex;
   gap: 6px;
   align-items: center;
+}
+
+/* ===============================
+MODAL OVERLAY
+=============================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* ===============================
+MODAL CARD
+=============================== */
+
+.modal-card {
+  background: var(--color-bg-surface);
+  padding: 28px;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: modalFade 0.25s ease;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===============================
+TITLE
+=============================== */
+
+.modal-card h3 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* ===============================
+FORM GRID
+=============================== */
+
+.modal-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===============================
+INPUTS (FIXED)
+=============================== */
+
+.modal-card input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.modal-card input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.modal-card input:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg-surface-2);
+}
+
+/* ===============================
+FILE INPUT FIX
+=============================== */
+
+.modal-card input[type="file"] {
+  padding: 8px;
+  height: auto;
   cursor: pointer;
 }
 
+/* ===============================
+FORM ROW (FOR NAME + PRICE SIDE BY SIDE)
+=============================== */
+
+.modal-row {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-row input {
+  flex: 1;
+}
+
+/* ===============================
+BUTTONS
+=============================== */
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-actions button {
+  flex: 1;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* CANCEL */
+.modal-actions .secondary {
+  background: var(--color-bg-surface-2);
+  color: var(--color-text-primary);
+}
+
+.modal-actions .secondary:hover {
+  background: var(--color-border);
+}
+
+/* UPDATE */
+.modal-actions .primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.modal-actions .primary:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ===============================
+UNIFIED FORM CONTROLS
+=============================== */
+
+.panel input,
+.panel select,
+.panel .file-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+  box-sizing: border-box;
+}
+
+/* PLACEHOLDER */
+.panel input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* FOCUS */
+.panel input:focus,
+.panel select:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg-surface-2);
+}
+
+/* ===============================
+SELECT FIX (REMOVE DEFAULT LOOK)
+=============================== */
+
+.panel select {
+  appearance: none;
+  cursor: pointer;
+}
+
+/* ===============================
+FILE INPUT (CUSTOM STYLE)
+=============================== */
+
+.panel input[type="file"] {
+  display: none;
+}
+
+.file-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0 12px;
+}
+
+/* button inside file */
+.file-input span {
+  background: var(--color-bg-surface-2);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid var(--color-border);
+}
+
+/* file name text */
+.file-input small {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+/* hover */
+.file-input:hover {
+  border-color: var(--color-primary);
+}
+
+/* ===============================
+RESPONSIVE
+=============================== */
+
+@media (max-width: 900px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}

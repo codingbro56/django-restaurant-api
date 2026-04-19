@@ -11,6 +11,8 @@ from django.utils.dateparse import parse_date
 import csv
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
+
+from apps.users.models import User
 User = get_user_model()
 
 from .serializers import (
@@ -26,9 +28,10 @@ from .serializers import (
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
 def admin_user_list(request):
-    admins = User.objects.filter(is_staff=True).order_by("-date_joined")
-    serializer = AdminListSerializer(admins, many=True)
+    users = User.objects.all().order_by("-date_joined")
+    serializer = AdminListSerializer(users, many=True)
     return Response(serializer.data)
+
 
 
 # -----------------------------
@@ -38,13 +41,12 @@ def admin_user_list(request):
 @permission_classes([IsAdminUser])
 def admin_user_detail(request, user_id):
     try:
-        admin = User.objects.get(id=user_id, is_staff=True)
+        user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return Response({"error": "Admin not found"}, status=404)
+        return Response({"error": "User not found"}, status=404)
 
-    serializer = AdminDetailSerializer(admin)
+    serializer = AdminDetailSerializer(user)
     return Response(serializer.data)
-
 
 # -----------------------------
 # Create Admin (Full Details)
@@ -68,15 +70,15 @@ def admin_create_user(request):
 @permission_classes([IsAdminUser])
 def admin_update_user(request, user_id):
     try:
-        admin = User.objects.get(id=user_id, is_staff=True)
+        user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return Response({"error": "Admin not found"}, status=404)
+        return Response({"error": "User not found"}, status=404)
 
-    serializer = AdminUpdateSerializer(admin, data=request.data, partial=True)
+    serializer = AdminUpdateSerializer(user, data=request.data, partial=True)
 
     if serializer.is_valid():
         serializer.save()
-        return Response({"message": "Admin updated successfully"})
+        return Response({"message": "User updated successfully"})
 
     return Response(serializer.errors, status=400)
 
@@ -88,14 +90,18 @@ def admin_update_user(request, user_id):
 @permission_classes([IsAdminUser])
 def admin_disable_user(request, user_id):
     try:
-        admin = User.objects.get(id=user_id, is_staff=True)
+        user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return Response({"error": "Admin not found"}, status=404)
+        return Response({"error": "User not found"}, status=404)
 
-    admin.is_active = False
-    admin.save()
+    user.is_active = False
+    user.save()
 
-    return Response({"message": "Admin deactivated successfully"})
+    role = "Admin" if user.is_staff else "User"
+
+    return Response({
+        "message": f"{role} deactivated successfully"
+    })
 
 @api_view(["GET"])
 @permission_classes([IsAdminUser])

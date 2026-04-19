@@ -1,0 +1,80 @@
+/* =====================================
+   ABOUT US PAGE - DARK THEME
+===================================== */
+
+.about-container {
+    padding: 60px 20px;
+    min-height: calc(100vh - 200px);
+}
+
+.about-hero {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px;
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.about-hero p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    line-height: 1.8;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.about-text h2 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.about-text p {
+    color: #cbd5e1;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.values-list {
+    list-style: none;
+    padding: 0;
+}
+
+.values-list li {
+    background: #1e293b;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border-left: 4px solid #3b82f6;
+    color: #cbd5e1;
+}
+
+.values-list strong {
+    color: #fff;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero h1 {
+        font-size: 2.5rem;
+    }
+}

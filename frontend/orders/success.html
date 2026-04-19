@@ -9,6 +9,29 @@
 
 <div id="header-container"></div>
 
+<div class="checkout-progress">
+
+  <div class="progress-step completed">
+    <div class="step-circle">✓</div>
+    <span>Cart</span>
+  </div>
+
+  <div class="progress-line"></div>
+
+  <div class="progress-step completed">
+    <div class="step-circle">✓</div>
+    <span>Payment</span>
+  </div>
+
+  <div class="progress-line"></div>
+
+  <div class="progress-step active">
+    <div class="step-circle">3</div>
+    <span>Confirmation</span>
+  </div>
+
+</div>
+
 <section class="success-page">
   <div class="success-card">
 
@@ -61,6 +84,10 @@
       <a href="/orders/my-orders.html" class="primary-btn">View My Orders</a>
       <a href="../menu/index.html" class="secondary-btn">Continue Ordering</a>
     </div>
+
+    <button class="danger-btn" id="cancel-order-btn">
+      Cancel Order
+    </button>
 
   </div>
 </section>

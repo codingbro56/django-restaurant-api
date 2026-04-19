@@ -15,6 +15,8 @@ urlpatterns = [
     path('api/orders/', include('apps.orders.urls')),
     # Admin User Management
     path("api/admin/", include("apps.users.admin_urls")),
+    # Payments
+    path("api/payment/", include("apps.payments.urls")),
 
 ]
 

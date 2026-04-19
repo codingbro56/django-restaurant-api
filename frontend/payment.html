@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Payment | BharatBites</title>
     <link rel="stylesheet" href="css/payment.css">
-</head>
+    <link rel="stylesheet" href="css/main.css">
+</head> 
 <body>
 
     <!-- HEADER -->
@@ -15,6 +16,31 @@
         </div>
     </header>
 
+    
+
+    <div class="checkout-progress">
+
+        <div class="progress-step completed">
+            <div class="step-circle">✓</div>
+            <span>Cart</span>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step active">
+            <div class="step-circle">2</div>
+            <span>Payment</span>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step">
+            <div class="step-circle">3</div>
+            <span>Confirmation</span>
+        </div>
+
+        </div>
+
     <!-- MAIN SECTION -->
     <section class="payment-section">
         <div class="container payment-grid">
@@ -24,54 +50,102 @@
 
                 <!-- Order Summary -->
                 <div class="card order-summary">
+
                     <h2>Order Summary</h2>
+
+                    <!-- Items -->
                     <div id="order-items"></div>
 
                     <div class="divider"></div>
 
+                    <!-- Billing Breakdown -->
                     <div class="summary-row">
                         <span>Subtotal</span>
                         <span id="subtotal"></span>
                     </div>
 
+                    <div class="summary-row">
+                        <span>Delivery Charge</span>
+                        <span id="delivery-charge"></span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>GST (5%)</span>
+                        <span id="tax-amount"></span>
+                    </div>
+
+                    <div class="divider"></div>
+
                     <div class="summary-row total-row">
                         <span>Total</span>
                         <span id="total-amount"></span>
                     </div>
+
                 </div>
 
                 <!-- Payment Method -->
                 <div class="card payment-method">
+
                     <h2>Select Payment Method</h2>
 
-                    <label class="payment-option active">
-                        <input type="radio" checked disabled>
-                        <div>
-                            <strong>Cash on Delivery</strong>
-                            <p>Pay in cash when your order is delivered.</p>
+                    <div class="payment-options">
+
+                        <!-- COD Option -->
+                        <div class="payment-option active" data-method="COD">
+                            <div class="option-left">
+                                <div class="radio-indicator"></div>
+                                <div>
+                                    <strong>Cash on Delivery</strong>
+                                    <p>Pay in cash when your order arrives.</p>
+                                </div>
+                            </div>
                         </div>
-                    </label>
+
+                        <!-- Online Payment (Disabled for now) -->
+                        <div class="payment-option disabled">
+                            <div class="option-left">
+                                <div class="radio-indicator"></div>
+                                <div>
+                                    <strong>Online Payment</strong>
+                                    <p>UPI / Card / Net Banking (Coming Soon)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="notice-box">
+                        You will pay the total amount at the time of delivery.
+                    </div>
 
                     <button class="btn-primary" id="confirm-btn">
                         Confirm Order
                     </button>
 
-                    <div class="trust-info">
-                        ✓ Secure Checkout <br>
-                        ✓ 30–45 Min Delivery
-                    </div>
                 </div>
-
             </div>
 
             <!-- RIGHT COLUMN -->
             <aside class="payment-sidebar">
 
                 <div class="card address-card">
-                    <h3>Delivery Address</h3>
-                    <p id="delivery-address">
-                        Loading...
-                    </p>
+
+                    <div class="address-header">
+                        <h3>Delivery Address</h3>
+                        <button class="edit-address-btn" id="edit-address-btn">Edit</button>
+                    </div>
+
+                    <div class="address-content">
+                        <p><strong id="delivery-name"></strong></p>
+                        <p id="delivery-phone"></p>
+                        <p id="delivery-full-address"></p>
+                        <p>
+                            <span id="delivery-city"></span>,
+                            <span id="delivery-state"></span> -
+                            <span id="delivery-pincode"></span>
+                        </p>
+                    </div>
+
                 </div>
 
                 <div class="card guarantee-card">
@@ -84,6 +158,31 @@
 
         </div>
     </section>
+
+    <!-- Edit Address Modal -->
+    <div class="modal-overlay hidden" id="address-modal">
+    <div class="modal">
+
+        <h3>Edit Delivery Address</h3>
+
+        <div class="modal-form">
+
+        <input type="text" id="edit-name" placeholder="Full Name">
+        <input type="text" id="edit-phone" placeholder="Phone Number">
+        <textarea id="edit-address" placeholder="Address"></textarea>
+        <input type="text" id="edit-city" placeholder="City">
+        <input type="text" id="edit-state" placeholder="State">
+        <input type="text" id="edit-pincode" placeholder="Pincode">
+
+        </div>
+
+        <div class="modal-actions">
+        <button class="secondary-btn" id="cancel-edit">Cancel</button>
+        <button class="primary-btn" id="save-edit">Save</button>
+        </div>
+
+    </div>
+    </div>
 
     <!-- Toast -->
     <div id="toast-container"></div>

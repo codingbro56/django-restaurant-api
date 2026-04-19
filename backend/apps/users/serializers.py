@@ -16,6 +16,7 @@ class AdminListSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "is_active",
+            "is_staff",
             "date_joined",
         ]
 

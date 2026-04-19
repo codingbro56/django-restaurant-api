@@ -1,0 +1,17 @@
+/* FORGOT PASSWORD PAGE */
+
+.auth-card{
+  max-width:420px;
+}
+
+.forgot-description{
+  text-align:center;
+  margin-bottom:24px;
+  color:#9ca3af;
+}
+
+.reset-form{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}

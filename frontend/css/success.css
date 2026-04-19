@@ -89,3 +89,18 @@
 .secondary-btn:hover {
   background: rgba(255,255,255,0.15);
 }
+
+.danger-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.danger-btn:hover {
+    background: #b91c1c;
+}

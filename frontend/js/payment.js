@@ -33,10 +33,76 @@ async function loadOrder() {
     }
 }
 
+// Event listeners for address editing
+
+// Open modal
+document.getElementById("edit-address-btn").addEventListener("click", () => {
+    document.getElementById("address-modal").classList.remove("hidden");
+
+    // Pre-fill current values
+    document.getElementById("edit-name").value =
+        document.getElementById("delivery-name").innerText;
+
+    document.getElementById("edit-phone").value =
+        document.getElementById("delivery-phone").innerText;
+
+    document.getElementById("edit-address").value =
+        document.getElementById("delivery-full-address").innerText;
+
+    document.getElementById("edit-city").value =
+        document.getElementById("delivery-city").innerText;
+
+    document.getElementById("edit-state").value =
+        document.getElementById("delivery-state").innerText;
+
+    document.getElementById("edit-pincode").value =
+        document.getElementById("delivery-pincode").innerText;
+});
+
+// Close modal
+document.getElementById("cancel-edit").addEventListener("click", () => {
+    document.getElementById("address-modal").classList.add("hidden");
+});
+
+// Save changes
+document.getElementById("save-edit").addEventListener("click", async () => {
+
+    const updatedData = {
+        delivery_name: document.getElementById("edit-name").value,
+        delivery_phone: document.getElementById("edit-phone").value,
+        delivery_address: document.getElementById("edit-address").value,
+        delivery_city: document.getElementById("edit-city").value,
+        delivery_state: document.getElementById("edit-state").value,
+        delivery_pincode: document.getElementById("edit-pincode").value
+    };
+
+    const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}/update-address/`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedData)
+    });
+
+    if (res.ok) {
+        document.getElementById("address-modal").classList.add("hidden");
+        loadOrder(); // refresh data
+        showToast("Address updated successfully", "success");
+    } else {
+        showToast("Failed to update address", "error");
+    }
+});
+
+// 
+
 function renderOrder(order) {
 
     const itemsContainer = document.getElementById("order-items");
+
     const subtotalEl = document.getElementById("subtotal");
+    const deliveryEl = document.getElementById("delivery-charge");
+    const taxEl = document.getElementById("tax-amount");
     const totalEl = document.getElementById("total-amount");
 
     itemsContainer.innerHTML = "";
@@ -46,12 +112,15 @@ function renderOrder(order) {
         return;
     }
 
+    let subtotal = 0;
+
     order.items.forEach(item => {
+
+        const itemTotal = parseFloat(item.price) * item.quantity;
+        subtotal += itemTotal;
 
         const row = document.createElement("div");
         row.className = "summary-row";
-
-        const itemTotal = parseFloat(item.price) * item.quantity;
 
         row.innerHTML = `
             <span>${item.menu_item_name} x ${item.quantity}</span>
@@ -61,8 +130,18 @@ function renderOrder(order) {
         itemsContainer.appendChild(row);
     });
 
-    subtotalEl.innerText = `₹${order.total_amount}`;
+    // Show breakdown
+    subtotalEl.innerText = `₹${subtotal.toFixed(2)}`;
+    deliveryEl.innerText = `₹${order.delivery_charge}`;
+    taxEl.innerText = `₹${order.tax_amount}`;
     totalEl.innerText = `₹${order.total_amount}`;
+
+    document.getElementById("delivery-name").innerText = order.delivery_name || "";
+    document.getElementById("delivery-phone").innerText = order.delivery_phone || "";
+    document.getElementById("delivery-full-address").innerText = order.delivery_address || "";
+    document.getElementById("delivery-city").innerText = order.delivery_city || "";
+    document.getElementById("delivery-state").innerText = order.delivery_state || "";
+    document.getElementById("delivery-pincode").innerText = order.delivery_pincode || "";
 }
 
 async function confirmCOD() {

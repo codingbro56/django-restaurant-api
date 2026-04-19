@@ -1,6 +1,6 @@
 /* =========================
-   AUTH – DARK THEME (MOBILE FIRST)
-   ========================= */
+AUTH – DARK THEME
+========================= */
 
 .auth-bg {
   min-height: 100vh;
@@ -13,13 +13,13 @@
 }
 
 /* =========================
-   CARD
-   ========================= */
+CARD
+========================= */
 
 .auth-card {
   width: 100%;
-  max-width: 100%;
-  padding: 28px 18px;
+  max-width: 720px;
+  padding: 28px 20px;
   background: linear-gradient(180deg, #111827, #020617);
   border-radius: 18px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.6);
@@ -27,8 +27,8 @@
 }
 
 /* =========================
-   LOGO
-   ========================= */
+LOGO
+========================= */
 
 .auth-logo {
   display: flex;
@@ -41,13 +41,13 @@
 }
 
 /* =========================
-   HEADINGS
-   ========================= */
+HEADINGS
+========================= */
 
 .auth-card h2 {
   text-align: center;
   margin-bottom: 6px;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .auth-subtitle {
@@ -58,8 +58,8 @@
 }
 
 /* =========================
-   SECTIONS
-   ========================= */
+FORM SECTIONS
+========================= */
 
 .form-section {
   margin-bottom: 28px;
@@ -73,22 +73,25 @@
 }
 
 /* =========================
-   GRID
-   ========================= */
+GRID SYSTEM
+========================= */
 
 .form-grid {
   display: grid;
   gap: 18px;
 }
 
-.two-col,
+.two-col {
+  grid-template-columns: 1fr;
+}
+
 .three-col {
   grid-template-columns: 1fr;
 }
 
 /* =========================
-   LABEL
-   ========================= */
+LABELS
+========================= */
 
 .auth-card label {
   display: block;
@@ -98,8 +101,8 @@
 }
 
 /* =========================
-   INPUT STRUCTURE
-   ========================= */
+INPUT GROUP
+========================= */
 
 .input-wrapper {
   display: flex;
@@ -138,8 +141,8 @@
 }
 
 /* =========================
-   PHONE WRAPPER
-   ========================= */
+PHONE INPUT
+========================= */
 
 .phone-wrapper {
   display: flex;
@@ -153,75 +156,8 @@
 }
 
 /* =========================
-   ERROR TEXT
-   ========================= */
-
-.error-text {
-  font-size: 12px;
-  color: #ef4444;
-  margin-top: 6px;
-  display: none;
-  line-height: 1.4;
-}
-
-/* =========================
-   USERNAME SUGGESTIONS
-   ========================= */
-
-.suggestions {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 8px;
-  margin-top: 4px;
-  z-index: 10;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-.suggestions.active {
-  display: block;
-}
-
-.suggestion-item {
-  padding: 10px 14px;
-  cursor: pointer;
-  font-size: 13px;
-  color: #e5e7eb;
-  border-bottom: 1px solid #374151;
-  transition: background 0.2s;
-}
-
-.suggestion-item:hover {
-  background: #374151;
-  color: #60a5fa;
-}
-
-.suggestion-item:last-child {
-  border-bottom: none;
-}
-
-/* =========================
-   PASSWORD TOGGLE
-   ========================= */
-
-.toggle-eye {
-  cursor: pointer;
-}
-
-.toggle-eye i {
-  width: 18px;
-  height: 18px;
-  color: #94a3b8;
-}
-
-/* =========================
-   BUTTON
-   ========================= */
+BUTTON
+========================= */
 
 .primary-btn {
   width: 100%;
@@ -235,7 +171,6 @@
   cursor: pointer;
   box-shadow: 0 12px 28px rgba(37,99,235,0.45);
   margin-top: 10px;
-  transition: 0.2s ease;
 }
 
 .primary-btn:hover {
@@ -243,8 +178,8 @@
 }
 
 /* =========================
-   FOOTER
-   ========================= */
+FOOTER
+========================= */
 
 .auth-footer {
   text-align: center;
@@ -259,8 +194,8 @@
 }
 
 /* =========================
-   TOAST
-   ========================= */
+TOAST
+========================= */
 
 .toast-container {
   position: fixed;
@@ -283,7 +218,6 @@
   opacity: 0;
   transform: translateY(-10px);
   transition: all 0.3s ease;
-  width: 100%;
 }
 
 .toast.show {
@@ -291,33 +225,14 @@
   transform: translateY(0);
 }
 
-.toast.success {
-  border-left: 4px solid #22c55e;
-}
-
-.toast.error {
-  border-left: 4px solid #ef4444;
-}
-
 /* =========================
-   DESKTOP
-   ========================= */
+DESKTOP GRID
+========================= */
 
 @media (min-width: 900px) {
 
   .auth-card {
-    max-width: 720px;
     padding: 40px 35px;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.7);
-  }
-
-  .auth-card h2 {
-    font-size: 22px;
-  }
-
-  .auth-subtitle {
-    font-size: 14px;
-    margin-bottom: 28px;
   }
 
   .two-col {
@@ -327,4 +242,5 @@
   .three-col {
     grid-template-columns: 1fr 1fr 1fr;
   }
+
 }

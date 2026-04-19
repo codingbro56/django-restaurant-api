@@ -3,7 +3,7 @@ from .models import Order, OrderItem
 from apps.payments.models import Payment
 
 
-# 🔹 Used for order lists (admin list, my orders)
+# Used for order lists (admin list, my orders)
 class OrderSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(source="user.username", read_only=True)
@@ -30,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return None
 
 
-# 🔹 Used for order detail
+#  Used for order detail
 class OrderItemSerializer(serializers.ModelSerializer):
 
     item_name = serializers.CharField(source='menu_item.name', read_only=True)
@@ -96,7 +96,17 @@ class PaymentOrderSerializer(serializers.ModelSerializer):
             "status",
             "total_amount",
             "items",
-            "payment"
+            "payment",
+            # Billing breakdown
+            "delivery_charge",
+            "tax_amount",
+            # Delivery snapshot
+            "delivery_name",
+            "delivery_phone",
+            "delivery_address",
+            "delivery_city",
+            "delivery_state",
+            "delivery_pincode",
         ]
 
     def get_payment(self, obj):

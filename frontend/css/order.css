@@ -53,11 +53,11 @@
 }
 
 .order-status.completed {
-  background: #1f2937;
+  background: #276825;
   color: #d1d5db;
 }
 
-.order-status.placed {
+.order-status.pending {
   background: #1e3a8a;
   color: #93c5fd;
 }

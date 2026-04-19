@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Feedback | BharatBites</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/feedback.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div id="header-container"></div>
+
+    <!-- TOAST -->
+    <div id="ui-toast" class="ui-toast"></div>
+
+    <!-- MAIN -->
+    <main class="feedback-container container">
+
+        <div class="feedback-header">
+            <h1>We Value Your Feedback</h1>
+            <p>Tell us what you liked and how we can improve.</p>
+        </div>
+
+        <div class="feedback-form-card">
+
+            <form id="feedbackForm">
+
+                <div class="input-group">
+                    <label>Name</label>
+                    <input
+                        type="text"
+                        id="feedbackName"
+                        placeholder="Your name"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        id="feedbackEmail"
+                        placeholder="Your email address"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>Rating (1 to 5)</label>
+                    <input
+                        type="number"
+                        id="feedbackRating"
+                        min="1"
+                        max="5"
+                        placeholder="5"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>Comments</label>
+                    <textarea
+                        id="feedbackMessage"
+                        rows="4"
+                        placeholder="Write your experience..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                    id="feedbackSubmitBtn"
+                >
+                    Submit Feedback
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-container"></div>
+
+    <!-- SCRIPTS -->
+
+    <script src="js/config.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/feedback.js"></script>
+
+    <script>
+
+        fetch("partials/header.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("header-container").innerHTML = html;
+            loadHeader();
+        });
+
+        fetch("partials/footer.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("footer-container").innerHTML = html;
+        });
+
+    </script>
+
+</body>
+
+</html>

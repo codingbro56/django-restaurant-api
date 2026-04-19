@@ -34,7 +34,12 @@ function apiFetch(url, options = {}) {
       localStorage.removeItem("admin_token");
       window.location.href = "login.html";
     }
-    return res.json();
+    return res.json().then(data => {
+      if (!res.ok) {
+        throw new Error(data.message || "API Error");
+      }
+      return data;
+    });
   });
 }
 
@@ -43,14 +48,14 @@ function apiFetch(url, options = {}) {
 // ===============================
 function loadAdmins() {
   const tbody = document.getElementById("adminTableBody");
-  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+  tbody.innerHTML = "<tr><td colspan='5'>Loading...</td></tr>";
 
   apiFetch("/api/admin/users/")
     .then(data => {
       tbody.innerHTML = "";
 
       if (!data || data.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='4'>No admins found</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='5'>No users found</td></tr>";
         return;
       }
 
@@ -58,12 +63,21 @@ function loadAdmins() {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${admin.id}</td>
-          <td>${admin.full_name}</td>
+          <td>${admin.full_name || "-"}</td>
           <td>${admin.username}</td>
           <td>${admin.is_active ? "Active" : "Disabled"}</td>
+          <td>${admin.is_staff ? "Admin" : "User"}</td>
         `;
 
         row.addEventListener("click", () => {
+
+          // Remove previous selection
+          document.querySelectorAll("#adminTableBody tr")
+            .forEach(r => r.classList.remove("selected"));
+
+          // Add selected class
+          row.classList.add("selected");
+
           selectAdmin(admin.id);
         });
 
@@ -71,7 +85,7 @@ function loadAdmins() {
       });
     })
     .catch(() => {
-      tbody.innerHTML = "<tr><td colspan='4'>Failed to load</td></tr>";
+      tbody.innerHTML = "<tr><td colspan='5'>Failed to load</td></tr>";
     });
 }
 
@@ -83,11 +97,15 @@ let selectedAdminId = null;
 function selectAdmin(id) {
   selectedAdminId = id;
 
+  // Show loading state (optional but good UX)
+  document.getElementById("emptyState").classList.add("hidden");
+  document.getElementById("detailContent").classList.remove("hidden");
+  // document.getElementById("detailContent").innerHTML = "Loading..."; 
+
   apiFetch(`/api/admin/users/${id}/detail/`)
     .then(admin => {
-      document.getElementById("emptyState").classList.add("hidden");
-      document.getElementById("detailContent").classList.remove("hidden");
 
+      // Fill data
       document.getElementById("detail_full_name").value = admin.full_name || "";
       document.getElementById("detail_username").value = admin.username || "";
       document.getElementById("detail_email").value = admin.email || "";
@@ -97,6 +115,13 @@ function selectAdmin(id) {
       document.getElementById("detail_state").value = admin.state || "";
       document.getElementById("detail_pincode").value = admin.pincode || "";
       document.getElementById("detail_is_active").checked = admin.is_active;
+    })
+    .catch(() => {
+      showToast("Failed to load admin details", true);
+
+      // revert UI if failed
+      document.getElementById("emptyState").classList.remove("hidden");
+      document.getElementById("detailContent").classList.add("hidden");
     });
 }
 
@@ -162,8 +187,8 @@ document.getElementById("disableAdminBtn")
     apiFetch(`/api/admin/users/${selectedAdminId}/disable/`, {
       method: "DELETE"
     })
-      .then(() => {
-        showToast("Admin deactivated");
+      .then(data => {
+        showToast(data.message);
         loadAdmins();
       })
       .catch(() => showToast("Failed to deactivate", true));
@@ -220,4 +245,14 @@ document.getElementById("createAdminBtn")
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   loadAdmins();
+});
+
+document.getElementById("searchInput").addEventListener("input", function () {
+  const value = this.value.toLowerCase();
+  const rows = document.querySelectorAll("#adminTableBody tr");
+
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(value) ? "" : "none";
+  });
 });

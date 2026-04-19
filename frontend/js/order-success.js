@@ -2,6 +2,35 @@ const params = new URLSearchParams(window.location.search);
 const orderId = params.get("order_id");
 const token = localStorage.getItem("access_token");
 
+const cancelBtn = document.getElementById("cancel-order-btn");
+
+if (cancelBtn) {
+    cancelBtn.addEventListener("click", async () => {
+
+        const res = await fetch(
+            `${API_BASE_URL}/api/orders/${orderId}/cancel/`,
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showToast("Order cancelled successfully", "success");
+            setTimeout(() => {
+                window.location.href = "my-order.html";
+            }, 1500);
+        } else {
+            showToast(data.error || "Cannot cancel order", "error");
+        }
+
+    });
+}
+
 if (!token) {
   window.location.href = "../auth/login.html";
 }
@@ -63,6 +92,10 @@ function renderSuccess(order) {
   if (deliveryBox) {
     deliveryBox.innerText = "30–45 minutes";
   }
+}
+
+if (order.status !== "pending") {
+    document.getElementById("cancel-order-btn").style.display = "none";
 }
 
 document.addEventListener("DOMContentLoaded", loadSuccessData);

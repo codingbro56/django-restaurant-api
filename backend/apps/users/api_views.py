@@ -11,7 +11,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from urllib.parse import unquote
-from .models import User
+from .models import User, ContactMessage, Feedback
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -252,3 +252,88 @@ def user_profile(request):
     user.save()
 
     return Response({"message": "Profile updated successfully"})
+
+# ========================================
+# COMMUNICATION / FEEDBACK
+# ========================================
+
+@api_view(["POST"])
+def submit_contact(request):
+    name = request.data.get("name")
+    email = request.data.get("email")
+    message = request.data.get("message")
+
+    if not all([name, email, message]):
+        return Response({"error": "All fields are required"}, status=400)
+
+    contact = ContactMessage.objects.create(name=name, email=email, message=message)
+
+    try:
+        send_mail(
+            subject="New Contact Message from BharatBites",
+            message=f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}",
+            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else "noreply@bharatbites.xyz",
+            recipient_list=[settings.ADMIN_EMAIL] if hasattr(settings, 'ADMIN_EMAIL') else ["admin@bharatbites.xyz"],
+        )
+    except Exception as e:
+        print("Mail error:", e)
+
+    return Response({"success": "Message received"})
+
+@api_view(["POST"])
+def submit_feedback(request):
+    name = request.data.get("name")
+    email = request.data.get("email")
+    rating = request.data.get("rating")
+    message = request.data.get("message")
+
+    if not all([name, email, rating, message]):
+        return Response({"error": "All fields are required"}, status=400)
+
+    feedback = Feedback.objects.create(name=name, email=email, rating=rating, message=message)
+
+    try:
+        send_mail(
+            subject="New Feedback received for BharatBites",
+            message=f"Name: {name}\nEmail: {email}\nRating: {rating}/5\n\nFeedback:\n{message}",
+            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else "noreply@bharatbites.xyz",
+            recipient_list=[settings.ADMIN_EMAIL] if hasattr(settings, 'ADMIN_EMAIL') else ["admin@bharatbites.xyz"],
+        )
+    except Exception as e:
+        print("Mail error:", e)
+
+    return Response({"success": "Feedback received"})
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def admin_feedback_list(request):
+    feedbacks = Feedback.objects.all().order_by("-created_at").values()
+    return Response(list(feedbacks))
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def admin_feedback_reply(request, feedback_id):
+    try:
+        feedback = Feedback.objects.get(id=feedback_id)
+    except Feedback.DoesNotExist:
+        return Response({"error": "Feedback not found"}, status=404)
+
+    reply_text = request.data.get("reply")
+    if not reply_text:
+        return Response({"error": "Reply text is required"}, status=400)
+
+    feedback.admin_reply = reply_text
+    feedback.is_reviewed = True
+    feedback.save()
+
+    try:
+        send_mail(
+            subject="Reply to your Feedback on BharatBites",
+            message=f"Hello {feedback.name},\n\nThank you for your feedback:\n\"{feedback.message}\"\n\nOur Reply:\n{reply_text}\n\nBest,\nBharatBites Admin",
+            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else "noreply@bharatbites.xyz",
+            recipient_list=[feedback.email],
+        )
+    except Exception as e:
+        print("Mail error:", e)
+
+    return Response({"success": "Reply sent"})

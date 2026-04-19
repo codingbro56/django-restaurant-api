@@ -1,13 +1,11 @@
 from django.db import models
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
-
 
 class MenuItem(models.Model):
     category = models.ForeignKey(
@@ -20,10 +18,10 @@ class MenuItem(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(upload_to="menu/", blank=True, null=True)
 
-    # 🔥 MANUAL SPECIAL
+    # MANUAL SPECIAL
     is_special = models.BooleanField(default=False)
 
-    # 🔥 AUTO WEEKLY SPECIAL (NEW)
+    # AUTO WEEKLY SPECIAL (NEW)
     # 0 = Monday ... 6 = Sunday
     special_day = models.IntegerField(
         null=True,

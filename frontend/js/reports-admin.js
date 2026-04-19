@@ -1,221 +1,493 @@
-function loadReport() {
-    const status = document.getElementById("statusFilter").value;
-    const start = document.getElementById("startDate").value;
-    const end = document.getElementById("endDate").value;
+/* ==========================================
+   BHARATBITES ANALYTICS CONTROLLER
+========================================== */
 
-    let url = API_BASE_URL + "/api/admin/reports/orders/?";
+const ENDPOINTS = {
+  summary: "/api/orders/admin/analytics/summary/",
+  revenue: "/api/orders/admin/analytics/revenue/",
+  status: "/api/orders/admin/analytics/status/",
+  categories: "/api/orders/admin/analytics/categories/",
+  topItems: "/api/orders/admin/analytics/top-items/",
+  special: "/api/orders/admin/analytics/special/",
+  weekly: "/api/orders/admin/analytics/weekly/"
+};
 
-    if (status) url += "status=" + status + "&";
-    if (start) url += "start=" + start + "&";
-    if (end) url += "end=" + end;
+let charts = {
+  revenue: null,
+  category: null,
+  status: null,
+  weekly: null
+};
 
-    fetch(url, {
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("admin_token")
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("totalOrders").innerText = data.total_orders;
-      document.getElementById("totalAmount").innerText = data.total_amount;
-
-      const box = document.getElementById("reportList");
-      box.innerHTML = "";
-
-      // ✅ ADD THIS HERE
-      const statusMap = {
-          placed: "Pending",
-          completed: "Completed",
-          cancelled: "Cancelled"
-      };
-
-      data.orders.forEach(o => {
-          const displayStatus = statusMap[o.status] || o.status;
-
-          box.innerHTML += `
-              <div>
-                  Order #${o.id} — ${o.user} — ₹${o.total}
-                  (${displayStatus}) — ${o.date}
-              </div>
-          `;
-      });
-
-      // 🔹 CHART CALL
-      drawChart(data.orders);
-    });
-
-}
+let currentRange = "monthly";
+let startDate = null;
+let endDate = null;
 
 
-function exportCSV() {
-    const status = document.getElementById("statusFilter").value;
-    const start = document.getElementById("startDate").value;
-    const end = document.getElementById("endDate").value;
+/* ==========================================
+   INITIALIZE
+========================================== */
 
-    let url = API_BASE_URL + "/api/admin/reports/orders/csv/?";
-    if (status) url += "status=" + status + "&";
-    if (start) url += "start=" + start + "&";
-    if (end) url += "end=" + end;
+document.addEventListener("DOMContentLoaded", () => {
 
-    fetch(url, {
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("admin_token")
-        }
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Export failed");
-        return res.blob();
-    })
-    .then(blob => {
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "order_report.csv";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    })
-    .catch(() => {
-        alert("CSV export failed");
-    });
-}
+  setupRangeSelector();
+  setupCustomFilter();
+  setupExportButtons();
 
-let chartInstance = null;
+  loadDashboard();
 
-function drawChart(orders) {
-  const counts = {
-    Pending: 0,
-    Completed: 0,
-    Cancelled: 0
-  };
+});
 
-  orders.forEach(o => {
-    if (o.status === "placed") counts.Pending++;
-    else if (o.status === "completed") counts.Completed++;
-    else if (o.status === "cancelled") counts.Cancelled++;
-  });
 
-  const ctx = document.getElementById("orderChart").getContext("2d");
+/* ==========================================
+   API HELPER
+========================================== */
 
-  if (chartInstance) chartInstance.destroy();
+async function fetchAPI(endpoint) {
 
-  chartInstance = new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: Object.keys(counts),
-      datasets: [{
-        data: Object.values(counts),
-        backgroundColor: ["#facc15", "#22c55e", "#ef4444"]
-      }]
+  let url = API_BASE_URL + endpoint;
+
+  if (startDate && endDate) {
+    url += `?start_date=${startDate}&end_date=${endDate}`;
+  } else {
+    url += `?range=${currentRange}`;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("admin_token")
     }
   });
+
+  if (!response.ok) {
+    throw new Error("API error");
+  }
+
+  return response.json();
 }
 
 
+/* ==========================================
+   LOAD DASHBOARD
+========================================== */
 
-function loadUserReport() {
-  const month = document.getElementById("userReportMonth").value;
+async function loadDashboard() {
 
-  if (!month) {
-    alert("Please select a month");
+  try {
+
+    await Promise.all([
+      loadSummary(),
+      loadRevenueChart(),
+      loadWeeklyChart(),
+      loadStatusChart(),
+      loadCategoryChart(),
+      loadTopItems(),
+      loadSpecialRevenue()
+    ]);
+
+  } catch (error) {
+
+    console.error("Analytics load failed:", error);
+
+  }
+
+}
+
+
+/* ==========================================
+   KPI CARDS
+========================================== */
+
+async function loadSummary() {
+
+  const data = await fetchAPI(ENDPOINTS.summary);
+
+  setText("totalRevenue", formatCurrency(data.total_revenue));
+  setText("totalOrders", data.total_orders);
+  setText("avgOrderValue", formatCurrency(data.avg_order_value));
+  setText("repeatPercent", data.repeat_customer_percent);
+  setText("paymentSuccessRate", data.payment_success_rate);
+
+}
+
+
+async function loadSpecialRevenue() {
+
+  const data = await fetchAPI(ENDPOINTS.special);
+
+  setText("specialDishRevenue", formatCurrency(data.special_revenue));
+
+}
+
+
+/* ==========================================
+   REVENUE LINE CHART
+========================================== */
+
+async function loadRevenueChart() {
+
+  const data = await fetchAPI(ENDPOINTS.revenue);
+
+  if (!data || data.length === 0) {
+    console.warn("Revenue API returned no data");
     return;
   }
 
-  fetch(API_BASE_URL + "/api/admin/reports/users/?month=" + month, {
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("admin_token")
-    }
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("usersTotal").innerText = data.total;
-    document.getElementById("usersActive").innerText = data.active;
-    document.getElementById("usersDisabled").innerText = data.disabled;
-    document.getElementById("usersAdmins").innerText = data.admins;
+  const labels = data.map(i => i.date);
+  const values = data.map(i => i.revenue);
 
-    renderUserChart(data.active, data.disabled);
-  });
-}
+  const ctx = document.getElementById("revenueChart").getContext("2d");
 
-function loadTopItems() {
-  fetch(API_BASE_URL + "/api/orders/reports/top-items/", {
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("admin_token")
-    }
-  })
-  .then(res => res.json())
-  .then(items => {
-    const box = document.getElementById("topItemsList");
-    box.innerHTML = "";
+  if (charts.revenue) charts.revenue.destroy();
 
-    if (!items.length) {
-      box.innerText = "No data available";
-      return;
-    }
-
-    items.forEach((item, index) => {
-      box.innerHTML += `
-        <div class="report-row">
-          <strong>${index + 1}. ${item.menu_item__name}</strong>
-          <span>Sold: ${item.total_sold}</span>
-        </div>
-      `;
-    });
-    renderTopItemsChart(items);
-  });
-}
-
-let topItemsChart = null;
-
-function renderTopItemsChart(items) {
-  const labels = items.map(i => i.menu_item__name);
-  const data = items.map(i => i.total_sold);
-
-  const ctx = document.getElementById("topItemsChart").getContext("2d");
-
-  if (topItemsChart) {
-    topItemsChart.destroy();
-  }
-
-  topItemsChart = new Chart(ctx, {
-    type: "bar",
+  charts.revenue = new Chart(ctx, {
+    type: "line",
     data: {
       labels: labels,
       datasets: [{
-        label: "Items Sold",
-        data: data,
-        backgroundColor: "#6366f1"
+        label: "Revenue",
+        data: values,
+        borderColor: "#3b82f6",
+        backgroundColor: "rgba(59,130,246,0.15)",
+        fill: true,
+        tension: 0.3
       }]
     },
-    options: {
-      indexAxis: "y",
-      responsive: true,
-      plugins: {
-        legend: { display: false }
-      }
-    }
+    options: baseChartOptions()
   });
 }
 
-let userStatusChart = null;
 
-function renderUserChart(active, disabled) {
-  const ctx = document.getElementById("userStatusChart").getContext("2d");
+async function loadWeeklyChart() {
 
-  if (userStatusChart) {
-    userStatusChart.destroy();
-  }
+  const data = await fetchAPI(ENDPOINTS.weekly);
 
-  userStatusChart = new Chart(ctx, {
-    type: "pie",
+  const labels = data.map(i => i.date);
+  const values = data.map(i => i.orders);
+
+  const ctx = document.getElementById("weeklyChart").getContext("2d");
+
+  if (charts.weekly) charts.weekly.destroy();
+
+  charts.weekly = new Chart(ctx, {
+
+    type: "line",
+
     data: {
-      labels: ["Active Users", "Disabled Users"],
+      labels: labels,
       datasets: [{
-        data: [active, disabled],
-        backgroundColor: ["#22c55e", "#ef4444"]
+        label: "Orders",
+        data: values,
+        borderColor: "#22c55e",
+        backgroundColor: "rgba(34,197,94,0.2)",
+        fill: true,
+        tension: 0.3
       }]
     },
-    options: {
-      responsive: true
-    }
+
+    options: baseChartOptions()
+
   });
+
+}
+
+
+/* ==========================================
+   CATEGORY BAR CHART
+========================================== */
+
+async function loadCategoryChart() {
+
+  const data = await fetchAPI(ENDPOINTS.categories);
+
+  const labels = data.map(i => i.category);
+  const values = data.map(i => i.revenue);
+
+  const ctx = document.getElementById("categoryChart").getContext("2d");
+
+  if (charts.category) charts.category.destroy();
+
+  charts.category = new Chart(ctx, {
+
+    type: "bar",
+
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Revenue",
+        data: values,
+        backgroundColor: "#3b82f6"
+      }]
+    },
+
+    options: baseChartOptions()
+
+  });
+
+}
+
+
+/* ==========================================
+   STATUS PIE CHART
+========================================== */
+
+async function loadStatusChart() {
+
+  const data = await fetchAPI(ENDPOINTS.status);
+
+  const labels = data.map(i => i.status);
+  const values = data.map(i => i.count);
+
+  const ctx = document.getElementById("statusChart").getContext("2d");
+
+  if (charts.status) charts.status.destroy();
+
+  charts.status = new Chart(ctx, {
+
+    type: "doughnut",
+
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: [
+          "#22c55e",
+          "#facc15",
+          "#ef4444"
+        ]
+      }]
+    },
+
+    options: baseChartOptions()
+
+  });
+
+}
+
+
+/* ==========================================
+   TOP ITEMS TABLE
+========================================== */
+
+async function loadTopItems() {
+
+  const data = await fetchAPI(ENDPOINTS.topItems);
+
+  const table = document.getElementById("topItemsTable");
+
+  table.innerHTML = "";
+
+  data.forEach(item => {
+
+    table.innerHTML += `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.category}</td>
+        <td>${item.units}</td>
+        <td>₹${formatCurrency(item.revenue)}</td>
+      </tr>
+    `;
+
+  });
+
+}
+
+
+/* ==========================================
+   RANGE SELECTOR
+========================================== */
+
+function setupRangeSelector() {
+
+  const buttons = document.querySelectorAll(".range-selector button");
+
+  buttons.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      buttons.forEach(b => b.classList.remove("active"));
+
+      btn.classList.add("active");
+
+      currentRange = btn.dataset.range;
+
+      startDate = null;
+      endDate = null;
+
+      loadDashboard();
+
+    });
+
+  });
+
+}
+
+
+/* ==========================================
+   CUSTOM DATE FILTER
+========================================== */
+
+function setupCustomFilter() {
+
+  const applyBtn = document.getElementById("applyFilterBtn");
+
+  applyBtn.addEventListener("click", () => {
+
+    startDate = document.getElementById("startDate").value;
+    endDate = document.getElementById("endDate").value;
+
+    if (!startDate || !endDate) {
+      alert("Please select both dates");
+      return;
+    }
+
+    loadDashboard();
+
+  });
+
+}
+
+
+/* ==========================================
+   EXPORT BUTTONS
+========================================== */
+
+function setupExportButtons() {
+
+  document.getElementById("exportCsvBtn")
+    .addEventListener("click", exportCSV);
+
+  document.getElementById("exportPdfBtn")
+    .addEventListener("click", exportPDF);
+
+}
+
+
+/* ==========================================
+   EXPORT CSV
+========================================== */
+
+async function exportCSV() {
+
+  const data = await fetchAPI(ENDPOINTS.topItems);
+
+  let csv = "Item,Category,Units Sold,Revenue\n";
+
+  data.forEach(i => {
+
+    csv += `${i.name},${i.category},${i.units},${i.revenue}\n`;
+
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+
+  const link = document.createElement("a");
+
+  link.href = URL.createObjectURL(blob);
+
+  link.download = "bharatbites_report.csv";
+
+  link.click();
+
+}
+
+
+/* ==========================================
+   EXPORT PDF
+========================================== */
+async function exportPDF() {
+
+  const element = document.querySelector(".admin-content");
+
+  if (!element) {
+    console.error("PDF export failed: target element not found");
+    return;
+  }
+
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    useCORS: true
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+
+  const { jsPDF } = window.jspdf;
+
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const imgWidth = 210;
+  const pageHeight = 295;
+
+  const imgHeight = canvas.height * imgWidth / canvas.width;
+
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+
+  heightLeft -= pageHeight;
+
+  while (heightLeft > 0) {
+
+    position = heightLeft - imgHeight;
+
+    pdf.addPage();
+
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+
+    heightLeft -= pageHeight;
+
+  }
+
+  pdf.save("bharatbites_analytics_report.pdf");
+
+}
+
+/* ==========================================
+   UTILITIES
+========================================== */
+
+function setText(id, value) {
+
+  const el = document.getElementById(id);
+
+  if (el) el.innerText = value;
+
+}
+
+
+function formatCurrency(value) {
+
+  return Number(value || 0).toLocaleString("en-IN");
+
+}
+
+
+function baseChartOptions() {
+
+  return {
+
+    responsive: true,
+
+    plugins: {
+      legend: {
+        labels: {
+          color: "#cbd5e1"
+        }
+      }
+    },
+
+    scales: {
+      x: {
+        ticks: { color: "#cbd5e1" },
+        grid: { color: "rgba(255,255,255,0.05)" }
+      },
+      y: {
+        ticks: { color: "#cbd5e1" },
+        grid: { color: "rgba(255,255,255,0.05)" }
+      }
+    }
+
+  };
+
 }

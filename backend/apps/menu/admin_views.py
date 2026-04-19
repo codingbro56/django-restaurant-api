@@ -7,6 +7,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
 
 from .models import Category, MenuItem
+from django.db.models import ProtectedError
 
 
 # ===============================
@@ -125,8 +126,21 @@ def admin_update_menu_item(request, item_id):
 @api_view(["DELETE"])
 @permission_classes([IsAdminUser])
 def admin_delete_menu_item(request, item_id):
-    MenuItem.objects.filter(id=item_id).delete()
-    return Response({"message": "Item deleted"})
+
+    item = get_object_or_404(MenuItem, id=item_id)
+
+    try:
+        item.delete()
+
+        return Response({
+            "success": True,
+            "message": "Menu item deleted"
+        })
+
+    except ProtectedError:
+        return Response({
+            "error": "This item cannot be deleted because it exists in orders."
+        }, status=400)
 
 # New API to update special settings (manual toggle + auto weekly special)
 @api_view(["PUT"])

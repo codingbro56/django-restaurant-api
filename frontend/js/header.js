@@ -5,28 +5,35 @@ function loadHeader() {
 
   if (!nav || !profileBox) return;
 
-  nav.innerHTML = "";
-  profileBox.innerHTML = "";
-
   const currentPath = window.location.pathname;
 
+  // ===== NAV LINKS =====
   if (!token) {
     nav.innerHTML = `
-      <a href="../home/index.html">Home</a>
-      <a href="../menu/index.html">Menu</a>
-      <a href="../auth/login.html">Login</a>
-      <a href="../auth/register.html">Register</a>
+      <a href="/index.html">Home</a>
+      <a href="/menu/index.html">Menu</a>
+      <a href="/feedback.html">Feedback</a>
+      <a href="/aboutus.html">About Us</a>
+      <a href="/contactus.html">Contact Us</a>
+      <a href="/auth/login.html">Login</a>
+      <a href="/auth/register.html">Register</a>
     `;
+
+    profileBox.innerHTML = "";
     return;
   }
 
   nav.innerHTML = `
-    <a href="../home/index.html">Home</a>
-    <a href="../menu/index.html">Menu</a>
-    <a href="../cart/index.html">Cart</a>
-    <a href="../orders/my-orders.html">Orders</a>
+    <a href="/index.html">Home</a>
+    <a href="/menu/index.html">Menu</a>
+    <a href="/cart/index.html">Cart</a>
+    <a href="/orders/my-orders.html">Orders</a>
+    <a href="/feedback.html">Feedback</a>
+    <a href="/aboutus.html">About Us</a>
+    <a href="/contactus.html">Contact Us</a>
   `;
 
+  // ===== PROFILE =====
   if (currentPath.includes("profile")) {
     profileBox.innerHTML = `
       <button class="secondary" onclick="logout()">Logout</button>
@@ -35,24 +42,47 @@ function loadHeader() {
     const initials = localStorage.getItem("user_initials") || "U";
 
     profileBox.innerHTML = `
-      <div class="profile-avatar-header"
-           onclick="window.location.href='../auth/profile.html'">
+      <div class="profile-avatar-header" id="profileAvatar">
         ${initials}
+      </div>
+
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="/auth/profile.html">Profile</a>
+        <button onclick="logout()">Logout</button>
       </div>
     `;
   }
 }
 
 
-
-/* Profile dropdown */
+/* ===== FIXED DROPDOWN ===== */
 document.addEventListener("click", (e) => {
   const box = document.getElementById("profile-box");
-  if (!box) return;
-  box.classList.toggle("open", box.contains(e.target));
+  const avatar = document.getElementById("profileAvatar");
+
+  if (!box || !avatar) return;
+
+  if (avatar.contains(e.target)) {
+    box.classList.toggle("open");
+  } else {
+    box.classList.remove("open");
+  }
 });
 
-/* Mobile menu toggle */
+
+function logout() {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("user_initials");
+
+  // optional: clear other user data
+  localStorage.removeItem("user_data");
+
+  // redirect to login
+  window.location.href = "/auth/login.html";
+}
+
+
+/* ===== MOBILE MENU ===== */
 document.addEventListener("DOMContentLoaded", () => {
   loadHeader();
 

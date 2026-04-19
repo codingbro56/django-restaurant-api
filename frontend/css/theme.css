@@ -1,0 +1,52 @@
+:root {
+  --color-bg-app: #020617;
+  --color-bg-main: #0f172a;
+  --color-bg-surface: #111c2e;
+  --color-bg-surface-2: #1e293b;
+  --color-border: #1e293b;
+  --color-border-strong: #334155;
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #e2e8f0;
+  --color-text-muted: #94a3b8;
+
+  --color-primary: #2563eb;
+  --color-primary-hover: #3b82f6;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #facc15;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+
+  --bg-card: var(--color-bg-surface);
+  --text-muted: var(--color-text-muted);
+  --radius: var(--radius-md);
+  --primary: var(--color-primary);
+  --danger: var(--color-danger);
+}
+
+.card,
+.panel,
+.kpi-card,
+.table-section,
+.chart-section {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.btn,
+button.primary,
+button.secondary,
+button.danger,
+.primary-btn,
+.action-btn {
+  border-radius: var(--radius-md);
+}

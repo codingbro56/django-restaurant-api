@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage Feedback - BharatBites Admin</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../css/admin-layout.css">
+    <link rel="stylesheet" href="../css/feedback-admin.css">
+    <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+<div class="admin-layout admin-app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="adminSidebar"></aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="content main">
+
+        <header class="page-header">
+            <div>
+                <h1>Customer Feedback</h1>
+                <p>Review and reply to customer reviews</p>
+            </div>
+        </header>
+
+        <div id="ui-toast" class="ui-toast"></div>
+
+        <div class="feedback-grid" id="feedbackContainer">
+            <!-- Feedback cards injected by JS -->
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ================= REPLY MODAL ================= -->
+<div id="replyModal" class="modal-overlay">
+
+    <div class="modal">
+
+        <h3>Reply to Feedback</h3>
+
+        <p>Your reply will be sent via email to the customer.</p>
+
+        <div class="input-group">
+            <textarea
+                id="replyMessage"
+                rows="5"
+                placeholder="Type your reply here..."
+            ></textarea>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-outline" onclick="closeReplyModal()">
+                Cancel
+            </button>
+
+            <button class="primary-btn" id="sendReplyBtn">
+                Send Reply
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="../js/config.js"></script>
+<script src="../js/admin-guard.js"></script>
+<script src="../js/sidebar-loader.js"></script>
+<script src="../js/feedback-admin.js"></script>
+
+</body>
+</html>

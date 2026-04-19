@@ -118,3 +118,131 @@ body {
         position: static;
     }
 }
+
+
+.address-card {
+    margin-bottom: 24px;
+}
+
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.edit-address-btn {
+    background: transparent;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.address-content p {
+    margin: 4px 0;
+    color: #cbd5e1;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.payment-option {
+    background: rgba(255,255,255,0.05);
+    padding: 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: 0.3s ease;
+}
+
+.payment-option:hover {
+    border: 1px solid #3b82f6;
+}
+
+.payment-option.active {
+    border: 1px solid #3b82f6;
+    background: rgba(59,130,246,0.08);
+}
+
+.payment-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.option-left {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.radio-indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #3b82f6;
+    border-radius: 50%;
+    margin-top: 4px;
+}
+
+.payment-option.active .radio-indicator {
+    background: #3b82f6;
+}
+
+.notice-box {
+    background: rgba(255,255,255,0.06);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal {
+    background: #0f1b2d;
+    padding: 30px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.modal-form input,
+.modal-form textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: #070f1f;
+    color: #fff;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+

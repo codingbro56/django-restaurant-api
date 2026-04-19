@@ -4,32 +4,20 @@
   <title>Admin – User Management</title>
   <meta charset="UTF-8">
 
-  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin-layout.css">
   <link rel="stylesheet" href="../css/user-manage.css">
+  <link rel="stylesheet" href="../css/theme.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="admin-layout">
+<div class="admin-layout admin-app">
 
   <!-- ================= SIDEBAR ================= -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h2>BharatBites</h2>
-      <span>Admin Panel</span>
-    </div>
-
-    <nav>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="menu.html">Menu</a>
-      <a href="orders.html">Orders</a>
-      <a href="user-management.html" class="active">Users</a>
-      <a href="reports.html">Reports</a>
-    </nav>
-  </aside>
+  <aside class="sidebar" id="adminSidebar"></aside>
 
   <!-- ================= MAIN CONTENT ================= -->
-  <main class="admin-main">
+  <main class="admin-main main">
 
     <!-- Header -->
     <div class="page-header">
@@ -58,6 +46,7 @@
               <th>Full Name</th>
               <th>Username</th>
               <th>Status</th>
+              <th>Role</th>
             </tr>
           </thead>
           <tbody id="adminTableBody">
@@ -189,6 +178,7 @@
 
 <script src="../js/config.js"></script>
 <script src="../js/admin-guard.js"></script>
+<script src="../js/sidebar-loader.js"></script>
 <script src="../js/user-admin.js"></script>
 
 </body>

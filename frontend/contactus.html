@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Contact Us - BharatBites</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/contactus.css">
+    <link rel="stylesheet" href="../css/footer.css">
+</head>
+
+<body>
+    <div id="header-container"></div>
+    <div id="ui-toast" class="ui-toast"></div>
+
+    <main class="contact-container container">
+        <div class="contact-header">
+            <h1>Contact Us</h1>
+            <p>Have a question or want to order in bulk? Drop us a message.</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p><strong>Phone:</strong> +91 98765 43210</p>
+                <p><strong>Email:</strong> support@bharatbites.xyz</p>
+                <p><strong>Address:</strong> 123 Spice Street, Flavor Town, India</p>
+            </div>
+
+            <div class="contact-form-card">
+                <form id="contactForm">
+                    <div class="input-group">
+                        <label>Name</label>
+                        <input type="text" id="contactName" required placeholder="Your full name">
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="contactEmail" required placeholder="Your email address">
+                    </div>
+                    <div class="input-group">
+                        <label>Message</label>
+                        <textarea id="contactMessage" required placeholder="How can we help you?" rows="5"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" id="contactSubmitBtn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/contactus.js"></script>
+    <script>
+        fetch("partials/header.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("header-container").innerHTML = html;
+                loadHeader();
+            });
+        fetch("partials/footer.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("footer-container").innerHTML = html;
+            });
+    </script>
+</body>
+
+</html>

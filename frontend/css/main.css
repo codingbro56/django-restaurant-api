@@ -3,11 +3,16 @@
    ========================= */
 
 :root {
-  --primary: #2563eb;      /* blue (actions) */
-  --danger: #dc2626;       /* delete / warning */
-  --accent: #f59e0b;       /* saffron highlight */
-  --bg-dark: #020617;      /* app background */
-  --bg-card: #0f172a;      /* cards */
+  --primary: #2563eb;
+  /* blue (actions) */
+  --danger: #dc2626;
+  /* delete / warning */
+  --accent: #f59e0b;
+  /* saffron highlight */
+  --bg-dark: #020617;
+  /* app background */
+  --bg-card: #0f172a;
+  /* cards */
   --text-main: #ffffff;
   --text-muted: #9ca3af;
   --radius: 12px;
@@ -26,6 +31,38 @@ body {
   margin: 0;
   background: var(--bg-dark);
   color: var(--text-main);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 /* =========================
@@ -80,6 +117,8 @@ button {
   cursor: pointer;
   font-size: 15px;
   padding: 10px 18px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
 }
 
 button.primary {
@@ -90,6 +129,7 @@ button.primary {
 button.secondary {
   background: #1e293b;
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 button.danger {
@@ -99,6 +139,12 @@ button.danger {
 
 button:hover {
   opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 /* =========================
@@ -147,6 +193,47 @@ footer a:hover {
   text-align: center;
 }
 
+/* =========================
+   MOBILE RESPONSIVENESS
+   ========================= */
+
+@media (max-width: 768px) {
+
+  header,
+  .navbar {
+    flex-direction: column;
+    padding: 14px 20px;
+    gap: 15px;
+  }
+
+  .navbar nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .navbar nav a {
+    margin-left: 0;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .container {
+    padding: 30px 15px;
+  }
+}
+
 
 /* =========================
    UI TOAST MESSAGES (CLEAN)
@@ -154,17 +241,19 @@ footer a:hover {
 
 .ui-toast {
   position: fixed;
-  top: 80px;              /* below header */
+  top: 80px;
+  /* below header */
   right: 24px;
 
-  background: #111827;    /* neutral dark */
+  background: #111827;
+  /* neutral dark */
   color: #ffffff;
 
   padding: 12px 18px;
   border-radius: 12px;
   font-size: 14px;
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 
   opacity: 0;
   pointer-events: none;
@@ -205,4 +294,123 @@ footer a:hover {
 
 .profile-avatar-header:hover {
   transform: scale(1.05);
+}
+
+/* Progressbar CSS */
+
+.checkout-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 30px auto;
+  max-width: 700px;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.step-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.progress-step.active .step-circle {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.progress-step.completed .step-circle {
+  background: #16a34a;
+  color: #fff;
+}
+
+.progress-line {
+  height: 3px;
+  width: 80px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-step.completed+.progress-line {
+  background: #16a34a;
+}
+
+
+/* =====================================
+GLOBAL SCROLL SYSTEM (USER PAGES)
+===================================== */
+
+/* Allow normal page scroll */
+html, body {
+  height: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Prevent weird layout jumps */
+body {
+  min-height: 100vh;
+}
+
+/* =====================================
+SCROLLBAR DESIGN (MODERN)
+===================================== */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.5);
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100,116,139,0.5) transparent;
+}
+
+/* =====================================
+FIX OVERFLOW BUGS (COMMON ISSUE)
+===================================== */
+
+/* Prevent horizontal scroll everywhere */
+* {
+  box-sizing: border-box;
+}
+
+/* Images never overflow */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Sections don't break layout */
+section {
+  overflow-x: hidden;
 }

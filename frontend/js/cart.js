@@ -135,24 +135,30 @@ function clearCart() {
 
 
 // PLACE ORDER
-function placeOrder() {
-  fetch(API_BASE_URL + "/api/orders/place/", {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  })
-  .then(res => {
-    if (!res.ok) throw new Error();
-    showToast("Order placed successfully", "success");
+async function placeOrder() {
+   try {
+      const res = await fetch(`${API_BASE_URL}/api/orders/place/`, {
+         method: "POST",
+         headers: {
+            "Authorization": `Bearer ${token}`
+         }
+      });
 
-    setTimeout(() => {
-      window.location.href = "../orders/success.html";
-    }, 800);
-  })
-  .catch(() => {
-    showToast("Order could not be placed", "error");
-  });
+      if (!res.ok) {
+         const text = await res.text();
+         console.error("Server response:", text);
+         showToast("Failed to place order", "error");
+         return;
+      }
+
+      const data = await res.json();
+
+      window.location.href = `/payment.html?order_id=${data.id}`;
+
+   } catch (error) {
+      console.error(error);
+      showToast("Network error", "error");
+   }
 }
 
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>About Us - BharatBites</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/aboutus.css">
+    <link rel="stylesheet" href="../css/footer.css">
+</head>
+
+<body>
+    <div id="header-container"></div>
+
+    <main class="about-container container">
+        <section class="about-hero">
+            <h1>Our Story</h1>
+            <p>BharatBites brings the true essence of Indian culinary heritage to your doorstep. What started as a small
+                kitchen to serve authentic homemade food has now grown into a beloved destination for thousands of food
+                lovers.</p>
+        </section>
+
+        <section class="about-grid">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=800"
+                    alt="Indian Chef" />
+            </div>
+            <div class="about-text">
+                <h2>Our Mission</h2>
+                <p>To preserve the tradition of Indian spices and recipes while providing modern, fast, and reliable
+                    delivery services. We believe that authentic taste doesn't have to be compromised for convenience.
+                </p>
+
+                <h2>Our Values</h2>
+                <ul class="values-list">
+                    <li><strong>Quality First:</strong> Fresh ingredients sourced daily.</li>
+                    <li><strong>Authenticity:</strong> Traditional recipes without shortcuts.</li>
+                    <li><strong>Customer Satisfaction:</strong> Your happiness is our priority.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+        fetch("partials/header.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("header-container").innerHTML = html;
+                loadHeader();
+            });
+        fetch("partials/footer.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("footer-container").innerHTML = html;
+            });
+    </script>
+</body>
+
+</html>
